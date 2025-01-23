@@ -1,0 +1,59 @@
+@font-face {
+  font-family: "vazir";
+  src: url("../fonts/Vazir-Bold-FD.eot");
+  src: url("../fonts/Vazir-Bold-FD.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/Vazir-Bold-FD.woff2") format("woff2"),
+    url("../fonts/Vazir-Bold-FD.woff") format("woff"),
+    url("../fonts/Vazir-Bold-FD.ttf") format("truetype");
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: "vazir";
+  src: url("../fonts/Vazir-FD.eot");
+  src: url("../fonts/Vazir-FD.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/Vazir-FD.woff2") format("woff2"),
+    url("../fonts/Vazir-FD.woff") format("woff"),
+    url("../fonts/Vazir-FD.ttf") format("truetype");
+}
+
+* {
+  font-family: vazir;
+}
+
+.d-none {
+  display: none !important;
+}
+
+.button-error {
+  background: #b12222 !important;
+  border-color: #b12222 !important;
+}
+
+.button-error:hover {
+  background: #961313 !important;
+  border-color: #961313 !important;
+}
+
+.button-success {
+  background: #4ab122 !important;
+  border-color: #4ab122 !important;
+}
+
+.button-success:hover {
+  background: #139613 !important;
+  border-color: #139613 !important;
+}
+
+
+.oni_menu .radio-td label {
+  margin-left: 5px !important;
+  margin-right: 5px !important;
+
+}
+
+
+.oni_menu td .regular-text {
+  width: 100%;
+
+}
