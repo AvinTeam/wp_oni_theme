@@ -52,8 +52,27 @@
 
 }
 
-
-.oni_menu td .regular-text {
+.w-100 {
   width: 100%;
+}
 
+.mph_big_style #oni_row {
+  width: 30px;
+}
+
+.mph_big_style table.fixed{
+  table-layout: auto;
+}
+
+.oni-loader {
+  background-color: black;
+  position: fixed;
+  height: 100vh;
+  right: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 100000;
+  opacity: 0.5;
+  display: none;
 }

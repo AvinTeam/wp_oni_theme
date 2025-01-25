@@ -81,10 +81,20 @@
                     class="button button-primary">ذخیرهٔ
                     تغییرات</button>
             </p>
-        </form>
 
+
+
+        </form>
+        <h2>پاک کردن سوال ها</h2>
+
+
+
+        <p class="submit">
+            <button type="button" id="del_question" class="button button-primary button-error">پاک کردن</button>
+        </p>
     </div>
 
 
     <div class="clear"></div>
+    <div class="oni-loader "></div>
 </div>

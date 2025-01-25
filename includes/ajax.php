@@ -1,5 +1,7 @@
 <?php
 
+use oniclass\ONIDB;
+
 add_action('wp_ajax_nopriv_oni_sent_sms', 'oni_sent_sms');
 
 function oni_sent_sms()
@@ -46,7 +48,7 @@ function oni_sent_verify()
                     'meta_key'   => 'mobile',
                     'meta_value' => $mobile,
                     'number'     => 1,
-                ]);
+                 ]);
 
                 if (! empty($user_query->get_results())) {
                     $user = $user_query->get_results()[ 0 ];
@@ -61,6 +63,9 @@ function oni_sent_verify()
 
                     if (! is_wp_error($user_id)) {
                         update_user_meta($user_id, 'mobile', $mobile);
+                        update_user_meta($user_id, 'questions', 0);
+                        update_user_meta($user_id, 'count_true', 0);
+                        update_user_meta($user_id, 'count_match', 0);
                         wp_set_current_user($user_id);
                         wp_set_auth_cookie($user_id, true);
 
@@ -80,5 +85,54 @@ function oni_sent_verify()
 
     }
     wp_send_json_error('لطفا دوباره تلاش کنید', 403);
+
+}
+
+add_action('wp_ajax_oni_update_row', 'oni_update_row');
+
+function oni_update_row()
+{
+    $onidb = new ONIDB('question');
+
+    if (intval($_POST[ 'dataId' ])) {
+
+        $delete_row = $onidb->delete(
+            [
+                'id' => intval($_POST[ 'dataId' ]),
+             ]
+        );
+        if ($delete_row) {
+
+            wp_send_json_success($delete_row);
+
+        }
+        wp_send_json_error('حذف انجام نشد', 403);
+
+    } else {
+        wp_send_json_error('خطا در ارسال اطلاعات', 403);
+    }
+
+}
+
+add_action('wp_ajax_oni_logout', 'oni_logout');
+
+function oni_logout()
+{
+
+    wp_logout();
+
+    wp_send_json_success('https://zendegibaayeha.ir');
+
+}
+
+add_action('wp_ajax_oni_del_all_question', 'oni_del_all_question');
+
+function oni_del_all_question()
+{
+    $onidb = new ONIDB('question');
+
+    $onidb->empty();
+
+    wp_send_json_success('ok');
 
 }

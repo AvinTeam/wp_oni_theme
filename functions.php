@@ -1,8 +1,9 @@
 <?php
+
 (defined('ABSPATH')) || exit;
 header('Content-Type: text/html; charset=utf-8');
 
-define('ONI_VERSION', '1.0.0');
+define('ONI_VERSION', '1.2.1');
 
 define('ONI_PATH', get_template_directory() . "/");
 define('ONI_INCLUDES', ONI_PATH . 'includes/');
@@ -18,15 +19,18 @@ define('ONI_JS', ONI_ASSETS . 'js/');
 define('ONI_IMAGE', ONI_ASSETS . 'image/');
 define('ONI_VENDOR', ONI_ASSETS . 'vendor/');
 
+require_once ONI_PATH . 'vendor/autoload.php';
+
 require_once ONI_CORE . '/accesses.php';
 require_once ONI_INCLUDES . '/theme_filter.php';
 require_once ONI_INCLUDES . '/theme-function.php';
 require_once ONI_INCLUDES . '/ajax.php';
 require_once ONI_INCLUDES . '/styles.php';
 require_once ONI_INCLUDES . '/init.php';
+require_once ONI_INCLUDES . '/jdf.php';
 
 require_once ONI_CLASS . '/ONIDB.php';
-
+require_once ONI_CLASS . '/EXPORTCLASS.php';
 
 $oni_option = oni_start_working();
 
@@ -35,20 +39,16 @@ $oni_option = oni_start_working();
 // require_once ONI_CLASS . '/Iran_Area.php';
 // require_once ONI_INCLUDES . '/init_user_submit.php';
 
-// require_once ONI_INCLUDES . '/jdf.php';
-
-
-//
-
-// if (is_admin()) {
-//     //require_once ONI_CLASS . '/List_Table.php';
-require_once ONI_INCLUDES . '/menu.php';
-require_once ONI_INCLUDES . '/install.php';
+if (is_admin()) {
+    require_once ONI_CLASS . '/List_Table.php';
+    require_once ONI_INCLUDES . '/menu.php';
+    require_once ONI_INCLUDES . '/install.php';
+    require_once ONI_INCLUDES . '/edit_user_table.php';
 //     require_once ONI_INCLUDES . '/edit_column_institute.php';
-//     require_once ONI_INCLUDES . '/edit_user_table.php';
+//
 //     require_once ONI_INCLUDES . '/handle_download.php';
 
-// }
+}
 
 // if (isset($_GET[ 'test' ])) {
 
@@ -56,5 +56,3 @@ require_once ONI_INCLUDES . '/install.php';
 //     // exit;
 
 // }
-
-//                $_POST[ 'form' ][ 'text' ] = wp_kses_post(wp_unslash(nl2br($_POST[ 'form' ][ 'text' ])));

@@ -1,10 +1,11 @@
 <?php
+namespace oniclass;
 
 class ONIDB
 {
 
-    private $wpdb;
-    private $tablename;
+    protected $wpdb;
+    protected $tablename;
 
     public function __construct($table)
     {
@@ -15,11 +16,14 @@ class ONIDB
 
     }
 
-    public function insert(array $data, array $format): int | false
+    public function insert(array $data): int | false
     {
 
+        $format = [  ];
         foreach ($data as $key => $value) {
             $data[ $key ] = $value;
+            $format[  ]   = $this->set_type($value);
+
         }
 
         $inserted = $this->wpdb->insert(
@@ -33,30 +37,40 @@ class ONIDB
 
     }
 
-    public function update(array $data, array $where, array $format = null, array $where_format = null): int | false
+    public function update(array $data, array $where): int | false
     {
 
-        $result = false;
+        if (! $data && ! $where) {return false;}
 
-        if ($data && $where) {
+        $format = $where_format = [  ];
 
-            $result = $this->wpdb->update(
-                $this->tablename,
-                $data,
-                $where,
-                $format,
-                $where_format
-            );
+        foreach ($data as $value) {
+            $format[  ] = $this->set_type($value);
         }
+
+        foreach ($where as $value) {
+            $where_format[  ] = $this->set_type($value);
+
+        }
+
+        $result = $this->wpdb->update(
+            $this->tablename,
+            $data,
+            $where,
+            $format,
+            $where_format
+        );
+
         return $result;
 
     }
 
-    public function delete(array $data, array $format): int | false
+    public function delete(array $data): int | false
     {
-
+        $format = [  ];
         foreach ($data as $key => $value) {
             $data[ $key ] = $value;
+            $format[  ]   = $this->set_type($value);
         }
 
         $result = false;
@@ -75,82 +89,154 @@ class ONIDB
 
     }
 
-    public function get(array $data, array $format): object | array | false
+    public function get(array $data, string $output = OBJECT): object | array | false
     {
 
-        $array = [  ];
-        $where = '';
-        $m     = 0;
+        if (empty($data)) {return false;}
+
+        $where = '1=1';
+
         foreach ($data as $key => $value) {
-            $where .= ' AND %i = ' . $format[ $m ];
-            $array[  ] = $key;
-            $array[  ] = $value;
-            $m++;
+            $where .= $this->wpdb->prepare(' AND %i = ' . $this->set_type($value), $key, $value);
         }
 
-        $result = false;
-        if (! empty($data)) {
+        $result = $this->wpdb->get_row(
+            "SELECT * FROM `$this->tablename` WHERE $where",
+            $output
+        );
 
-            $result = $this->wpdb->get_row(
-                $this->wpdb->prepare(
-                    "SELECT * FROM `$this->tablename` WHERE 1=1 $where",
-                    $array
-                )
-            );
-        }
         return $result;
     }
 
-    public function num(array $data, array $format): int | string
+    public function num(array $data = [  ], string $where = ''): int | string
     {
 
-        $where = "";
+        $sqlwhere = "";
 
-        $m = 0;
-        foreach ($data as $key => $value) {
+        if (! empty($where)) {
 
-            switch ($format[ $m ]) {
-                case '%s':
-                    $value = "'$value'";
-                    break;
-                default:
-                    $value = $value;
-                    break;
-            }
+            $sqlwhere = " AND  $where ";
 
-            $where .= " AND  `$key` = $value ";
-
-            $m++;
         }
 
-        $num = $this->wpdb->get_var("SELECT COUNT(*) FROM $this->tablename WHERE 1=1  $where ");
+        if (! empty($data)) {
+
+            foreach ($data as $key => $value) {
+
+                switch ($this->set_type($value)) {
+                    case '%s':
+                        $value = "'$value'";
+                        break;
+                    default:
+                        $value = $value;
+                        break;
+                }
+
+                $sqlwhere .= " AND  `$key` = $value ";
+            }
+        }
+
+        $num = $this->wpdb->get_var("SELECT COUNT(*) FROM $this->tablename WHERE 1=1  $sqlwhere ");
 
         return absint($num);
 
     }
 
-    public function select(int $per_page, int $offset, string $status = '', string $date = ''): array | object | null
+    public function select(array $args = [  ]): array | object | null
     {
-        $sqlwhere = '';
+        $where = '1=1 ';
 
-        if (empty($status)) {
-            $sqlwhere .= " AND status !='sms' ";
-        } elseif (! empty($status)) {
-            $sqlwhere .= " AND status ='$status' ";
+        if (isset($args[ 'data' ])) {
+            foreach ($args[ 'data' ] as $key => $value) {
+
+                $where .= $this->wpdb->prepare(' AND %i = ' . $this->set_type($value), $key, $value);
+            }
         }
 
-        if (! empty($date)) {
-            $sqlwhere .= " AND created_at <= '$date' ";
+        if (isset($args[ 's' ])) {
+            $where .= $this->wpdb->prepare(" AND %i LIKE %s", $args[ 's' ][ 0 ], '%' . $args[ 's' ][ 1 ] . '%');
+        }
+
+        if (isset($args[ 'order_by' ])) {
+            $where .= $this->wpdb->prepare(" ORDER BY %i " . $args[ 'order_by' ][ 1 ], $args[ 'order_by' ][ 0 ]);
+
+        }
+        if (isset($args[ 'per_page' ])) {
+
+            $where .= $this->wpdb->prepare(" LIMIT %d ", absint($args[ 'per_page' ]));
+        }
+        if (isset($args[ 'offset' ])) {
+
+            $where .= $this->wpdb->prepare(" OFFSET %d ", absint($args[ 'offset' ]));
 
         }
 
         $mpn_row = $this->wpdb->get_results(
-            $this->wpdb->prepare(
-                "SELECT * FROM `$this->tablename` WHERE 1=1  $sqlwhere ORDER BY `created_at` DESC LIMIT %d OFFSET %d",
-                [ $per_page, $offset ]
-            ), ARRAY_A
+            "SELECT * FROM `$this->tablename` WHERE  $where "
         );
+
         return $mpn_row;
+
+    }
+
+    public function sum(string $object, array $data, string $where): int | string
+    {
+
+        $sqlwhere = "";
+
+        if (! empty($where)) {
+
+            $sqlwhere = " AND  $where ";
+
+        }
+
+        if (! empty($data)) {
+
+            foreach ($data as $key => $value) {
+
+                switch ($this->set_type($value)) {
+                    case '%s':
+                        $value = "'$value'";
+                        break;
+                    default:
+                        $value = $value;
+                        break;
+                }
+
+                $sqlwhere .= " AND  `$key` = $value ";
+            }
+        }
+
+        $num = $this->wpdb->get_var("SELECT SUM($object) FROM `$this->tablename` WHERE 1=1 $sqlwhere ");
+
+        return absint($num);
+
+    }
+
+    protected function set_type($item)
+    {
+        switch (gettype($item)) {
+            case 'integer':
+                return '%d';
+                break;
+
+            case 'string':
+                return '%s';
+                break;
+
+            default:
+                return '%d';
+                break;
+        }
+
+    }
+
+    public function empty()
+    {
+
+        $empty = $this->wpdb->get_results("TRUNCATE `$this->tablename`  ");
+
+        return $empty;
 
     }
 

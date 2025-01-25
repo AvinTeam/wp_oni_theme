@@ -1,27 +1,30 @@
 <?php (defined('ABSPATH')) || exit;
 global $title; ?>
-<div class="wrap mph_big_style oni_menu">
+<div class="wrap mph_big_style">
 
 
-    <h1 class="wp-heading-inline"> <?php echo esc_html($title) ?></h1>
+    <h1 class="wp-heading-inline"> <?php echo esc_html($title) ?> <a
+            href="<?php echo esc_html(admin_url('admin.php?page=add_ayeh')) ?>" class="page-title-action">افزودن
+            سوال</a></h1>
 
     <?php
 
-        $nasrListTable->atlas_res($row);
-        $nasrListTable->prepare_items();
+        //$oniListTable->oni_res($row);
+        $oniListTable->prepare_items();
 
-        echo '<form method="post" action="" class="nasr-table" >';
-        $nasrListTable->views();
-
-        $nasrListTable->display();
-
-        wp_nonce_field('mph_nonce' . get_current_user_id());
+        echo '<form method="post" action="" >';
+        $oniListTable->views();
+        $oniListTable->search_box('جست و جو سوال', 'oni_title');
+        $oniListTable->display();
 
     ?>
 
     </form>
 
+
+
+
 </div>
-<div class="nasr-loader"></div>
+<div class="oni-loader "></div>
 
 <div class="clear"></div>

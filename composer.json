@@ -1,0 +1,18 @@
+{
+    "name": "mrrashidpour/oni",
+    "description": "oni match",
+    "autoload": {
+        "psr-4": {
+            "oniclass\\": "classes/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Mohammadreza Rashidpour",
+            "email": "rashidpour1995@gmail.com"
+        }
+    ],
+    "require": {
+        "phpoffice/phpspreadsheet": "^3.8"
+    }
+}

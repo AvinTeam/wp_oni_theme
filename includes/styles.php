@@ -7,10 +7,24 @@ add_action('admin_enqueue_scripts', 'oni_admin_script');
 function oni_admin_script()
 {
 
+    wp_register_style(
+        'jalalidatepicker',
+        ONI_VENDOR . 'jalalidatepicker/jalalidatepicker.min.css',
+        [  ],
+        '0.9.6'
+    );
+    wp_register_script(
+        'jalalidatepicker',
+        ONI_VENDOR . 'jalalidatepicker/jalalidatepicker.min.js',
+        [  ],
+        '0.9.6',
+        true
+    );
+
     wp_enqueue_style(
         'oni_admin',
         ONI_CSS . 'admin.css',
-        [  ],
+        [ 'jalalidatepicker' ],
         ONI_VERSION
     );
 
@@ -19,7 +33,7 @@ function oni_admin_script()
     wp_enqueue_script(
         'oni_admin',
         ONI_JS . 'admin.js',
-        [ 'jquery' ],
+        [ 'jquery', 'jalalidatepicker' ],
         ONI_VERSION,
         true
     );
@@ -29,7 +43,7 @@ function oni_admin_script()
         'oni_js',
         [
             'ajaxurl' => admin_url('admin-ajax.php'),
-            'nonce'    => wp_create_nonce('ajax-nonce'),
+            'nonce'   => wp_create_nonce('ajax-nonce'),
          ]
     );
 
@@ -67,7 +81,7 @@ function oni_style()
     wp_enqueue_style(
         'oni_style',
         ONI_CSS . 'public.css',
-        [ 'bootstrap.rtl','bootstrap.icons', 'select2' ],
+        [ 'bootstrap.rtl', 'bootstrap.icons', 'select2' ],
         ONI_VERSION
     );
 
@@ -99,9 +113,10 @@ function oni_style()
         'oni_js',
         'oni_js',
         [
-            'ajaxurl'   => admin_url('admin-ajax.php'),
-            'nonce'     => wp_create_nonce('ajax-nonce' . oni_cookie()),
-            'option'    => oni_start_working(),
+            'ajaxurl' => admin_url('admin-ajax.php'),
+            'nonce'   => wp_create_nonce('ajax-nonce' . oni_cookie()),
+            'option'  => oni_start_working(),
+            'answers' => (is_user_logged_in()) ? oni_exam() : [  ],
 
          ]
     );

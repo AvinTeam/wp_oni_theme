@@ -1,5 +1,7 @@
 <?php
 
+use oniclass\ONIDB;
+
 (defined('ABSPATH')) || exit;
 
 function oni_template_path($oni_page = false)
@@ -119,7 +121,7 @@ function oni_update_option($data)
 
     $oni_option = [
         'version'           => ONI_VERSION,
-        
+
         'tsms'              => (isset($data[ 'tsms' ])) ? $data[ 'tsms' ] : $oni_option[ 'tsms' ],
         'ghasedaksms'       => (isset($data[ 'ghasedaksms' ])) ? $data[ 'ghasedaksms' ] : $oni_option[ 'ghasedaksms' ],
         'set_timer'         => (isset($data[ 'set_timer' ])) ? absint($data[ 'set_timer' ]) : $oni_option[ 'set_timer' ],
@@ -350,47 +352,42 @@ function oni_mask_mobile($mobile)
     return "شماره موبایل نامعتبر است.";
 }
 
-function tarikh($data, $time = "")
+
+
+function tarikh($data, $type = '')
 {
-    $data1 = "";
-    if (! empty($data)) {
-        $arr  = explode(" ", $data);
-        $data = $arr[ 0 ];
 
-        $arrayData = [ '/', '-' ];
 
-        foreach ($arrayData as $arrayData) {
-            $x = explode($arrayData, $data);
-            if (sizeof($x) == 3) {
+    $data_array = explode(" ", $data);
 
-                list($gy, $gm, $gd) = explode($arrayData, $data);
 
-                if ($arrayData == '/') {
-                    $tagir = '-';
-                    $chen  = 'jalali_to_gregorian';
-                }
-                if ($arrayData == '-') {
-                    $tagir = '/';
-                    $chen  = 'gregorian_to_jalali';
-                }
+    $data = $data_array[ 0 ];
+    $time = (sizeof($data_array) >= 2) ? $data_array[ 1 ] : 0;
 
-                $data1 = $chen($gy, $gm, $gd, $tagir);
 
-                break;
-            }
+    $has_mode = (strpos($data, '-')) ? '-' : '/';
 
-        }
 
-        if ($time == "d") {
-            $data1 = $data1;
-        } elseif ($time == "t") {
-            $data1 = $arr[ 1 ];
-        } else {
-            $data1 = $data1 . " " . $arr[ 1 ];
-        }
+    list($y, $m, $d) = explode($has_mode, $data);
+
+
+    $ch_date = (strpos($data, '-')) ? gregorian_to_jalali($y, $m, $d, '/') : jalali_to_gregorian($y, $m, $d, '-');
+
+
+    if ($type == 'time') {
+        $new_date = $time;
+    } elseif ($type == 'date') {
+        $new_date = $ch_date;
+    } else {
+        $new_date = ($time === 0) ? $ch_date : $ch_date . ' ' . $time;
     }
-    return $data1;
+
+
+    return $new_date;
+
+
 }
+
 
 function get_name_by_id($data, $id)
 {
@@ -520,4 +517,50 @@ function sanitize_text_no_item($item)
 
     return $new_item;
 
+}
+
+
+function oni_exam()
+{
+
+    $oni_option = oni_start_working();
+
+    $onidb    = new ONIDB('question');
+    $all_ayeh = $onidb->select();
+
+    $random_numbers = [  ];
+    $exam           = [  ];
+    $answers        = [  ];
+    $stop_condition = false;
+
+    while (! $stop_condition) {
+        $random_number = rand(1, $onidb->num() - 1);
+
+        if (! in_array($random_number, $random_numbers)) {
+            $random_numbers[  ] = $random_number;
+
+            $ayeh                       = $all_ayeh[ $random_number ];
+            $exam[  ]                   = $ayeh;
+            $answers[ 'Q' . $ayeh->id ] = $ayeh->answer;
+
+            if (count($random_numbers) == $oni_option[ 'count_questions' ]) {
+                $stop_condition = true;
+            }
+        }
+    }
+    $GLOBALS[ 'exam' ] = $exam;
+
+    return $answers;
+}
+
+function generate_uuid() {
+    // تولید UUID به فرمت استاندارد
+    return sprintf(
+        '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+        mt_rand(0, 0xffff), mt_rand(0, 0xffff),
+        mt_rand(0, 0xffff),
+        mt_rand(0, 0x0fff) | 0x4000,
+        mt_rand(0, 0x3fff) | 0x8000,
+        mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
+    );
 }
