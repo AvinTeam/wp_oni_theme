@@ -25,6 +25,21 @@ if (pageLogin) {
                         document.getElementById('codeVerification').style.display = 'block';
                         document.getElementById('resendCode').disabled = true;
                         startTimer();
+
+
+
+                        let otpInput = document.getElementById('verificationCode');
+
+                        // اعمال فوکوس روی فیلد
+                        otpInput.focus();
+
+
+
+
+
+
+
+
                     }
                 } else {
 
@@ -39,6 +54,7 @@ if (pageLogin) {
         } else {
 
             let loginAlert = document.getElementById('login-alert');
+            isSendSms = true
 
             loginAlert.classList.remove('d-none');
             loginAlert.textContent = 'شماره موبایل نامعتبر است';
@@ -191,7 +207,7 @@ jQuery(document).ready(function ($) {
             dataType: 'json',
             success: function (response) {
 
-                //window.location.href;
+                window.location.href = response.data;
                 console.log(response);
             }
         });

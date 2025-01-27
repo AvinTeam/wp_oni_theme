@@ -1,9 +1,8 @@
 <?php
 
 (defined('ABSPATH')) || exit;
-header('Content-Type: text/html; charset=utf-8');
 
-define('ONI_VERSION', '1.2.1');
+define('ONI_VERSION', '1.2.24');
 
 define('ONI_PATH', get_template_directory() . "/");
 define('ONI_INCLUDES', ONI_PATH . 'includes/');

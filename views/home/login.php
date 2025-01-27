@@ -12,7 +12,12 @@
 
 
 
-
+<style>
+footer {
+    position: absolute;
+    bottom: 0;
+}
+</style>
 
 
 
@@ -53,8 +58,9 @@
 
                     <div class="input-group mb-3">
                         <span class="input-group-text" id="verify"><i class="bi bi-person-fill"></i></span>
-                        <input type="text" inputmode="numeric" pattern="\d*" class="form-control onlyNumbersInput"
-                            id="verificationCode" maxlength="<?php echo $oni_option[ 'set_code_count' ] ?>"
+                        <input autocomplete="one-time-code" type="text" inputmode="numeric" pattern="\d*"
+                            class="form-control onlyNumbersInput" id="verificationCode"
+                            maxlength="<?php echo $oni_option[ 'set_code_count' ] ?>"
                             placeholder="کد تایید را وارد کنید" aria-describedby="verify">
 
                     </div>
@@ -69,8 +75,9 @@
                     <button type="button" class="btn btn-link btn-block" id="editNumber">ویرایش شماره</button>
                 </div>
             </div>
+            <div id="login-alert" class="alert alert-danger mt-2 d-none" role="alert"></div>
+
         </form>
-        <div id="login-alert" class="alert alert-danger mt-2 d-none" role="alert"></div>
 
     </div>
 
@@ -78,3 +85,52 @@
 
 
 </div>
+
+
+
+<script>
+if ('OTPCredential' in window) {
+    const verifyCodeButton = document.getElementById('verifyCode');
+
+    // انتخاب فیلد ورودی
+    const inputVerificationCode = document.getElementById('verificationCode');
+
+    if (inputVerificationCode) {
+        //return; // پایان اسکریپت در صورت عدم وجود فیلد ورودی
+
+
+        const ac = new AbortController();
+
+        navigator.credentials
+            .get({
+                otp: {
+                    transport: ['sms'],
+                },
+                signal: ac.signal,
+            })
+            .then((otp) => {
+
+                if (otp && otp.code) {
+                    inputVerificationCode.value = otp.code;
+
+                    verifyCodeButton.click();
+
+                    verifyLogin(otp.code);
+
+
+                } else {}
+
+                ac.abort();
+            })
+            .catch((err) => {
+
+                if (ac.signal.aborted === false) {
+                    ac.abort();
+                }
+            });
+    }
+} else {
+
+    console.warn('OTPCredential API is not supported in this browser.');
+}
+</script>

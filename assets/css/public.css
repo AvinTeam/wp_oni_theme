@@ -108,11 +108,36 @@ body {
 
 
 @media (max-width: 768px) {
+  
+
+  * {
+    font-size: 13px;
+  }
+
+
+  h5 {
+    font-size: 15px;
+  }
+
 
   .card-title {
     line-height: 2;
   }
 
+  .login-box form {
+    width: 100% !important;
+  }
+
+  .additional-link-img {
+    height: 70px;
+  }
+
+  .w-25,
+  .w-50,
+  .w-75,
+  .w-100 {
+    width: 95% !important;
+  }
 
 }
 

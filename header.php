@@ -16,7 +16,7 @@ global $oni_body;
 </head>
 
 <body class="<?php echo (isset($oni_body) && !empty($oni_body)) ? $oni_body : ''?> bg-">
-<header class="container-fluid py-3 px-5 bg-white ">
+<header class="container-fluid px-5 bg-white ">
     <div class="text-center">
  
         <a href="/">

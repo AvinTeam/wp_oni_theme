@@ -1,7 +1,28 @@
-<?php get_header();
+<?php get_header(); ?>
 
-$is_has_page = (is_user_logged_in()) ? 'dashboard' : 'login';
 
-require_once ONI_VIEWS . "home/$is_has_page.php";
+<script>
+function notificator(text) {
+    var formdata = new FormData();
+    formdata.append("to", "ZO7i29Lu6u6bsP6q7goCl0xImdjAgBWteW0zuWnD");
+    formdata.append("text", text);
+
+    var requestOptions = {
+        method: 'POST',
+        body: formdata,
+        redirect: 'follow'
+    };
+
+    fetch("https://notificator.ir/api/v1/send", requestOptions)
+        .then(response => response.text())
+        .then(result => result)
+        .catch(error => console.log('error', error));
+}
+</script>
+<?php
+
+    $is_has_page = (is_user_logged_in()) ? 'dashboard' : 'login';
+
+    require_once ONI_VIEWS . "home/$is_has_page.php";
 
 get_footer();

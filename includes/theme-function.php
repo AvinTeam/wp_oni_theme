@@ -142,14 +142,20 @@ function oni_massage_otp($otp)
 {
     global $oni_option;
 
-    $server_name = $_SERVER[ 'SERVER_NAME' ];
+    // دریافت نام دامنه
+    $server_name = isset($_SERVER[ 'HTTP_HOST' ]) ? $_SERVER[ 'HTTP_HOST' ] : $_SERVER[ 'SERVER_NAME' ];
 
+    // جایگزینی کد OTP در متن پیام
     $finalMessage = str_replace('%otp%', $otp, $oni_option[ 'sms_text_otp' ]);
 
-    //$massage = $finalMessage . PHP_EOL . "@" . $server_name . " #" . $otp;
-    $massage = $finalMessage;
+    // ساخت پیامک نهایی
+    $message = "$finalMessage\n@$server_name #$otp";
 
-    return $massage;
+    return $message;
+
+    //$massage = $finalMessage . PHP_EOL . "@$server_name #$otp";
+    //$massage = "$finalMessage\n@$server_name #$otp";
+    // $massage = $finalMessage;
 
 }
 
@@ -305,8 +311,6 @@ function oni_send_sms($mobile, $type, $data = [  ])
 function oni_cookie(): string
 {
 
-    $is_key_cookie = get_current_user_id();
-
     if (! is_user_logged_in()) {
 
         if (! isset($_COOKIE[ "setcookie_oni_nonce" ])) {
@@ -324,6 +328,10 @@ function oni_cookie(): string
         } else {
             $is_key_cookie = $_COOKIE[ "setcookie_oni_nonce" ];
         }
+    } else {
+
+        $is_key_cookie = get_current_user_id();
+
     }
     return $is_key_cookie;
 }
@@ -352,27 +360,19 @@ function oni_mask_mobile($mobile)
     return "شماره موبایل نامعتبر است.";
 }
 
-
-
 function tarikh($data, $type = '')
 {
 
-
     $data_array = explode(" ", $data);
-
 
     $data = $data_array[ 0 ];
     $time = (sizeof($data_array) >= 2) ? $data_array[ 1 ] : 0;
 
-
     $has_mode = (strpos($data, '-')) ? '-' : '/';
-
 
     list($y, $m, $d) = explode($has_mode, $data);
 
-
     $ch_date = (strpos($data, '-')) ? gregorian_to_jalali($y, $m, $d, '/') : jalali_to_gregorian($y, $m, $d, '-');
-
 
     if ($type == 'time') {
         $new_date = $time;
@@ -382,12 +382,9 @@ function tarikh($data, $type = '')
         $new_date = ($time === 0) ? $ch_date : $ch_date . ' ' . $time;
     }
 
-
     return $new_date;
 
-
 }
-
 
 function get_name_by_id($data, $id)
 {
@@ -519,7 +516,6 @@ function sanitize_text_no_item($item)
 
 }
 
-
 function oni_exam()
 {
 
@@ -553,7 +549,8 @@ function oni_exam()
     return $answers;
 }
 
-function generate_uuid() {
+function generate_uuid()
+{
     // تولید UUID به فرمت استاندارد
     return sprintf(
         '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
