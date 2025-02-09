@@ -10,35 +10,35 @@
 
 ?>
 
-<div class="oni-body mx-auto  pb-5 rounded-3 h-100 ">
-    <header class="oni-d-row mx-auto d-flex flex-column justify-content-around align-items-center rounded-bottom-5 ">
+<div class="oni-body mx-auto  pb-5 rounded-3 h-100  position-relative">
+    <header id="login" class="oni-d-row mx-auto d-flex flex-column justify-content-around align-items-center rounded-bottom-5 ">
         <div class="d-flex flex-column justify-content-around oni-login-header ">
             <img class="" style="height: 105px; width: 186.14px; "
-                src="<?php echo oni_panel_image('zendegibaayeha_logo.png') ?> ">
-                <div class="height-16"></div>
+                src="<?php echo oni_panel_image('zendegibaayeha_logo.svg') ?> ">
+                <div class="h-16px"></div>
             
-                <img class="img-fluid mt-3" style="height: 70.22px; width: 194.67px; " src="<?php echo oni_panel_image('oni_logo.png') ?> ">
+                <img class="img-fluid mt-3" style="height: 70.22px; width: 194.67px; " src="<?php echo oni_panel_image('oni_logo.svg') ?> ">
         </div>
-        <h3 class="text-center my-3 text-white font-14px"><?php echo get_bloginfo('description') ?></h3>
+        <h3 class="text-center my-3 text-white f-14px"><?php echo get_bloginfo('description') ?></h3>
     </header>
-    <div class="height-48"></div>
+    <div class="h-48px"></div>
     <div class="oni-d-row oni-form mx-auto d-flex flex-column justify-content-between text-center">
 
         <form id="loginForm">
             <?php wp_nonce_field('oni_login_page' . oni_cookie()); ?>
 
             <div id="mobileForm">
-                <img src="<?php echo oni_panel_image('mobile.png') ?>">
-                <div class="height-32"></div>
+                <img src="<?php echo oni_panel_image('mobile.svg') ?>">
+                <div class="h-32px"></div>
                 <div class="form-group text-center">
                     <input type="tel" inputmode="numeric" pattern="\d*"
-                        class="form-control form-control-lg onlyNumbersInput border-2 height-48" id="mobile"
+                        class="form-control form-control-lg onlyNumbersInput border-2 h-48px f-14px text-primary" id="mobile"
                         maxlength="11" placeholder="09123456789" aria-describedby="sendsms">
                 </div>
-                <div class="height-48"></div>
+                <div class="h-48px"></div>
                 <div class="form-group d-grid ">
                     <button type="submit" disabled id="send-code"
-                        class="btn btn-primary height-48 w-100 text-center py-3 d-flex flex-row justify-content-center align-items-center gap-3 ">
+                        class="btn btn-primary h-48px w-100 text-center py-3 d-flex flex-row justify-content-center align-items-center gap-3 ">
                         <img src="<?php echo oni_panel_image('btn-icon.png') ?>">
                         <span>دریافت کد</span>
                     </button>
@@ -46,32 +46,32 @@
             </div>
 
             <div id="codeVerification"  style="display: none;">
-                <img src="<?php echo oni_panel_image('codeVerify.png') ?>">
-                <div class="height-32"></div>
+                <img src="<?php echo oni_panel_image('codeVerify.svg') ?>">
+                <div class="h-32px"></div>
                 <div class="form-group text-center">
                     <input autocomplete="one-time-code" type="text" inputmode="numeric" pattern="\d*"
-                        class="form-control form-control-lg onlyNumbersInput border-2 height-48 text-center"
+                        class="form-control form-control-lg onlyNumbersInput border-2 h-48px text-center f-14px  text-primary"
                         id="verificationCode" maxlength="<?php echo $oni_option[ 'set_code_count' ] ?>"
                         placeholder="<?php for ($i = 0; $i < $oni_option[ 'set_code_count' ]; $i++) {echo 'ـــ ';}?>"
                         aria-describedby="verify">
 
                     <div class="d-flex flex-row justify-content-between px-3">
-                        <div class="timer text-center font-12px  text-primary" id="timer">00:00</div>
-                        <button type="button" class="btn btn-link btn-block font-12px text-primary" id="resendCode" disabled>ارسال مجدد
+                        <div class="timer text-center f-12px  text-primary" id="timer">00:00</div>
+                        <button type="button" class="btn btn-link btn-block f-12px text-primary" id="resendCode" disabled>ارسال مجدد
                         کد</button>
                     </div>
 
                 </div>
-                <div class="height-48"></div>
+                <div class="h-48px"></div>
                 <div class="form-group ">
                     <button type="submit" disabled id="verifyCode"
-                        class="btn btn-primary  height-48 w-100 text-center py-3 d-flex flex-row justify-content-center align-items-center gap-3 ">
+                        class="btn btn-primary  h-48px w-100 text-center py-3 d-flex flex-row justify-content-center align-items-center gap-3 ">
                         <img src="<?php echo oni_panel_image('btn-icon.png') ?>">
                         <span>تایید و ورود</span>
                     </button>
-                    <div class="height-12"></div>
+                    <div class="h-12px"></div>
                     <button type="button" id="editNumber"
-                        class="btn btn-outline-primary height-48 w-100 text-center py-3 d-flex flex-row justify-content-center align-items-center gap-3 ">
+                        class="btn btn-outline-primary h-48px w-100 text-center py-3 d-flex flex-row justify-content-center align-items-center gap-3 ">
                         <img src="<?php echo oni_panel_image('btn-icon.png') ?>">
                         <span>تغییر شماره</span>
                     </button>
@@ -85,10 +85,10 @@
 
         <div class="">
 
-            <img style="width: 30%;" class="" src="<?php echo oni_panel_image('logofooter.png') ?>">
+            <img style="width: 30%;" class="" src="<?php echo oni_panel_image('logofooter.svg') ?>">
 
-            <h3 class="font-14px text-primary">در شبکه های اجتماعی</h3>
-            <div class="height-24"></div>
+            <h3 class="f-14px text-primary">در شبکه های اجتماعی</h3>
+            <div class="h-24px"></div>
             <div class="d-flex flex-row justify-content-between align-items-center oni-social ">
                 <a class="rounded-circle border border-1 oni-border-color p-2" href="#"><img
                         src="<?php echo oni_panel_image('rubika.png') ?>"></a>
@@ -103,12 +103,10 @@
             </div>
         </div>
     </div>
-</div>
 
 
-
-
-<div class="toast-container position-fixed top-0 end-0 p-3">
+    
+<div class="toast-container position-absolute top-0 p-3">
     <div id="loginToast" class="toast align-items-center text-white bg-danger border-0" role="alert"
         aria-live="assertive" aria-atomic="true">
         <div class="d-flex">
@@ -120,6 +118,11 @@
         </div>
     </div>
 </div>
+</div>
+
+
+
+
 
 <script>
 if ('OTPCredential' in window) {

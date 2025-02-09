@@ -539,7 +539,7 @@ function oni_exam()
             $exam[  ]                   = $ayeh;
             $answers[ 'Q' . $ayeh->id ] = $ayeh->answer;
 
-            if (count($random_numbers) == $oni_option[ 'count_questions' ]) {
+            if (count($random_numbers) == 5) {
                 $stop_condition = true;
             }
         }
@@ -560,4 +560,37 @@ function generate_uuid()
         mt_rand(0, 0x3fff) | 0x8000,
         mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
     );
+}
+
+function q_name_row(int $index, int $type = 0): string
+{
+
+    switch ($index) {
+        case 1:
+            $name_row = $type ? 'اول' : 'یک';
+            break;
+
+        case 2:
+            $name_row = $type ? 'دوم' : 'دو';
+            break;
+
+        case 3:
+            $name_row = $type ? 'سوم' : 'سه';
+            break;
+
+        case 4:
+            $name_row = $type ? 'چهارم' : 'چهار';
+            break;
+
+        case 5:
+            $name_row = $type ? 'پنجم' : 'پنح';
+            break;
+
+        default:
+            $name_row = '';
+            break;
+    }
+
+    return $name_row;
+
 }

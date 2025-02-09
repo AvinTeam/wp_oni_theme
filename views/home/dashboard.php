@@ -1,183 +1,188 @@
-<?php
+<?php global $exam;
+$all_user_count_true = absint(get_user_meta(get_current_user_id(), 'count_true', true)); ?>
+<div class="oni-body mx-auto  pb-5 rounded-3 ">
+    <div class="h-32px"></div>
+    <header class="oni-d-row mx-auto d-flex flex-row justify-content-between align-items-center rounded-bottom-5 ">
+        <img class="img-fluid" src="<?php echo oni_panel_image('zendegibaayeha.svg') ?> ">
 
-    use oniclass\ONIDB;
-
-    global $exam;
-
-    $all_user_questions   = absint(get_user_meta(get_current_user_id(), 'questions', true));
-    $all_user_count_true  = absint(get_user_meta(get_current_user_id(), 'count_true', true));
-    $all_user_count_match = absint(get_user_meta(get_current_user_id(), 'count_match', true));
-
-    $matchdl = new ONIDB('match');
-
-    $this_data = date('Y-m-d');
-
-    $all_count_true_today      = $matchdl->sum('count_true', [ 'iduser' => get_current_user_id() ], "DATE(`created_at`) = '$this_data'");
-    $all_count_questions_today = $matchdl->sum('count_questions', [ 'iduser' => get_current_user_id() ], "DATE(`created_at`) = '$this_data'");
-    $all_count_match_today     = $matchdl->num([ 'iduser' => get_current_user_id() ], "DATE(`created_at`) = '$this_data'");
-?>
-
-
-
-<div class="d-flex justify-content-center align-content-center mt-3">
-
-    <div class="w-75 bg-white p-3 rounded-3 border border-1">
-        <p class="text-center"><?php echo get_user_meta(get_current_user_id(), 'mobile', true) ?></p>
-
-        <table class="table table-bordered p-0 m-0 ">
-            <thead>
-                <tr>
-                    <th class="text-center" scope="col"></th>
-                    <th class="text-center" scope="col">تعداد شرکت در مسابقه </th>
-                    <th class="text-center" scope="col">مجموع امتیاز کسب شده</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th class="text-center" scope="row">کل</th>
-                    <td class="text-center"><?php echo $all_user_count_match ?></td>
-                    <td class="text-center"><?php echo $all_user_count_true ?> از<?php echo $all_user_questions ?> </td>
-                </tr>
-                <tr>
-                    <th class="text-center" scope="row">امروز</th>
-                    <td class="text-center"><?php echo $all_count_match_today ?></td>
-                    <td class="text-center"><?php echo $all_count_true_today ?>
-                        از<?php echo $all_count_questions_today ?> </td>
-                </tr>
-
-            </tbody>
-        </table>
-    </div>
-
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-<?php if (isset($_GET[ 'eid' ]) && ! empty($_GET[ 'eid' ])):
-
-        $deta_eid = [
-            'eid'    => $_GET[ 'eid' ],
-            'iduser' => get_current_user_id(),
-
-         ];
-
-        $num_eid = $matchdl->num($deta_eid);
-
-        if (! $num_eid) {exit;}
-
-        $end_match = $matchdl->get($deta_eid);
-
-    ?>
-<div class="d-flex flex-column justify-content-center align-content-center rounded-3">
-    <div class="card w-75 oni_row text-center">
-        <div class="card-body">
-
-            <img src="<?php echo oni_panel_image('box.svg') ?>">
-
-            <div class="">
-
-
-                <p class="mt-5 color-gray text-info">
-                    با تشکر از شرکت شما در مسابقه زندگی با آیه ها
-
-                </p>
-                <h6>
-                    پاسخ های درست: <?php echo $end_match->count_true ?>
-                </h6>
-                <h5 class="text-success">
-                    شما با <?php echo $all_count_true_today ?> امتیاز در قرعه کشی امروز شرکت می کنید.
-                </h5>
-                <p class="mt-3 color-gray text-info">
-                    در صورت تمایل می توانید باز هم در مسابقه شرکت و امتیاز های خود را افزایش دهید
-                </p>
-                <a href="/" class="btn btn-primary btn-lg bg-gradiant w-25 rounded-5">شرکت مجدد در
-                    مسابقه</a>
-                <br>
-                <button href="https://zendegibaayeha.ir" class="btn btn-outline-primary btn-lg mt-2 w-25 rounded-5"
-                    id="oni-logout">خروج از
-                    مسابقه</button>
+        <a href=""><img class="img-fluid" style="height: 48px; width: 48px; "
+                src="<?php echo oni_panel_image('profile.svg') ?> "></a>
+    </header>
+    <div class="h-32px"></div>
+    <div id="user-info"
+        class="oni-d-row mx-auto border border-1  d-flex flex-row justify-content-between align-items-center p-12px ">
+        <span class="text-primary f-14px">خوش آمدید کاربر
+            <b><?php echo get_user_meta(get_current_user_id(), 'mobile', true) ?></b></span>
+        <div class="d-flex flex-row justify-content-center align-items-center">
+            <div class="cont-bg d-flex flex-row justify-content-center align-items-center text-white">
+                <?php echo number_format($all_user_count_true) ?> امتیاز
             </div>
+            <img class="img-fluid" src="<?php echo oni_panel_image('next-cont.svg') ?>">
+
+        </div>
+    </div>
+    <div class="h-32px"></div>
+    <div class="oni-d-row mx-auto d-flex flex-row justify-content-between align-items-center">
+        <a id="start-match" href="#"> <img class="img-fluid" src="<?php echo oni_panel_image('start-match.svg') ?>"></a>
+        <a href="#"> <img class="img-fluid" src="<?php echo oni_panel_image('statistics-match.svg') ?>"></a>
+        <a href="https://zendegibaayeha.ir"> <img class="img-fluid"
+                src="<?php echo oni_panel_image('context-match.svg') ?>"></a>
+    </div>
+    <div class="h-32px"></div>
+    <div
+        class="oni-d-row mx-auto d-flex  row-cols-5 justify-content-between align-items-center bg-white p-12px all-number-question position-sticky top-0 z-3 shadow ">
+
+        <div id="qn-1"
+            class="number-question col d-flex flex-column justify-content-center align-items-center text-center">
+            <div class="number f-22px text-white h-48px">1</div>
+            <div class="h-12px"></div>
+            <span class="f-12px">سوال اول</span>
+
+        </div>
+        <div id="qn-2"
+            class="number-question col d-flex flex-column justify-content-center align-items-center text-center">
+            <div class="number f-22px text-white h-48px">2</div>
+            <div class="h-12px"></div>
+            <span class="f-12px">سوال دوم</span>
+
+        </div>
+        <div id="qn-3"
+            class="number-question col d-flex flex-column justify-content-center align-items-center text-center">
+            <div class="number f-22px text-white h-48px">3</div>
+            <div class="h-12px"></div>
+            <span class="f-12px">سوال سوم</span>
+
+        </div>
+        <div id="qn-4"
+            class="number-question ذcol d-flex flex-column justify-content-center align-items-center text-center">
+            <div class="number f-22px text-white h-48px">4</div>
+            <div class="h-12px"></div>
+            <span class="f-12px">سوال چهارم</span>
+
+        </div>
+
+        <div id="qn-5"
+            class="number-question col d-flex flex-column justify-content-center align-items-center text-center">
+            <div class="number f-22px text-white h-48px">5</div>
+            <div class="h-12px"></div>
+            <span class="f-12px">سوال پنجم</span>
+
         </div>
     </div>
 
-</div>
-<?php else:$question_list = ''; ?>
-<form method="post" action="" novalidate="novalidate" id="form-question">
-    <div class="d-flex justify-content-center align-content-center">
 
-        <div class="w-75 py-3">
-            <div class="alert alert-info text-center m-0 ">
-                <a href="https://zendegibaayeha.ir/ayeha/" target="_blank" class="text-primary">مشاهده محتوای مسابقه</a>
-            </div>
-        </div>
+    <form method="post" action="" novalidate="novalidate" id="form-question">
 
-    </div>
 
-    <div class="d-flex flex-column justify-content-center align-content-center rounded-3">
+        <div class="h-32px"></div>
 
         <?php foreach ($exam as $index => $ayeh): $question_list .= $ayeh->id . ','; ?>
-        <div class="card w-75 oni_row">
-            <h5 class="card-header text-center  bg-white">
-                سوال <?php echo $index + 1 ?> از<?php echo $oni_option[ 'count_questions' ] ?>
-            </h5>
-            <div class="card-body">
-                <h5 class="card-title text-center" style="font-family: 'osmantaha'; "><?php echo $ayeh->question ?></h5>
+	        <section id="question-<?php echo $index + 1 ?>" class="oni-d-row mx-auto d-flex flex-column bg-white p-24px ">
+
+	            <div class="d-flex flex-row justify-content-between align-items-center">
+	                <span class="text-primary-400">سوال	                                                        <?php echo q_name_row(($index + 1), 1) ?></span>
+	                <span class="text-primary-400"><?php echo q_name_row(($index + 1)) ?> از پنج</span>
+	            </div>
+	            <div class="h-16px"></div>
+
+	            <div class="d-flex flex-column border-top border-top-1 border-primary">
+	                <div class="h-24px"></div>
+	                <div class="text-center text-primary f-16px fw-bold"><?php echo $ayeh->question ?></div>
+	                <div class="h-16px"></div>
+	                <div class="text-center">
+	                    <img src="<?php echo oni_panel_image('line-question.svg') ?>">
+	                </div>
+	                <div class="h-24px"></div>
+
+	                <div class="">
+	                    <label
+	                        class=" label-answer h-48px border border-1 w-100 rounded-12px p-12px d-flex flex-row align-items-center gap-2 "
+	                        for="<?php echo $ayeh->id ?>_1">
+	                        <div class="check-icon"></div>
+	                        <span class="text-justify"><?php echo $ayeh->option1 ?></span>
+	                        <input class="opacity-0" id="<?php echo $ayeh->id ?>_1" type="radio"
+	                            data-i="<?php echo $index + 1 ?>" data-id="<?php echo $ayeh->id ?>" value="1"
+	                            name="Q<?php echo $ayeh->id ?>">
+	                    </label>
+	                    <div class="h-16px"></div>
+	                    <label
+	                        class=" label-answer h-48px border border-1 w-100 rounded-12px p-12px d-flex flex-row align-items-center gap-2 "
+	                        for="<?php echo $ayeh->id ?>_2">
+	                        <div class="check-icon"></div>
+	                        <span class="text-justify"><?php echo $ayeh->option2 ?></span>
+	                        <input class="opacity-0" id="<?php echo $ayeh->id ?>_2" type="radio"
+	                            data-i="<?php echo $index + 1 ?>" data-id="<?php echo $ayeh->id ?>" value="2"
+	                            name="Q<?php echo $ayeh->id ?>">
+	                    </label>
+	                    <div class="h-16px"></div>
+	                    <label
+	                        class=" label-answer h-48px border border-1 w-100 rounded-12px p-12px d-flex flex-row align-items-center gap-2 "
+	                        for="<?php echo $ayeh->id ?>_3">
+	                        <div class="check-icon"></div>
+	                        <span class="text-justify"><?php echo $ayeh->option3 ?></span>
+	                        <input class="opacity-0" id="<?php echo $ayeh->id ?>_3" type="radio"
+	                            data-i="<?php echo $index + 1 ?>" data-id="<?php echo $ayeh->id ?>" value="3"
+	                            name="Q<?php echo $ayeh->id ?>">
+	                    </label>
+	                    <div class="h-16px"></div>
 
 
-                <div class="mt-5">
-                    <label class="form-check form-control form-check-label w-100" for="<?php echo $ayeh->id ?>_1">
-                        <input class="form-check-input" id="<?php echo $ayeh->id ?>_1" type="radio"
-                            data-i="<?php echo $index + 1 ?>" data-id="<?php echo $ayeh->id ?>" value="1"
-                            name="Q<?php echo $ayeh->id ?>">
-                        <?php echo $ayeh->option1 ?>
-                    </label>
+	                    <label
+	                        class=" label-answer h-48px border border-1 w-100 rounded-12px p-12px d-flex flex-row align-items-center gap-2 "
+	                        for="<?php echo $ayeh->id ?>_4">
+	                        <div class="check-icon"></div>
+	                        <span class="text-justify"><?php echo $ayeh->option4 ?></span>
+	                        <input class="opacity-0" id="<?php echo $ayeh->id ?>_4" type="radio"
+	                            data-i="<?php echo $index + 1 ?>" data-id="<?php echo $ayeh->id ?>" value="4"
+	                            name="Q<?php echo $ayeh->id ?>">
+	                    </label>
+	                </div>
 
-
-                    <label class="form-check form-control form-check-label w-100" for="<?php echo $ayeh->id ?>_2">
-                        <input class="form-check-input" id="<?php echo $ayeh->id ?>_2" type="radio"
-                            data-i="<?php echo $index + 1 ?>" data-id="<?php echo $ayeh->id ?>" value="2"
-                            name="Q<?php echo $ayeh->id ?>">
-                        <?php echo $ayeh->option2 ?>
-                    </label>
-
-                    <label class="form-check form-control form-check-label w-100" for="<?php echo $ayeh->id ?>_3">
-                        <input class="form-check-input" id="<?php echo $ayeh->id ?>_3" type="radio"
-                            data-i="<?php echo $index + 1 ?>" data-id="<?php echo $ayeh->id ?>" value="3"
-                            name="Q<?php echo $ayeh->id ?>">
-                        <?php echo $ayeh->option3 ?>
-                    </label>
-
-                    <label class="form-check form-control form-check-label w-100" for="<?php echo $ayeh->id ?>_4">
-                        <input class="form-check-input" id="<?php echo $ayeh->id ?>_4" type="radio"
-                            data-i="<?php echo $index + 1 ?>" data-id="<?php echo $ayeh->id ?>" value="4"
-                            name="Q<?php echo $ayeh->id ?>">
-                        <?php echo $ayeh->option4 ?>
-                    </label>
-                </div>
-            </div>
-        </div>
-        <?php endforeach; ?>
-    </div>
-    <div class="d-flex justify-content-center align-content-center">
-        <div class="w-75 py-3">
+	            </div>
+	        </section>
+	        <div class="h-24px"></div>
+	        <?php endforeach; ?>
+        <div class="oni-d-row mx-auto d-flex flex-column">
 
             <input type="hidden" name="question_list" value="<?php echo $question_list ?>">
 
+            <button type="submit" disabled id="verifyCode"
+                class="btn btn-primary h-48px w-100 text-center d-flex flex-row justify-content-center align-items-center gap-3 rounded-8px ">
+                <img src="<?php echo oni_panel_image('btn-icon.png') ?>">
+                <span>پایان</span>
+            </button>
+        </div>
+    </form>
 
 
+    <!-- Modal -->
+    <div class="modal fade  rounded-8px" id="endMatch" tabindex="-1" aria-labelledby="endMatchLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered ">
+            <div class="modal-content">
 
-            <button type="submit" name="oni_activation" value="question"
-                class="btn btn-primary bg-gradiant btn-block w-100 py-3" disabled="disabled">تایید و ارسال</button>
+                <div class="modal-body d-flex flex-column align-items-center">
+                    <img class="mx-auto" src="<?php echo oni_panel_image('endMatch-logo.svg') ?>">
+                    <div class="h-12px"></div>
+
+                    <p id="q-true" class="f-16px fw-heavy text-secondary "></p>
+                    <div class="h-12px"></div>
+                    
+                    <p id="all-count" class="f-16px fw-heavy text-secondary "></p>
+                    <div class="h-12px"></div>
+
+                    <a href=""
+                        class="btn btn-primary  h-48px w-100 text-center d-flex flex-row justify-content-center align-items-center gap-3 ">
+                        <img src="<?php echo oni_panel_image('btn-icon.png') ?>">
+                        <span>مشاهده نتایج اخیر</span>
+                    </a>
+                    <div class="h-12px"></div>
+                    <button href=""   onclick="location.reload()"
+                        class="btn btn-outline-primary  h-48px w-100 text-center d-flex flex-row justify-content-center align-items-center gap-3 ">
+                        <img src="<?php echo oni_panel_image('btn-icon.png') ?>">
+                        <span>بازگشت</span>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
-</form>
-<?php endif; ?>
+</div>

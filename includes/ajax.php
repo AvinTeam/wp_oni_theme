@@ -136,3 +136,54 @@ function oni_del_all_question()
     wp_send_json_success('ok');
 
 }
+
+add_action('wp_ajax_oni_sent_question', 'oni_sent_question');
+
+function oni_sent_question()
+{
+
+    $matchdl = new ONIDB('match');
+    $onidb   = new ONIDB('question');
+
+    $count_true = 0;
+    $uuid       = '';
+
+    while (true) {
+        $uuid = generate_uuid();
+        if (! $matchdl->num([ 'eid' => $uuid ])) {break;}
+    }
+    $question_list = sanitize_text_no_item(explode(',', $_POST[ 'question_list' ]));
+    foreach ($question_list as $question) {
+
+        $this_question = $onidb->get([ 'id' => $question ]);
+
+        if ($this_question->answer == absint($_POST[ 'Q' . $question ])) {$count_true++;}
+
+    }
+    $insert_match = $matchdl->insert([
+        'eid'             => $uuid,
+        'iduser'          => get_current_user_id(),
+        'count_questions' => count($question_list),
+        'count_true'      => $count_true,
+
+     ]);
+    if ($insert_match) {
+        $all_user_questions   = absint(get_user_meta(get_current_user_id(), 'questions', true));
+        $all_user_count_true  = absint(get_user_meta(get_current_user_id(), 'count_true', true));
+        $all_user_count_match = absint(get_user_meta(get_current_user_id(), 'count_match', true));
+
+        $count_all = ($all_user_count_true + $count_true);
+
+        update_user_meta(get_current_user_id(), 'questions', ($all_user_questions + count($question_list)));
+        update_user_meta(get_current_user_id(), 'count_true', $count_all);
+        update_user_meta(get_current_user_id(), 'count_match', ($all_user_count_match + 1));
+
+        wp_send_json_success([
+            'count_all'  => $count_all,
+            'count_true' => $count_true,
+         ]);
+
+    }
+    wp_send_json_error('');
+
+}

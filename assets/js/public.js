@@ -1,4 +1,5 @@
 
+
 function startLoading() {
     var overlay = document.getElementById("overlay");
 
@@ -73,6 +74,8 @@ if (pageLogin) {
 
                     }
                 } else {
+                    isSendSms = true
+
 
                     let loginToast = document.getElementById("loginToast");
                     let loginAlertBody = loginToast.querySelector(".toast-body");
@@ -92,6 +95,9 @@ if (pageLogin) {
             toast.show();
 
             isSendSms = true
+
+            endLoading();
+
 
         }
     }
@@ -129,6 +135,8 @@ if (pageLogin) {
                     location.reload();
                 }
             } else {
+                isSendSms = true
+
 
                 let loginToast = document.getElementById("loginToast");
                 let loginAlertBody = loginToast.querySelector(".toast-body");
@@ -185,6 +193,67 @@ if (pageLogin) {
 
 
 
+document.querySelectorAll('.number-question').forEach(item => {
+    item.addEventListener('click', function (e) {
+        let id = this.getAttribute('id');
+        id = id.replace("qn-", "");
+        const mapSection = document.getElementById('question-' + id);
+        mapSection.scrollIntoView({
+            behavior: 'smooth'
+        });
+
+    });
+});
+
+
+document.querySelectorAll('#start-match').forEach(item => {
+    item.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        const mapSection = document.getElementById('question-1');
+        mapSection.scrollIntoView({
+            behavior: 'smooth'
+        });
+
+        document.getElementById('qn-1').classList.add('q-info')
+
+    });
+});
+
+
+
+
+
+const sections = document.querySelectorAll("section"); // تمام سکشن‌ها رو بگیر
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+
+            let id = entry.target.id;
+            id = id.replace("question-", "");
+            const items = document.querySelectorAll(".number-question");
+            if (items) {
+                items.forEach(item => {
+                    item.classList.remove("q-info");
+                });
+
+                let this_has_id = document.getElementById('qn-' + id);
+
+                if (this_has_id.classList.contains("q-info") || this_has_id.classList.contains("q-success") || this_has_id.classList.contains("q-error")) {
+                } else {
+                    document.getElementById('qn-' + id).classList.add('q-info')
+                }
+            }
+        }
+    });
+}, { threshold: 0.8 });
+
+sections.forEach(section => observer.observe(section));
+
+
+
+
+
 
 
 
@@ -220,10 +289,11 @@ jQuery(document).ready(function ($) {
         const obj = oni_js.answers;
         const _this = this;
 
-
         let answer = $(this).val();
         let questionId = $(this).attr('data-id');
+        let qrow = $(this).attr('data-i');
         let clickName = $(this).attr('name');
+
         for (let index = 1; index < 5; index++) {
 
             if (index != answer) {
@@ -232,14 +302,13 @@ jQuery(document).ready(function ($) {
         }
 
         if (oni_js.answers[clickName] == answer) {
-            $(_this).parent().addClass("success");
+            $(_this).parent().addClass("a-success");
+            $('#qn-' + qrow).addClass('q-success');
 
         } else {
-            $(_this).parent().addClass("danger");
-            $('input#' + questionId + '_' + oni_js.answers[clickName]).parent().addClass("success");
-
-
-
+            $(_this).parent().addClass("a-error");
+            $('input#' + questionId + '_' + oni_js.answers[clickName]).parent().addClass("a-success");
+            $('#qn-' + qrow).addClass('q-error');
         }
 
         countAnswer++;
@@ -284,6 +353,55 @@ jQuery(document).ready(function ($) {
         // پاک کردن تمام کاراکترهای غیرعددی
         this.value = this.value.replace(/[^0-9]/g, '');
     });
+
+
+
+
+    $("#form-question").on("submit", function (e) {
+        e.preventDefault();
+
+        let formData = new FormData(this);
+        formData.append("action", "oni_sent_question");
+
+        $.ajax({
+            url: oni_js.ajaxurl,
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+
+                if (response.success) {
+                    //all-count
+                    // 150 امتیاز کسب شده
+
+                    //q-true
+                    // 3 جواب درست
+
+
+
+                    $("#endMatch #q-true").html(`${response.data.count_true} جواب درست`);
+                    $("#endMatch #all-count").html(`${response.data.count_all} امتیاز کسب شده`);
+                    $("#endMatch").modal("show");
+
+
+
+                } else {
+
+                }
+
+                console.log(response);
+            },
+            error: function (xhr, status, error) {
+                console.error("خطا در درخواست AJAX:", error);
+            }
+        });
+    });
+
+
+
+
+
 
 })
 
