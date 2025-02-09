@@ -13,9 +13,11 @@
 <div class="oni-body mx-auto  pb-5 rounded-3 h-100 ">
     <header class="oni-d-row mx-auto d-flex flex-column justify-content-around align-items-center rounded-bottom-5 ">
         <div class="d-flex flex-column justify-content-around oni-login-header ">
-            <img class="img-fluid w-100" style="height: 105px;"
+            <img class="" style="height: 105px; width: 186.14px; "
                 src="<?php echo oni_panel_image('zendegibaayeha_logo.png') ?> ">
-            <img class="img-fluid mt-3 w-100" src="<?php echo oni_panel_image('oni_logo.png') ?> ">
+                <div class="height-16"></div>
+            
+                <img class="img-fluid mt-3" style="height: 70.22px; width: 194.67px; " src="<?php echo oni_panel_image('oni_logo.png') ?> ">
         </div>
         <h3 class="text-center my-3 text-white font-14px"><?php echo get_bloginfo('description') ?></h3>
     </header>
@@ -143,11 +145,11 @@ if ('OTPCredential' in window) {
 
                 if (otp && otp.code) {
                     inputVerificationCode.value = otp.code;
+                    document.querySelector("#codeVerification #verifyCode").removeAttribute("disabled");
 
                     verifyCodeButton.click();
 
                     verifyLogin(otp.code);
-
 
                 } else {}
 

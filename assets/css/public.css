@@ -206,6 +206,10 @@ input::placeholder {
   height: 12px !important;
 }
 
+.height-16 {
+  height: 16px !important;
+}
+
 .height-24 {
   height: 24px !important;
 }
@@ -223,13 +227,6 @@ header.oni-d-row {
   background: var(--secondary-color);
   background: url('../image/vector.png'), linear-gradient(225deg, var(--secondary-color) 0%, var(--primary-color) 100%);
   height: 394px;
-  margin-top: -60px;
-}
-
-.oni-login-header {
-  padding-top: 106px;
-  height: 191.22px;
-
 }
 
 .oni-form {
