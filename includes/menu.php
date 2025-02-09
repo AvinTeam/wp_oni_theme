@@ -5,14 +5,14 @@ use oniclass\ONIDB;
 
 (defined('ABSPATH')) || exit;
 
-add_action('admin_menu', 'mph_admin_menu');
+add_action('admin_menu', 'oni_admin_menu');
 
 /**
  * Fires before the administration menu loads in the admin.
  *
  * @param string $context Empty context.
  */
-function mph_admin_menu(string $context): void
+function oni_admin_menu(string $context): void
 {
 
     $list_suffix = add_menu_page(

@@ -1,3 +1,39 @@
+
+function startLoading() {
+    var overlay = document.getElementById("overlay");
+
+    if (overlay) {
+        overlay.style.display = "flex"; // نمایش به صورت flex
+        overlay.style.opacity = "0"; // آماده‌سازی برای افکت fadeIn
+        overlay.style.transition = "opacity 0.5s ease-in-out"; // اضافه کردن انیمیشن
+
+        // تأخیر برای اعمال transition
+        setTimeout(() => {
+            overlay.style.opacity = "1";
+        }, 10);
+    }
+
+    document.body.classList.add("no-scroll"); // اضافه کردن کلاس به body
+}
+
+
+function endLoading() {
+
+    var overlay = document.getElementById("overlay");
+
+    if (overlay) {
+        overlay.style.transition = "opacity 0.5s ease-in-out"; // اضافه کردن انیمیشن
+        overlay.style.opacity = "0"; // شروع افکت fadeOut
+
+        setTimeout(() => {
+            overlay.style.display = "none"; // بعد از محو شدن، مخفی کردن کامل
+        }, 500); // مقدار 500 باید با زمان transition هماهنگ باشه
+    }
+
+    document.body.classList.remove("no-scroll"); // حذف کلاس از body
+
+}
+
 const pageLogin = document.getElementById('loginForm');
 if (pageLogin) {
 
@@ -9,6 +45,8 @@ if (pageLogin) {
         return regex.test(mobile);
     }
     function send_sms() {
+        startLoading();
+
         let mobile = document.getElementById('mobile').value;
         if (validateMobile(mobile)) {
 
@@ -19,45 +57,41 @@ if (pageLogin) {
 
                 const response = JSON.parse(xhr.responseText);
 
+                endLoading();
+
+
                 if (xhr.status === 200) {
                     if (response.success) {
                         document.getElementById('mobileForm').style.display = 'none';
                         document.getElementById('codeVerification').style.display = 'block';
                         document.getElementById('resendCode').disabled = true;
+
                         startTimer();
-
-
-
                         let otpInput = document.getElementById('verificationCode');
-
-                        // اعمال فوکوس روی فیلد
+                        otpInput.value = '';
                         otpInput.focus();
-
-
-
-
-
-
-
 
                     }
                 } else {
 
-                    let loginAlert = document.getElementById('login-alert');
-
-                    loginAlert.classList.remove('d-none');
-                    loginAlert.textContent = response.data;
+                    let loginToast = document.getElementById("loginToast");
+                    let loginAlertBody = loginToast.querySelector(".toast-body");
+                    loginAlertBody.textContent = response.data;
+                    let toast = new bootstrap.Toast(loginToast);
+                    toast.show();
                 }
             };
             xhr.send(`action=oni_sent_sms&nonce=${oni_js.nonce}&mobileNumber=${mobile}`);
 
         } else {
 
-            let loginAlert = document.getElementById('login-alert');
-            isSendSms = true
+            let loginToast = document.getElementById("loginToast");
+            let loginAlertBody = loginToast.querySelector(".toast-body");
+            loginAlertBody.textContent = 'شماره موبایل نامعتبر است';
+            let toast = new bootstrap.Toast(loginToast);
+            toast.show();
 
-            loginAlert.classList.remove('d-none');
-            loginAlert.textContent = 'شماره موبایل نامعتبر است';
+            isSendSms = true
 
         }
     }
@@ -73,6 +107,10 @@ if (pageLogin) {
 
 
     document.getElementById('verifyCode').addEventListener('click', function () {
+
+        startLoading();
+
+
         let mobile = document.getElementById('mobile').value;
 
         let verificationCode = document.getElementById('verificationCode').value;
@@ -84,16 +122,20 @@ if (pageLogin) {
 
             const response = JSON.parse(xhr.responseText);
 
+            endLoading();
+
             if (xhr.status === 200) {
                 if (response.success) {
                     location.reload();
                 }
             } else {
 
-                let loginAlert = document.getElementById('login-alert');
+                let loginToast = document.getElementById("loginToast");
+                let loginAlertBody = loginToast.querySelector(".toast-body");
+                loginAlertBody.textContent = response.data;
+                let toast = new bootstrap.Toast(loginToast);
+                toast.show();
 
-                loginAlert.classList.remove('d-none');
-                loginAlert.textContent = response.data;
             }
         };
         xhr.send(`action=oni_sent_verify&nonce=${oni_js.nonce}&otpNumber=${verificationCode}&mobileNumber=${mobile}`);
@@ -149,6 +191,29 @@ if (pageLogin) {
 jQuery(document).ready(function ($) {
 
     let countAnswer = 0;
+
+    $('#mobileForm #mobile').keyup(function (e) {
+        e.preventDefault();
+        let mobile = $(this).val();
+
+        if (mobile.length >= 11) {
+            $('#mobileForm #send-code').removeAttr('disabled');
+        } else {
+            $('#mobileForm #send-code').attr('disabled', '');
+        }
+    });
+
+
+    $('#codeVerification #verificationCode').keyup(function (e) {
+        e.preventDefault();
+        let mobile = $(this).val();
+
+        if (mobile.length >= oni_js.option.set_code_count) {
+            $('#codeVerification #verifyCode').removeAttr('disabled');
+        } else {
+            $('#codeVerification #verifyCode').attr('disabled', '');
+        }
+    });
 
 
     $('input[type=radio]').change(function (e) {

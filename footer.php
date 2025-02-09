@@ -1,5 +1,5 @@
 <?php wp_footer()?>
-<footer class="container-fluid py-3 px-5 bg-white mt-5">
+<!-- <footer class="container-fluid py-3 px-5 bg-white mt-5">
     <div class="text-center text-md-end">
 
 
@@ -8,7 +8,13 @@
 
 
     </div>
-</footer>
+</footer> -->
+
+
+<!-- لودر تمام صفحه -->
+<div class="overlay" id="overlay">
+    <div class="loader"></div>
+</div>
 </body>
 
 </html>
