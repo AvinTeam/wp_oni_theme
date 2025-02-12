@@ -118,11 +118,8 @@ add_action('wp_ajax_oni_logout', 'oni_logout');
 
 function oni_logout()
 {
-
     wp_logout();
-
-    wp_send_json_success('https://zendegibaayeha.ir');
-
+    wp_send_json_success(home_url());
 }
 
 add_action('wp_ajax_oni_del_all_question', 'oni_del_all_question');
@@ -185,5 +182,18 @@ function oni_sent_question()
 
     }
     wp_send_json_error('');
+
+}
+
+add_action('wp_ajax_oniAjaxAllMatch', 'oniAjaxAllMatch');
+
+function oniAjaxAllMatch()
+{
+
+    // $matchdl = new ONIDB('match');
+    // $onidb   = new ONIDB('question');
+
+    wp_send_json_success($_POST);
+    // wp_send_json_error('');
 
 }

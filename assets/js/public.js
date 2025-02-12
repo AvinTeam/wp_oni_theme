@@ -246,7 +246,7 @@ const observer = new IntersectionObserver((entries) => {
             }
         }
     });
-}, { threshold: 0.8 });
+}, { threshold: 1.0 });
 
 sections.forEach(section => observer.observe(section));
 
@@ -342,7 +342,6 @@ jQuery(document).ready(function ($) {
             success: function (response) {
 
                 window.location.href = response.data;
-                console.log(response);
             }
         });
 
@@ -353,8 +352,6 @@ jQuery(document).ready(function ($) {
         // پاک کردن تمام کاراکترهای غیرعددی
         this.value = this.value.replace(/[^0-9]/g, '');
     });
-
-
 
 
     $("#form-question").on("submit", function (e) {
@@ -372,20 +369,9 @@ jQuery(document).ready(function ($) {
             success: function (response) {
 
                 if (response.success) {
-                    //all-count
-                    // 150 امتیاز کسب شده
-
-                    //q-true
-                    // 3 جواب درست
-
-
-
                     $("#endMatch #q-true").html(`${response.data.count_true} جواب درست`);
                     $("#endMatch #all-count").html(`${response.data.count_all} امتیاز کسب شده`);
                     $("#endMatch").modal("show");
-
-
-
                 } else {
 
                 }
@@ -398,8 +384,117 @@ jQuery(document).ready(function ($) {
         });
     });
 
+    function ajaxAllMatch(type, paged = 1) {
+
+        const formData = {
+            action: 'oniAjaxAllMatch',
+            type: type,
+            paged: paged
+        };
+
+        $.ajax({
+            url: oni_js.ajaxurl,
+            method: 'POST',
+            data: formData,
+            dataType: 'json',
+            success: function (response) {
+
+                // if (response.success) {
+                //     $("#endMatch #q-true").html(`${response.data.count_true} جواب درست`);
+                //     $("#endMatch #all-count").html(`${response.data.count_all} امتیاز کسب شده`);
+                //     $("#endMatch").modal("show");
+                // } else {
+
+                // }
 
 
+
+
+
+
+
+
+                // if (response.results && Array.isArray(response.results)) {
+                //     response.results.forEach(item => {
+    
+                //         let description = '';
+                //         let signature = '';  
+                //         let avatar = '';  
+                        
+    
+    
+        
+                //         if (item.description != null && !$('#nasr-form-description').hasClass("nasr-dn")) {
+                //             description = `<p class="" style="direction:rtl; word-wrap: break-word;overflow: hidden; text-align: justify; font-size: 12px;">
+                //                                 ${item.description != null ? item.description : ''}
+                //                             </p>`;
+    
+                //         }
+        
+                //         if (!$('#nasr-form-signature').hasClass("nasr-dn")) {
+                //             signature = `<p class="" style="direction:rtl; word-wrap: break-word;overflow: hidden; text-align: center;">
+                //                                 <img src="${item.signature}" style="border-radius: 10px;height: 100px;object-fit: cover;">
+                //                             </p>`;
+    
+                //         }
+                        
+        
+                //         if (!$('#nasr-form-avatar').hasClass("nasr-dn")) {
+                //             avatar = `<img src="/wp-content/themes/nasrollah/assets/image/avatar/${item.avatar}.jpg"
+                //                                     class="w3-circle" style="height:50px;margin: 10px;">`;
+    
+                //         }
+                        
+    
+                //         const label = $(`
+                //                     <div style="direction:rtl; float: right; height: auto;" class="w3-col l4 m6 s12 w3-padding fixed-height">
+                //                         <div class="w3-card w3-round-large w3-border w3-border-gray w3-padding">
+                //                             <h4 class=" nasr_users " >
+                //                             ${avatar}
+                //                                 <div class="nasr_username">
+                //                                     <p>${item.full_name}</p>
+                //                                     <span>${maskMobileNumber(item.mobile)}</span>
+                //                                 </div>
+                //                             </h4>
+                //                             ${description}
+                //                             ${signature}
+     
+                //                         </div>
+                //                     </div>
+                //             `);
+                //         div.append(label);
+    
+                //     });
+                // }
+
+
+
+
+
+
+                console.log(response);
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr);
+                console.error("خطا در درخواست AJAX:", error);
+            }
+        });
+
+    }
+
+    ajaxAllMatch('all-match');
+    $('.profile-filter').click(function (e) {
+        e.preventDefault();
+        let id = $(this).attr('id');
+        $('.profile-filter').removeClass('btn-active');
+        $(this).addClass('btn-active');
+
+        $('.count-match').addClass('d-none');
+        $('#count-' + id).removeClass('d-none');
+
+
+
+    });
 
 
 

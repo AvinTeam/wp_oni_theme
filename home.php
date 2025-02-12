@@ -21,7 +21,11 @@ function notificator(text) {
 </script>
 <?php
 
-    $is_has_page = (is_user_logged_in()) ? 'dashboard' : 'login';
+
+
+    $is_profile = (isset($_GET[ 'profile' ]) && empty($_GET[ 'profile' ])) ? 'profile' : 'dashboard';
+
+    $is_has_page = (is_user_logged_in()) ? $is_profile : 'login';
 
     require_once ONI_VIEWS . "home/$is_has_page.php";
 
