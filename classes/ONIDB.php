@@ -110,7 +110,6 @@ class ONIDB
 
     public function num(array $data = [  ], string $where = ''): int | string
     {
-
         $sqlwhere = "";
 
         if (! empty($where)) {
@@ -149,7 +148,18 @@ class ONIDB
         if (isset($args[ 'data' ])) {
             foreach ($args[ 'data' ] as $key => $value) {
 
-                $where .= $this->wpdb->prepare(' AND %i = ' . $this->set_type($value), $key, $value);
+                if (is_array($value)) {
+                    $where .= ' AND (';
+                    foreach ($value as $i => $row) {
+                        if ($i == 1) {$where .= ' OR ';}
+                        $where .= $this->wpdb->prepare(' %i = ' . $this->set_type($row), $key, $row);
+                    }
+                    $where .= ')';
+                } else {
+                    $where .= $this->wpdb->prepare(' AND %i = ' . $this->set_type($value), $key, $value);
+
+                }
+
             }
         }
 
@@ -157,24 +167,26 @@ class ONIDB
             $where .= $this->wpdb->prepare(" AND %i LIKE %s", $args[ 's' ][ 0 ], '%' . $args[ 's' ][ 1 ] . '%');
         }
 
+        if (isset($args[ 'where' ])) {
+            $where .= " AND  {$args[ 'where' ]} ";
+        }
+
         if (isset($args[ 'order_by' ])) {
             $where .= $this->wpdb->prepare(" ORDER BY %i " . $args[ 'order_by' ][ 1 ], $args[ 'order_by' ][ 0 ]);
-
         }
         if (isset($args[ 'per_page' ])) {
-
             $where .= $this->wpdb->prepare(" LIMIT %d ", absint($args[ 'per_page' ]));
         }
+
         if (isset($args[ 'offset' ])) {
-
             $where .= $this->wpdb->prepare(" OFFSET %d ", absint($args[ 'offset' ]));
-
         }
 
-        $mpn_row = $this->wpdb->get_results(
-            "SELECT * FROM `$this->tablename` WHERE  $where "
-        );
+        $star = (isset($args[ 'star' ])) ? $args[ 'star' ] : "*";
 
+        $mpn_row = $this->wpdb->get_results(
+            "SELECT $star FROM `$this->tablename` WHERE  $where "
+        );
         return $mpn_row;
 
     }

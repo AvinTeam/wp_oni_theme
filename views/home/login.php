@@ -24,35 +24,35 @@
         <h3 class="text-center my-3 text-white f-14px"><?php echo get_bloginfo('description') ?></h3>
     </header>
     <div class="h-48px"></div>
-    <div class="w-100 rounded-8px  oni-form mx-auto d-flex flex-column justify-content-between text-center">
+    <div class="w-100 rounded-8px oni-form mx-auto d-flex flex-column justify-content-between text-center">
 
         <form id="loginForm">
             <?php wp_nonce_field('oni_login_page' . oni_cookie()); ?>
 
-            <div id="mobileForm">
+            <div id="mobileForm" style="display: none;">
                 <img src="<?php echo oni_panel_image('mobile.svg') ?>">
                 <div class="h-32px"></div>
                 <div class="form-group text-center">
                     <input type="tel" inputmode="numeric" pattern="\d*"
-                        class="form-control form-control-lg onlyNumbersInput border-2 h-48px f-14px text-primary login-input"
+                        class="form-control form-control-lg onlyNumbersInput border-1 h-48px f-14px text-primary login-input"
                         id="mobile" maxlength="11" placeholder="09123456789" aria-describedby="sendsms">
                 </div>
                 <div class="h-48px"></div>
                 <div class="form-group d-grid ">
                     <button type="submit" disabled id="send-code"
-                        class="btn btn-secondary h-48px w-100 text-center py-3 d-flex flex-row justify-content-center align-items-center gap-3 ">
+                        class="btn btn-secondary h-48px w-100 text-center py-3 d-flex flex-row justify-content-center align-items-center gap-3 rounded-8px">
                         <img src="<?php echo oni_panel_image('btn-icon.png') ?>">
                         <span>دریافت کد</span>
                     </button>
                 </div>
             </div>
 
-            <div id="codeVerification" style="display: none;">
+            <div id="codeVerification">
                 <img src="<?php echo oni_panel_image('codeVerify.svg') ?>">
                 <div class="h-32px"></div>
                 <div class="form-group text-center mx-auto" style="width: 203px;">
                     <input autocomplete="one-time-code" type="text" inputmode="numeric" pattern="\d*"
-                        class="form-control form-control-lg onlyNumbersInput border-2 h-48px text-center f-14px  text-primary login-input"
+                        class="form-control form-control-lg onlyNumbersInput border-1 h-48px text-center f-14px  text-primary login-input"
                         id="verificationCode" maxlength="<?php echo $oni_option[ 'set_code_count' ] ?>"
                         placeholder="<?php for ($i = 0; $i < $oni_option[ 'set_code_count' ]; $i++) {echo 'ـــ ';}?>"
                         aria-describedby="verify">
@@ -68,22 +68,18 @@
                 <div class="h-48px"></div>
                 <div class="form-group ">
                     <button type="submit" disabled id="verifyCode"
-                        class="btn btn-secondary h-48px w-100 text-center py-3 d-flex flex-row justify-content-center align-items-center gap-3 ">
+                        class="btn btn-secondary h-48px w-100 text-center py-3 d-flex flex-row justify-content-center align-items-center gap-3 rounded-8px">
                         <img src="<?php echo oni_panel_image('btn-icon.png') ?>">
                         <span>تایید و ورود</span>
                     </button>
                     <div class="h-12px"></div>
                     <button type="button" id="editNumber"
-                        class="btn btn-outline-secondary h-48px w-100 text-center py-3 d-flex flex-row justify-content-center align-items-center gap-3 ">
+                        class="btn btn-outline-secondary h-48px w-100 text-center py-3 d-flex flex-row justify-content-center align-items-center gap-3 rounded-8px">
                         <img src="<?php echo oni_panel_image('btn-icon.png') ?>">
                         <span>تغییر شماره</span>
                     </button>
                 </div>
             </div>
-
-
-
-
         </form>
 
         <div class="">
@@ -92,7 +88,7 @@
 
             <h3 class="f-14px text-primary">در شبکه های اجتماعی</h3>
             <div class="h-24px"></div>
-            <div class="d-flex flex-row justify-content-between align-items-center oni-social ">
+            <div class="d-flex flex-row justify-content-around align-items-center oni-social ">
                 <a class="rounded-circle border border-1 oni-border-color p-2" href="#"><img
                         src="<?php echo oni_panel_image('rubika.png') ?>"></a>
                 <a class="rounded-circle border border-1 oni-border-color p-2" href="#"><img
@@ -106,9 +102,6 @@
             </div>
         </div>
     </div>
-
-
-
     <div class="toast-container position-absolute top-0 p-3">
         <div id="loginToast" class="toast align-items-center text-white bg-danger " role="alert"
             aria-live="assertive" aria-atomic="true">

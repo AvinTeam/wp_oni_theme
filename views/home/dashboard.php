@@ -3,7 +3,7 @@ $all_user_count_true = absint(get_user_meta(get_current_user_id(), 'count_true',
 <div class="oni-body mx-auto  pb-5 rounded-3  w-100">
     <div class="h-32px"></div>
     <header class="w-100 rounded-8px mx-auto d-flex flex-row justify-content-between align-items-center ">
-        <img class="img-fluid" src="<?php echo oni_panel_image('zendegibaayeha.svg') ?> ">
+        <img class="img-fluid w-25" src="<?php echo oni_panel_image('zendegibaayeha.png') ?> ">
 
         <a href="/?profile"><img class="img-fluid" style="height: 48px; width: 48px; "
                 src="<?php echo oni_panel_image('profile.svg') ?> "></a>
@@ -34,7 +34,7 @@ $all_user_count_true = absint(get_user_meta(get_current_user_id(), 'count_true',
 
         <div id="qn-1"
             class="number-question col d-flex flex-column justify-content-center align-items-center text-center">
-            <div class="number f-22px text-white h-48px">1</div>
+            <div class="number f-22px text-white h-48px rounded-circle">1</div>
             <div class="h-12px"></div>
             <span class="f-12px">سوال اول</span>
 
@@ -71,10 +71,7 @@ $all_user_count_true = absint(get_user_meta(get_current_user_id(), 'count_true',
     </div>
 
     <form method="post" action="" novalidate="novalidate" id="form-question">
-
-
         <div class="h-32px"></div>
-
         <?php foreach ($exam as $index => $ayeh): $question_list .= $ayeh->id . ','; ?>
         <section id="question-<?php echo $index + 1 ?>"
             class="w-100 rounded-8px  mx-auto d-flex flex-column bg-white p-24px ">
@@ -155,9 +152,9 @@ $all_user_count_true = absint(get_user_meta(get_current_user_id(), 'count_true',
             <input type="hidden" name="question_list" value="<?php echo $question_list ?>">
 
             <button type="submit" disabled id="verifyCode"
-                class="btn btn-primary h-48px w-100 text-center d-flex flex-row justify-content-center align-items-center gap-3 rounded-8px ">
-                <img src="<?php echo oni_panel_image('btn-icon.png') ?>">
-                <span>پایان</span>
+                class="btn btn-secondary h-48px w-100 text-center d-flex flex-row justify-content-center align-items-center gap-3 rounded-8px ">
+                <img src="<?php echo oni_panel_image('send.svg') ?>">
+                <span>پایان آزمون</span>
             </button>
         </div>
     </form>
@@ -174,21 +171,27 @@ $all_user_count_true = absint(get_user_meta(get_current_user_id(), 'count_true',
 
                     <p id="q-true" class="f-16px fw-heavy text-secondary "></p>
                     <div class="h-12px"></div>
-
+<!-- 
                     <p id="all-count" class="f-16px fw-heavy text-secondary "></p>
-                    <div class="h-12px"></div>
+                    <div class="h-12px"></div> -->
 
                     <a href="/?profile"
-                        class="btn btn-secondary h-48px w-100 text-center d-flex flex-row justify-content-center align-items-center gap-3 ">
+                        class="btn btn-secondary h-48px w-100 text-center d-flex flex-row justify-content-center align-items-center gap-3 rounded-8px">
                         <img src="<?php echo oni_panel_image('btn-icon.png') ?>">
                         <span>مشاهده نتایج اخیر</span>
                     </a>
                     <div class="h-12px"></div>
-                    <button href="" onclick="location.reload()"
-                        class="btn btn-outline-primary  h-48px w-100 text-center d-flex flex-row justify-content-center align-items-center gap-3 ">
+                    <button onclick="location.reload()"
+                        class="btn btn-outline-secondary h-48px w-100 text-center d-flex flex-row justify-content-center align-items-center gap-3 rounded-8px">
                         <img src="<?php echo oni_panel_image('btn-icon.png') ?>">
-                        <span>بازگشت</span>
+                        <span>آزمون مجدد</span>
                     </button>
+                    <div class="h-12px"></div>
+                    <a href="https://zendegibaayeha.ir" target="_blank"
+                        class="btn btn-outline-secondary h-48px w-100 text-center d-flex flex-row justify-content-center align-items-center gap-3 rounded-8px">
+                        <img src="<?php echo oni_panel_image('btn-icon.png') ?>">
+                        <span>صفحه نخست</span>
+                    </a>
                 </div>
             </div>
         </div>

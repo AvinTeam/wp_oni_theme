@@ -1,6 +1,7 @@
 <?php
 
 use oniclass\ONIDB;
+use oniclass\oni_export;
 
 add_action('wp_ajax_nopriv_oni_sent_sms', 'oni_sent_sms');
 
@@ -143,13 +144,13 @@ function oni_sent_question()
     $onidb   = new ONIDB('question');
 
     $count_true = 0;
-    $uuid       = '';
 
-    while (true) {
-        $uuid = generate_uuid();
-        if (! $matchdl->num([ 'eid' => $uuid ])) {break;}
-    }
+    $this_date = date('Y-m-d');
+
+    $q = $matchdl->num([ 'iduser' => get_current_user_id() ], "DATE(`created_at`) = '$this_date'");
+
     $question_list = sanitize_text_no_item(explode(',', $_POST[ 'question_list' ]));
+
     foreach ($question_list as $question) {
 
         $this_question = $onidb->get([ 'id' => $question ]);
@@ -158,7 +159,7 @@ function oni_sent_question()
 
     }
     $insert_match = $matchdl->insert([
-        'eid'             => $uuid,
+        'eid'             => absint($q) + 1,
         'iduser'          => get_current_user_id(),
         'count_questions' => count($question_list),
         'count_true'      => $count_true,
@@ -190,10 +191,142 @@ add_action('wp_ajax_oniAjaxAllMatch', 'oniAjaxAllMatch');
 function oniAjaxAllMatch()
 {
 
-    // $matchdl = new ONIDB('match');
-    // $onidb   = new ONIDB('question');
+    // wp_send_json_success($_POST);
 
-    wp_send_json_success($_POST);
-    // wp_send_json_error('');
+    if ($_POST[ 'type' ] == 'all-match') {
+        $matchdl = new oni_export('match');
+
+        $string_all_match = '';
+        $array            = $matchdl->get_by_user(
+            get_current_user_id(),
+            $_POST[ 'date' ] ? sanitize_text_field($_POST[ 'date' ]) : '',
+            $_POST[ 'sort' ] ? "total_count_true {$_POST[ 'sort' ]}" : '',
+        );
+
+        if (sizeof($array) == 0) {
+            if(!empty($_POST[ 'date' ])){
+                wp_send_json_success('<div class="alert alert-secondary" role="alert">شما در تاریخ '.$_POST[ 'date' ].' در مسابقه ای شرکت نکردید.</div>');
+  
+            }
+            wp_send_json_success('<div class="alert alert-secondary" role="alert">شما در مسابقه ای شرکت نکردید</div>');
+        }
+
+        foreach ($array as $row) {
+            $string_all_match .= '
+            <div class="w-100 bg-primary-100 d-flex flex-column rounded-8px ">
+                <div class="d-flex flex-row justify-content-around align-items-center border-primary-200"
+                    style="border-bottom: 1px solid">
+                    <div class="p-12px w-100  border-primary-200 " style="border-left: 1px solid">
+                        <span class="f-14px text-primary-600">روز مسابقه</span>
+                        <div class="h-12px"></div>
+                        <span class="fw-bold f-16px text-primary">' . tarikh($row->unique_date) . '</span>
+                    </div>
+                    <div class="p-12px w-100">
+                        <span class="f-14px text-primary-600">تعداد دفعات شرکت</span>
+                        <div class="h-12px"></div>
+                        <span class="fw-bold f-16px text-primary">' . number_format($row->total_match) . '</span>
+                    </div>
+                </div>
+                <div class="d-flex flex-row justify-content-around align-items-center">
+                    <div class="p-12px w-100  border-primary-200 " style="border-left: 1px solid">
+                        <span class="f-14px text-primary-600">نتیجه کل روز</span>
+                        <div class="h-12px"></div>
+                        <span class="fw-bold f-16px text-primary">نتیجه ' . number_format($row->total_count_true) . ' از ' . number_format($row->total_count_questions) . '</span>
+                    </div>
+                    <div class="p-12px w-100">
+                        <span class="f-14px text-primary-600">امتیاز کسب شده در روز</span>
+                        <div class="h-12px"></div>
+                        <span class="fw-bold f-16px text-primary">' . number_format($row->total_count_true) . ' امتیاز</span>
+                    </div>
+                </div>
+            </div>
+            <div class="h-16px"></div>';
+        }
+
+        wp_send_json_success($string_all_match);
+
+    } elseif ($_POST[ 'type' ] == 'today-match') {
+
+        $this_date = date('Y-m-d');
+
+        $onidb = new ONIDB('match');
+
+        $string_all_match = '';
+
+        $args = [
+            'date'  => [ 'iduser' => get_current_user_id() ],
+            'where' => "DATE(`created_at`) = '$this_date'",
+
+         ];
+
+        if (absint($_POST[ 'sort' ])) {
+            $args[ 'order_by' ] = [ "count_true", $_POST[ 'sort' ] ];
+        } else {
+            $args[ 'order_by' ] = [ "created_at", 'DESC' ];
+
+        }
+
+
+        $array = $onidb->select($args);
+        $m     = sizeof($array);
+        if (sizeof($array) == 0) {
+            wp_send_json_success('<div class="alert alert-secondary" role="alert">شما امروز در مسابقه ای شرکت نکردید</div>');
+        }
+
+        foreach ($array as $row) {
+
+            $eid = $row->eid;
+            if (! absint($row->eid)) {
+
+                $data = [
+                    'eid' => $m,
+                 ];
+                $where = [
+                    'id' => $row->id,
+                 ];
+
+                $onidb->update($data, $where);
+
+                $eid = $m;
+
+            }
+            $m--;
+
+            $string_all_match .= '
+            <div class="w-100 bg-primary-100 d-flex flex-column rounded-8px ">
+                <div class="d-flex flex-row justify-content-around align-items-center border-primary-200"
+                    style="border-bottom: 1px solid">
+                    <div class="p-12px w-100  border-primary-200 " style="border-left: 1px solid">
+                        <span class="f-14px text-primary-600">ساعت</span>
+                        <div class="h-12px"></div>
+                        <span class="fw-bold f-16px text-primary">' . tarikh($row->created_at, 'time') . '</span>
+                    </div>
+                    <div class="p-12px w-100">
+                        <span class="f-14px text-primary-600">دفعه شرکت</span>
+                        <div class="h-12px"></div>
+                        <span class="fw-bold f-16px text-primary">' . ($eid) . '</span>
+                    </div>
+                </div>
+                <div class="d-flex flex-row justify-content-around align-items-center">
+                    <div class="p-12px w-100  border-primary-200 " style="border-left: 1px solid">
+                        <span class="f-14px text-primary-600">نتیجه</span>
+                        <div class="h-12px"></div>
+                        <span class="fw-bold f-16px text-primary">نتیجه ' . number_format($row->count_true) . ' از ' . number_format($row->count_questions) . '</span>
+                    </div>
+                    <div class="p-12px w-100">
+                        <span class="f-14px text-primary-600">امتیاز کسب شده</span>
+                        <div class="h-12px"></div>
+                        <span class="fw-bold f-16px text-primary">' . number_format($row->count_true) . ' امتیاز</span>
+                    </div>
+                </div>
+            </div>
+            <div class="h-16px"></div>';
+
+        }
+
+        wp_send_json_success($string_all_match);
+
+    }
+    wp_send_json_error('');
 
 }

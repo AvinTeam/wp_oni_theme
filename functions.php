@@ -2,7 +2,7 @@
 
 (defined('ABSPATH')) || exit;
 
-define('ONI_VERSION', '1.3.5');
+define('ONI_VERSION', '2.0.3');
 
 define('ONI_PATH', get_template_directory() . "/");
 define('ONI_INCLUDES', ONI_PATH . 'includes/');
@@ -51,7 +51,7 @@ if (is_admin()) {
 
 // if (isset($_GET[ 'test' ])) {
 
-//     // print_r($_GET);
-//     // exit;
+    // print_r($_GET);
+    // exit;
 
 // }

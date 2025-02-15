@@ -583,7 +583,7 @@ function q_name_row(int $index, int $type = 0): string
             break;
 
         case 5:
-            $name_row = $type ? 'پنجم' : 'پنح';
+            $name_row = $type ? 'پنجم' : 'پنج';
             break;
 
         default:

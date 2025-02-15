@@ -71,20 +71,6 @@ function oni_style()
         [ 'bootstrap' ],
         '1.11.3'
     );
-    wp_register_style(
-        'select2',
-        ONI_VENDOR . 'select2/select2.min.css',
-        [ 'bootstrap' ],
-        '4.1.0-rc.0'
-    );
-
-    wp_enqueue_style(
-        'oni_style',
-        ONI_CSS . 'public.css',
-        [ 'bootstrap.rtl', 'bootstrap.icons', 'select2' ],
-        ONI_VERSION
-    );
-
     wp_register_script(
         'bootstrap',
         ONI_VENDOR . 'bootstrap/bootstrap.min.js',
@@ -93,6 +79,12 @@ function oni_style()
         true
     );
 
+    wp_register_style(
+        'select2',
+        ONI_VENDOR . 'select2/select2.min.css',
+        [ 'bootstrap' ],
+        '4.1.0-rc.0'
+    );
     wp_register_script(
         'select2',
         ONI_VENDOR . 'select2/select2.min.js',
@@ -101,10 +93,31 @@ function oni_style()
         true
     );
 
+    wp_register_style(
+        'jalalidatepicker',
+        ONI_VENDOR . 'jalalidatepicker/jalalidatepicker.min.css',
+        [  ],
+        '0.9.6'
+    );
+    wp_register_script(
+        'jalalidatepicker',
+        ONI_VENDOR . 'jalalidatepicker/jalalidatepicker.min.js',
+        [  ],
+        '0.9.6',
+        true
+    );
+
+    wp_enqueue_style(
+        'oni_style',
+        ONI_CSS . 'public.css',
+        [ 'bootstrap.rtl', 'bootstrap.icons', 'select2', 'jalalidatepicker' ],
+        ONI_VERSION
+    );
+
     wp_enqueue_script(
         'oni_js',
         ONI_JS . 'public.js',
-        [ 'jquery', 'bootstrap', 'select2' ],
+        [ 'jquery', 'bootstrap', 'select2', 'jalalidatepicker' ],
         ONI_VERSION,
         true
     );

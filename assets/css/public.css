@@ -28,10 +28,8 @@
   font-family: osmantaha;
   font-style: normal;
   font-weight: bold;
-  src: url('../fonts/osmantaha.ttf');
-  src: url('../fonts/osmantaha - Bold') format('woff'),
-    url('../fonts/IranSansX/IRANSansXFaNum-Bold.woff2') format('woff2'),
-    url("../fonts/osmantaha-Bold.ttf") format("truetype");
+  src: url('../fonts/osmantaha-Bold.ttf');
+  src: url("../fonts/osmantaha-Bold.ttf") format("truetype");
 }
 
 
@@ -108,11 +106,25 @@
   --secondary-600-color: #70D1D0;
   --secondary-700-color: #54C7C8;
   --secondary-800-color: #37BEC1;
-  --red-color: #973939;
-  --red-6-color: #E5CECE;
-  --red-8-color: #BB7E7E;
+  --red-color: #FF3378;
+
+  --red-100-color: #FFE5EE;
+  --red-800-color: #FF3378;
+
+  --tertiary-color: #82C341;
+  --fourthly-color: #8C5E2C;
+  --fifthly-color: #E0AD70;
+  --sixthly-color: #999999;
+  --seventy-color: #973939;
+
+
+
+
+
+
 
   --secondary-filter: brightness(0) saturate(100%) invert(84%) sepia(95%) saturate(4387%) hue-rotate(132deg) brightness(81%) contrast(82%);
+  --secondary-100-filter: brightness(0) saturate(100%) invert(99%) sepia(34%) saturate(248%) hue-rotate(347deg) brightness(100%) contrast(104%);
   --secondary-400-filter: brightness(0) saturate(100%) invert(97%) sepia(7%) saturate(1528%) hue-rotate(127deg) brightness(93%) contrast(90%);
   --primary-filter: brightness(0) saturate(100%) invert(26%) sepia(23%) saturate(3729%) hue-rotate(209deg) brightness(88%) contrast(84%);
   --primary-400-filter: brightness(0) saturate(100%) invert(71%) sepia(55%) saturate(238%) hue-rotate(199deg) brightness(86%) contrast(90%);
@@ -169,6 +181,7 @@ a {
 .btn-secondary:disabled {
   color: var(--secondary-400-color) !important;
   background-color: var(--secondary-100-color) !important;
+  border-color: var(--secondary-400-color) !important;
 }
 
 .btn-secondary.disabled img,
@@ -182,21 +195,21 @@ a {
 }
 
 .btn-outline-secondary:hover img {
-  filter: var(--secondary-filter);
+  filter: var(--secondary-100-filter);
 }
 
 
 .btn-outline-secondary,
 .btn-outline-secondary:active {
-  color: var(--secondary-400-color) !important;
-  border-color: var(--secondary-400-color) !important;
+  color: var(--secondary-color) !important;
+  border-color: var(--secondary-color) !important;
 }
 
 .btn-secondary:hover,
 .btn-outline-secondary:hover {
-  background: var(--secondary-300-color) !important;
-  border-color: var(--secondary-color) !important;
-  color: var(--secondary-color) !important;
+  background: var(--secondary-600-color) !important;
+  border-color: var(--secondary-600-color)  !important;
+  color: var(--secondary-100-color) !important;
 }
 
 .btn-outline-secondary.disabled,
@@ -411,7 +424,7 @@ a {
 }
 
 .oni-form {
-  height: 512px;
+  height: 570px;
 }
 
 .oni-social a img {
@@ -490,9 +503,9 @@ a {
 
 
 .label-answer.a-error {
-  border-color: #FF3378 !important;
-  background-color: #FFE5EE !important;
-  color: #FF3378 !important;
+  border-color: var(--red-color) !important;
+  background-color: var(--red-100-color) !important;
+  color: var(--red-color) !important;
 }
 
 .label-answer.a-error .check-icon {
@@ -516,7 +529,7 @@ a {
 
 
 #endMatch .modal-body {
-  background-image: url('../image/endMatch-bg.svg');
+  /* background-image: url('../image/endMatch-bg.svg'); */
   background-repeat: no-repeat;
   background-size: 100%;
 }
@@ -537,7 +550,52 @@ a {
 }
 
 
+.all-count {
+  background-image: url('../image/all-count.svg');
+  background-repeat: no-repeat;
+  background-size: 100%;
+  height: 90px;
+}
 
+.all-match {
+  background-image: url('../image/all-match.svg');
+  background-repeat: no-repeat;
+  background-size: 100%;
+  height: 90px;
+}
+
+
+.today-count {
+  background-image: url('../image/today-count.svg');
+  background-repeat: no-repeat;
+  background-size: 100%;
+  height: 90px;
+}
+
+.today-match {
+  background-image: url('../image/today-match.svg');
+  background-repeat: no-repeat;
+  background-size: 100%;
+  height: 90px;
+}
+
+
+#sort-input {
+  padding-right: 40px;
+}
+
+.this_sort {
+  margin-top: -20px;
+}
+
+.this_sort select {
+  width: 150px;
+}
+
+.this_sort img {
+  margin-bottom: -65px;
+  margin-right: 12px
+}
 
 
 @media (max-width: 768px) {

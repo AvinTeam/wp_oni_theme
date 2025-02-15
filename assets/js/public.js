@@ -1,3 +1,7 @@
+jalaliDatepicker.startWatch({
+    minDate: "attr",
+    maxDate: "attr"
+});
 
 
 function startLoading() {
@@ -16,7 +20,6 @@ function startLoading() {
 
     document.body.classList.add("no-scroll"); // اضافه کردن کلاس به body
 }
-
 
 function endLoading() {
 
@@ -191,8 +194,6 @@ if (pageLogin) {
 
 }
 
-
-
 document.querySelectorAll('.number-question').forEach(item => {
     item.addEventListener('click', function (e) {
         let id = this.getAttribute('id');
@@ -221,6 +222,19 @@ document.querySelectorAll('#start-match').forEach(item => {
 });
 
 
+// const dateInput = document.getElementById('date-input');
+
+// document.getElementById('select-date').addEventListener('click', function (e) {
+//     e.preventDefault();
+//     console.log(this);
+//     console.log(dateInput);
+
+//     dateInput.focus();
+
+
+
+
+// });
 
 
 
@@ -251,12 +265,6 @@ const observer = new IntersectionObserver((entries) => {
 sections.forEach(section => observer.observe(section));
 
 
-
-
-
-
-
-
 jQuery(document).ready(function ($) {
 
     let countAnswer = 0;
@@ -272,6 +280,16 @@ jQuery(document).ready(function ($) {
         }
     });
 
+    $('#mobileForm #mobile').change(function (e) {
+        e.preventDefault();
+        let mobile = $(this).val();
+
+        if (mobile.length >= 11) {
+            $('#mobileForm #send-code').removeAttr('disabled');
+        } else {
+            $('#mobileForm #send-code').attr('disabled', '');
+        }
+    });
 
     $('#codeVerification #verificationCode').keyup(function (e) {
         e.preventDefault();
@@ -284,6 +302,16 @@ jQuery(document).ready(function ($) {
         }
     });
 
+    $('#codeVerification #verificationCode').change(function (e) {
+        e.preventDefault();
+        let mobile = $(this).val();
+
+        if (mobile.length >= oni_js.option.set_code_count) {
+            $('#codeVerification #verifyCode').removeAttr('disabled');
+        } else {
+            $('#codeVerification #verifyCode').attr('disabled', '');
+        }
+    });
 
     $('input[type=radio]').change(function (e) {
         const obj = oni_js.answers;
@@ -353,7 +381,6 @@ jQuery(document).ready(function ($) {
         this.value = this.value.replace(/[^0-9]/g, '');
     });
 
-
     $("#form-question").on("submit", function (e) {
         e.preventDefault();
 
@@ -370,7 +397,7 @@ jQuery(document).ready(function ($) {
 
                 if (response.success) {
                     $("#endMatch #q-true").html(`${response.data.count_true} جواب درست`);
-                    $("#endMatch #all-count").html(`${response.data.count_all} امتیاز کسب شده`);
+                    // $("#endMatch #all-count").html(`${response.data.count_all} امتیاز کسب شده`);
                     $("#endMatch").modal("show");
                 } else {
 
@@ -384,11 +411,23 @@ jQuery(document).ready(function ($) {
         });
     });
 
-    function ajaxAllMatch(type, paged = 1) {
+    let type = 'all-match';
+    let date = '';
+    let sort = '';
+
+    function ajaxAllMatch(paged = 1) {
+
+
+        $("#overlay").css("display", "flex").hide().fadeIn();
+        $("body").addClass("no-scroll");
+        $('#all_result_match').html('');
+
 
         const formData = {
             action: 'oniAjaxAllMatch',
             type: type,
+            date: date,
+            sort: sort,
             paged: paged
         };
 
@@ -398,105 +437,89 @@ jQuery(document).ready(function ($) {
             data: formData,
             dataType: 'json',
             success: function (response) {
+                console.log(response.data);
 
-                // if (response.success) {
-                //     $("#endMatch #q-true").html(`${response.data.count_true} جواب درست`);
-                //     $("#endMatch #all-count").html(`${response.data.count_all} امتیاز کسب شده`);
-                //     $("#endMatch").modal("show");
-                // } else {
+                if (response.success) {
+                    $('#all_result_match').html(response.data);
+                }
+                else {
+                    $('#all_result_match').html(`<div class="alert alert-danger" role="alert">خطایی پیش آمده دوباره تلاش کتید</div>`);
+                }
 
-                // }
-
-
-
-
-
-
-
-
-                // if (response.results && Array.isArray(response.results)) {
-                //     response.results.forEach(item => {
-    
-                //         let description = '';
-                //         let signature = '';  
-                //         let avatar = '';  
-                        
-    
-    
-        
-                //         if (item.description != null && !$('#nasr-form-description').hasClass("nasr-dn")) {
-                //             description = `<p class="" style="direction:rtl; word-wrap: break-word;overflow: hidden; text-align: justify; font-size: 12px;">
-                //                                 ${item.description != null ? item.description : ''}
-                //                             </p>`;
-    
-                //         }
-        
-                //         if (!$('#nasr-form-signature').hasClass("nasr-dn")) {
-                //             signature = `<p class="" style="direction:rtl; word-wrap: break-word;overflow: hidden; text-align: center;">
-                //                                 <img src="${item.signature}" style="border-radius: 10px;height: 100px;object-fit: cover;">
-                //                             </p>`;
-    
-                //         }
-                        
-        
-                //         if (!$('#nasr-form-avatar').hasClass("nasr-dn")) {
-                //             avatar = `<img src="/wp-content/themes/nasrollah/assets/image/avatar/${item.avatar}.jpg"
-                //                                     class="w3-circle" style="height:50px;margin: 10px;">`;
-    
-                //         }
-                        
-    
-                //         const label = $(`
-                //                     <div style="direction:rtl; float: right; height: auto;" class="w3-col l4 m6 s12 w3-padding fixed-height">
-                //                         <div class="w3-card w3-round-large w3-border w3-border-gray w3-padding">
-                //                             <h4 class=" nasr_users " >
-                //                             ${avatar}
-                //                                 <div class="nasr_username">
-                //                                     <p>${item.full_name}</p>
-                //                                     <span>${maskMobileNumber(item.mobile)}</span>
-                //                                 </div>
-                //                             </h4>
-                //                             ${description}
-                //                             ${signature}
-     
-                //                         </div>
-                //                     </div>
-                //             `);
-                //         div.append(label);
-    
-                //     });
-                // }
-
-
-
-
-
-
-                console.log(response);
+                $("#overlay").fadeOut();
+                $("body").removeClass("no-scroll");
             },
             error: function (xhr, status, error) {
                 console.error(xhr);
                 console.error("خطا در درخواست AJAX:", error);
+                $('#all_result_match').html(`<div class="alert alert-danger" role="alert">خطایی پیش آمده دوباره تلاش کتید</div>`);
+
+                $("#overlay").fadeOut();
+                $("body").removeClass("no-scroll");
+
             }
         });
 
     }
 
-    ajaxAllMatch('all-match');
+    const allResultMatch = document.getElementById('all_result_match');
+
+    if (allResultMatch) {
+        ajaxAllMatch();
+    }
+
     $('.profile-filter').click(function (e) {
         e.preventDefault();
-        let id = $(this).attr('id');
+        type = $(this).attr('id');
         $('.profile-filter').removeClass('btn-active');
         $(this).addClass('btn-active');
 
         $('.count-match').addClass('d-none');
-        $('#count-' + id).removeClass('d-none');
+        $('#count-' + type).removeClass('d-none');
+
+        if (type == 'today-match') {
+            $('#select-date').addClass('d-none');
 
 
+        } else {
+            $('#select-date').removeClass('d-none');
+            $('#date-input').val('');
+            $('#select-date span').text('انتخاب روز');
+            date = ''
+
+
+        }
+
+        sort = '';
+        $('#sort-input').val(0);
+
+
+        ajaxAllMatch();
 
     });
 
+    $('#select-date').click(function (e) {
+        e.preventDefault();
 
+        const dateInput = document.getElementById('date-input');
+        dateInput.focus();
 
-})
+    });
+
+    $('#date-input').change(function (e) {
+        e.preventDefault();
+        date = $(this).val();
+        $('#select-date span').text(date);
+        ajaxAllMatch();
+
+    });
+
+    $('#sort-input').change(function (e) {
+        e.preventDefault();
+        sort = $(this).val();
+        ajaxAllMatch();
+
+    });
+
+});
 
