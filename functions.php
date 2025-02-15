@@ -2,7 +2,7 @@
 
 (defined('ABSPATH')) || exit;
 
-define('ONI_VERSION', '2.0.3');
+define('ONI_VERSION', '2.0.6');
 
 define('ONI_PATH', get_template_directory() . "/");
 define('ONI_INCLUDES', ONI_PATH . 'includes/');
@@ -30,6 +30,7 @@ require_once ONI_INCLUDES . '/jdf.php';
 
 require_once ONI_CLASS . '/ONIDB.php';
 require_once ONI_CLASS . '/EXPORTCLASS.php';
+require_once ONI_CLASS . '/Cipher.php';
 
 $oni_option = oni_start_working();
 

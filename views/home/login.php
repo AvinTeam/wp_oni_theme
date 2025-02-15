@@ -29,7 +29,7 @@
         <form id="loginForm">
             <?php wp_nonce_field('oni_login_page' . oni_cookie()); ?>
 
-            <div id="mobileForm" style="display: none;">
+            <div id="mobileForm">
                 <img src="<?php echo oni_panel_image('mobile.svg') ?>">
                 <div class="h-32px"></div>
                 <div class="form-group text-center">
@@ -47,7 +47,7 @@
                 </div>
             </div>
 
-            <div id="codeVerification">
+            <div id="codeVerification" style="display: none;">
                 <img src="<?php echo oni_panel_image('codeVerify.svg') ?>">
                 <div class="h-32px"></div>
                 <div class="form-group text-center mx-auto" style="width: 203px;">

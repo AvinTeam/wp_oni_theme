@@ -18,9 +18,9 @@
             <table class="form-table" role="presentation">
                 <tbody>
                     <tr>
-                        <th scope="row"><label for="count_questions">تعداد سوال های مسابقه</label></th>
-                        <td><input name="count_questions" type="text" id="count_questions"
-                                value="<?php echo $oni_option[ 'count_questions' ] ?>"
+                        <th scope="row"><label for="token_password">تعداد سوال های مسابقه</label></th>
+                        <td><input name="token_password" type="text" id="token_password"
+                                value="<?php echo $oni_option[ 'token_password' ] ?>"
                                 class="regular-text  onlyNumbersInput" inputmode="numeric" pattern="\d*">
                         </td>
                     </tr>

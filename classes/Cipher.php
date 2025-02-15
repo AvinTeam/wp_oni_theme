@@ -6,9 +6,11 @@ class Cipher
     private $encryptionKey;
     private $cipher = 'AES-256-CBC';
 
-    public function __construct($key)
+    public function __construct()
     {
-        $this->encryptionKey = hash('sha256', $key);
+        $oni_option = oni_start_working();
+
+        $this->encryptionKey = hash('sha256', trim($oni_option[ 'token_password' ]));
     }
 
     function base64UrlEncode($data)

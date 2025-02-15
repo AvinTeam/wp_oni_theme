@@ -102,7 +102,7 @@ function oni_start_working(): array
                 'sms_type'          => (isset($oni_option[ 'sms_type' ])) ? $oni_option[ 'sms_type' ] : 'tsms',
                 'notificator_token' => (isset($oni_option[ 'notificator_token' ])) ? $oni_option[ 'notificator_token' ] : '',
 
-                'count_questions'   => (isset($oni_option[ 'count_questions' ])) ? $oni_option[ 'count_questions' ] : 5,
+                'token_password'   => (isset($oni_option[ 'token_password' ])) ? $oni_option[ 'token_password' ] : 'super_secret-key',
 
              ]
 
@@ -130,7 +130,7 @@ function oni_update_option($data)
         'sms_type'          => (isset($data[ 'sms_type' ])) ? sanitize_text_field($data[ 'sms_type' ]) : $oni_option[ 'sms_type' ],
         'notificator_token' => (isset($data[ 'notificator_token' ])) ? sanitize_text_field($data[ 'notificator_token' ]) : $oni_option[ 'notificator_token' ],
 
-        'count_questions'   => (isset($data[ 'count_questions' ])) ? absint($data[ 'count_questions' ]) : $oni_option[ 'count_questions' ],
+        'token_password'   => (isset($data[ 'token_password' ])) ? absint($data[ 'token_password' ]) : $oni_option[ 'token_password' ],
 
      ];
 
