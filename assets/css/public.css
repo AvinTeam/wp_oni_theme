@@ -107,7 +107,6 @@
   --secondary-700-color: #54C7C8;
   --secondary-800-color: #37BEC1;
   --red-color: #FF3378;
-
   --red-100-color: #FFE5EE;
   --red-800-color: #FF3378;
 
@@ -116,12 +115,6 @@
   --fifthly-color: #E0AD70;
   --sixthly-color: #999999;
   --seventy-color: #973939;
-
-
-
-
-
-
 
   --secondary-filter: brightness(0) saturate(100%) invert(84%) sepia(95%) saturate(4387%) hue-rotate(132deg) brightness(81%) contrast(82%);
   --secondary-100-filter: brightness(0) saturate(100%) invert(99%) sepia(34%) saturate(248%) hue-rotate(347deg) brightness(100%) contrast(104%);
@@ -324,7 +317,6 @@ a {
 
 .fw-heavy {
   font-weight: 1000;
-
 }
 
 .h-8px {
