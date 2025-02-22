@@ -69,23 +69,6 @@
     url("../fonts/IranSansX/IRANSansXFaNum-Medium.ttf") format("truetype");
 }
 
-
-
-
-
-
-
-
-
-
-
-
-* {
-  font-family: 'IRANSansX' !important;
-}
-
-
-
 :root {
   --primary-color: #393C97;
   --primary-100-color: #F3F5FF;
@@ -125,7 +108,12 @@
 
   --bs-primary-rgb: 57, 60, 151;
   --btn-active-color: #37BEC1;
+  --bs-font-sans-serif: 'IRANSansX';
 
+}
+
+* {
+  font-family: 'IRANSansX';
 }
 
 .ayeh-question {
@@ -201,7 +189,7 @@ a {
 .btn-secondary:hover,
 .btn-outline-secondary:hover {
   background: var(--secondary-600-color) !important;
-  border-color: var(--secondary-600-color)  !important;
+  border-color: var(--secondary-600-color) !important;
   color: var(--secondary-100-color) !important;
 }
 
