@@ -13,6 +13,7 @@
 
         <form method="post" action="" novalidate="novalidate" enctype="multipart/form-data">
             <?php wp_nonce_field('oni_nonce' . get_current_user_id()); ?>
+            <p>برای وارد کردن سوال دقت کنید که در فیلد های زیر باید اسم ستون مربوطه را وارد کنید</p>
 
             <table class="form-table" role="presentation">
                 <tbody>
@@ -22,28 +23,28 @@
                     </tr>
                     <tr>
                         <th scope="row"><label for="question">سوال</label></th>
-                        <td><input name="frm[question]" type="text" id="question"></td>
+                        <td><input name="frm[question]" type="text" id="question" class="regular-text" placeholder="ستون سوال در اکسل"></td>
                     </tr>
                     <tr>
                         <th scope="row"><label for="option1">گزینه اول</label></th>
-                        <td><input name="frm[option1]" type="text" id="option1"></td>
+                        <td><input name="frm[option1]" type="text" id="option1" class="regular-text" placeholder="ستون گزینه اول در اکسل"></td>
                     </tr>
                     <tr>
                         <th scope="row"><label for="option2">گزینه دوم</label></th>
-                        <td><input name="frm[option2]" type="text" id="option2"></td>
+                        <td><input name="frm[option2]" type="text" id="option2" class="regular-text" placeholder="ستون سوال گزینه دوم در اکسل"></td>
                     </tr>
                     <tr>
                         <th scope="row"><label for="option3">گزینه سوم</label></th>
-                        <td><input name="frm[option3]" type="text" id="option3"></td>
+                        <td><input name="frm[option3]" type="text" id="option3" class="regular-text" placeholder="ستون سوال گزینه سوم در اکسل"></td>
                     </tr>
                     </tr>
                     <tr>
                         <th scope="row"><label for="option4">گزینه چهارم</label></th>
-                        <td><input name="frm[option4]" type="text" id="option4"></td>
+                        <td><input name="frm[option4]" type="text" id="option4" class="regular-text" placeholder="ستون سوال گزینه چعارم در اکسل"></td>
                     </tr>
                     <tr>
                         <th scope="row"><label for="answer">پاسخ درست</label></th>
-                        <td><input name="frm[answer]" type="text" id="answer"></td>
+                        <td><input name="frm[answer]" type="text" id="answer" class="regular-text" placeholder="ستون پاسخ درست در اکسل"></td>
                     </tr>
                     </tr>
                 </tbody>

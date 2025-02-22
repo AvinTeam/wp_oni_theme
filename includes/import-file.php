@@ -40,6 +40,7 @@ if (isset($_FILES[ 'excel_file' ]) && $_FILES[ 'excel_file' ][ 'error' ] === UPL
             foreach ($columnMapping as $key => $columnLetter) {
                 $value = "";
 
+                $columnLetter = strtoupper($columnLetter);
                 if ($key == 'question') {$value = sanitize_textarea_field($row[ $columnLetter ]);}
                 if ($key == 'option1') {$value = sanitize_text_field($row[ $columnLetter ]);}
                 if ($key == 'option2') {$value = sanitize_text_field($row[ $columnLetter ]);}
