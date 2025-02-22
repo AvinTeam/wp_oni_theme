@@ -222,22 +222,6 @@ document.querySelectorAll('#start-match').forEach(item => {
 });
 
 
-// const dateInput = document.getElementById('date-input');
-
-// document.getElementById('select-date').addEventListener('click', function (e) {
-//     e.preventDefault();
-//     console.log(this);
-//     console.log(dateInput);
-
-//     dateInput.focus();
-
-
-
-
-// });
-
-
-
 const sections = document.querySelectorAll("section"); // تمام سکشن‌ها رو بگیر
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -263,7 +247,6 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 1.0 });
 
 sections.forEach(section => observer.observe(section));
-
 
 jQuery(document).ready(function ($) {
 
@@ -354,7 +337,6 @@ jQuery(document).ready(function ($) {
 
     });
 
-
     $('#oni-logout').click(function (e) {
         e.preventDefault();
 
@@ -374,7 +356,6 @@ jQuery(document).ready(function ($) {
         });
 
     });
-
 
     $('.onlyNumbersInput').on('input paste', function () {
         // پاک کردن تمام کاراکترهای غیرعددی
@@ -403,7 +384,6 @@ jQuery(document).ready(function ($) {
 
                 }
 
-                console.log(response);
             },
             error: function (xhr, status, error) {
                 console.error("خطا در درخواست AJAX:", error);
@@ -437,8 +417,6 @@ jQuery(document).ready(function ($) {
             data: formData,
             dataType: 'json',
             success: function (response) {
-                console.log(response.data);
-
                 if (response.success) {
                     $('#all_result_match').html(response.data);
                 }
@@ -486,14 +464,10 @@ jQuery(document).ready(function ($) {
             $('#date-input').val('');
             $('#select-date span').text('انتخاب روز');
             date = ''
-
-
         }
 
         sort = '';
         $('#sort-input').val(0);
-
-
         ajaxAllMatch();
 
     });
@@ -509,7 +483,9 @@ jQuery(document).ready(function ($) {
     $('#date-input').change(function (e) {
         e.preventDefault();
         date = $(this).val();
-        $('#select-date span').text(date);
+
+        let spanText = (date === "") ? 'انتخاب روز' : date;
+        $('#select-date span').text(spanText);
         ajaxAllMatch();
 
     });
