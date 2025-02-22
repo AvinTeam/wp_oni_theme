@@ -9,7 +9,11 @@
     add_filter('wp_title', 'oni_title_filter_login');
 
 ?>
-
+<style>
+body {
+    height: 100vh;
+}
+</style>
 <div class="oni-body mx-auto w-100 pb-5 rounded-3 h-100  position-relative">
     <header id="login" style="margin-top: -30px; padding-top: 30px;"
         class="w-100 rounded-24px  mx-auto d-flex flex-column justify-content-around align-items-center">
@@ -103,8 +107,8 @@
         </div>
     </div>
     <div class="toast-container position-absolute top-0 p-3">
-        <div id="loginToast" class="toast align-items-center text-white bg-danger " role="alert"
-            aria-live="assertive" aria-atomic="true">
+        <div id="loginToast" class="toast align-items-center text-white bg-danger " role="alert" aria-live="assertive"
+            aria-atomic="true">
             <div class="d-flex">
                 <div class="toast-body">
 
