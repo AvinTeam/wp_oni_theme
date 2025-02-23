@@ -73,81 +73,67 @@ $all_user_count_true = absint(get_user_meta(get_current_user_id(), 'count_true',
 
     <form method="post" action="" novalidate="novalidate" id="form-question">
         <div class="h-32px"></div>
-        <?php foreach ($exam as $index => $ayeh): $question_list .= $ayeh->id . ','; ?>
-	        <section id="question-<?php echo $index + 1 ?>"
-	            class="w-100 rounded-8px  mx-auto d-flex flex-column bg-white p-24px ">
+        <?php foreach ($exam as $index => $ayeh): $question_list .= $ayeh->id . ',';
 
-	            <div class="d-flex flex-row justify-content-between align-items-center">
-	                <span class="text-primary-400">سوال	                                                        <?php echo q_name_row(($index + 1), 1) ?></span>
-	                <span class="text-primary-400"><?php echo q_name_row(($index + 1)) ?> از پنج</span>
-	            </div>
-	            <div class="h-16px"></div>
+                $option = [
+                    1 => $ayeh->option1,
+                    2 => $ayeh->option2,
+                    3 => $ayeh->option3,
+                    4 => $ayeh->option4,
+                 ];
 
-	            <div class="d-flex flex-column border-top border-top-1 border-primary">
-	                <div class="h-24px"></div>
-	                <div class="ayeh-question text-center text-primary f-16px fw-bold"><?php echo $ayeh->question ?></div>
-	                <div class="h-16px"></div>
-	                <div class="text-center">
-	                    <img src="<?php echo oni_panel_image('line-question.svg') ?>">
-	                </div>
-	                <div class="h-24px"></div>
+                $keys = array_keys($option); // گرفتن کلیدهای آرایه
+                shuffle($keys);              // به‌صورت تصادفی کردن کلیدها
 
-	                <div class="">
-	                    <label
-	                        class=" label-answer h-96px border border-1 w-100 rounded-12px p-12px d-flex flex-row align-items-center gap-2 "
-	                        for="<?php echo $ayeh->id ?>_1">
-	                        <div style=" width: 32px ;">
-	                            <div class="check-icon"></div>
-	                        </div>
-	                        <span class="text-justify f-16px"><?php echo $ayeh->option1 ?></span>
-	                        <input class="opacity-0" id="<?php echo $ayeh->id ?>_1" type="radio"
-	                            data-i="<?php echo $index + 1 ?>" data-id="<?php echo $ayeh->id ?>" value="1"
-	                            name="Q<?php echo $ayeh->id ?>">
-	                    </label>
-	                    <div class="h-16px"></div>
-	                    <label
-	                        class=" label-answer h-96px border border-1 w-100 rounded-12px p-12px d-flex flex-row align-items-center gap-2 "
-	                        for="<?php echo $ayeh->id ?>_2">
-	                        <div style=" width: 32px ;">
-	                            <div class="check-icon"></div>
-	                        </div>
-	                        <span class="text-justify f-16px"><?php echo $ayeh->option2 ?></span>
-	                        <input class="opacity-0" id="<?php echo $ayeh->id ?>_2" type="radio"
-	                            data-i="<?php echo $index + 1 ?>" data-id="<?php echo $ayeh->id ?>" value="2"
-	                            name="Q<?php echo $ayeh->id ?>">
-	                    </label>
-	                    <div class="h-16px"></div>
-	                    <label
-	                        class=" label-answer h-96px border border-1 w-100 rounded-12px p-12px d-flex flex-row align-items-center gap-2 "
-	                        for="<?php echo $ayeh->id ?>_3">
-	                        <div style=" width: 32px ;">
-	                            <div class="check-icon"></div>
-	                        </div>
-	                        <span class="text-justify f-16px"><?php echo $ayeh->option3 ?></span>
-	                        <input class="opacity-0" id="<?php echo $ayeh->id ?>_3" type="radio"
-	                            data-i="<?php echo $index + 1 ?>" data-id="<?php echo $ayeh->id ?>" value="3"
-	                            name="Q<?php echo $ayeh->id ?>">
-	                    </label>
-	                    <div class="h-16px"></div>
+                $shuffled = [  ];
+                foreach ($keys as $key) {
+                    $shuffled[ $key ] = $option[ $key ]; // اختصاص مقدار به کلید جدید
+                }
 
+            ?>
+        <section id="question-<?php echo $index + 1 ?>"
+            class="w-100 rounded-8px  mx-auto d-flex flex-column bg-white p-24px ">
 
-	                    <label
-	                        class=" label-answer h-96px border border-1 w-100 rounded-12px p-12px d-flex flex-row align-items-center gap-2 "
-	                        for="<?php echo $ayeh->id ?>_4">
-	                        <div style=" width: 32px ;">
-	                            <div class="check-icon"></div>
-	                        </div>
-	                        <span class="text-justify f-16px"><?php echo $ayeh->option4 ?></span>
-	                        <input class="opacity-0" id="<?php echo $ayeh->id ?>_4" type="radio"
-	                            data-i="<?php echo $index + 1 ?>" data-id="<?php echo $ayeh->id ?>" value="4"
-	                            name="Q<?php echo $ayeh->id ?>">
-	                    </label>
-	                </div>
+            <div class="d-flex flex-row justify-content-between align-items-center">
+                <span class="text-primary-400">سوال <?php echo q_name_row(($index + 1), 1) ?></span>
+                <span class="text-primary-400"><?php echo q_name_row(($index + 1)) ?> از پنج</span>
+            </div>
+            <div class="h-16px"></div>
 
-	            </div>
-	        </section>
-	        <div class="h-24px"></div>
-	        <?php endforeach; ?>
+            <div class="d-flex flex-column border-top border-top-1 border-primary">
+                <div class="h-24px"></div>
+                <div class="ayeh-question text-center text-primary f-16px fw-bold"><?php echo $ayeh->question ?></div>
+                <div class="h-16px"></div>
+                <div class="text-center">
+                    <img src="<?php echo oni_panel_image('line-question.svg') ?>">
+                </div>
+                <div class="h-24px"></div>
+
+                <div class="">
+
+                    <?php $shuffled_row = 1;foreach ($shuffled as $key => $value): ?>
+                    <label
+                        class=" label-answer h-96px border border-1 w-100 rounded-12px p-12px d-flex flex-row align-items-center gap-2 "
+                        for="<?php echo $ayeh->id ?>_<?php echo $key ?>">
+                        <div style=" width: 32px ;">
+                            <div class="check-icon"></div>
+                        </div>
+                        <span class="text-justify f-16px"><?php echo $value ?></span>
+                        <input class="opacity-0" id="<?php echo $ayeh->id ?>_<?php echo $key ?>" type="radio"
+                            data-i="<?php echo $index + 1 ?>" data-id="<?php echo $ayeh->id ?>"
+                            value="<?php echo $key ?>" name="Q<?php echo $ayeh->id ?>">
+                    </label>
+                    <?php if ($shuffled_row < 4): ?>
+                    <div class="h-16px"></div>
+                    <?php endif; ?>
+
+                    <?php $shuffled_row++; endforeach; ?>
+                </div>
+
+            </div>
+        </section>
+        <div class="h-24px"></div>
+        <?php endforeach; ?>
         <div class="w-100 rounded-8px  mx-auto d-flex flex-column">
 
             <input type="hidden" name="question_list" value="<?php echo $question_list ?>">
@@ -162,7 +148,8 @@ $all_user_count_true = absint(get_user_meta(get_current_user_id(), 'count_true',
 
 
     <!-- Modal -->
-    <div class="modal fade rounded-8px w-75 mx-auto" id="endMatch" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="endMatchLabel" aria-hidden="true">
+    <div class="modal fade rounded-8px w-75 mx-auto" id="endMatch" tabindex="-1" data-bs-backdrop="static"
+        data-bs-keyboard="false" aria-labelledby="endMatchLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered ">
             <div class="modal-content">
 
@@ -172,7 +159,7 @@ $all_user_count_true = absint(get_user_meta(get_current_user_id(), 'count_true',
 
                     <p id="q-true" class="f-16px fw-heavy text-secondary "></p>
                     <div class="h-12px"></div>
-<!--
+                    <!--
                     <p id="all-count" class="f-16px fw-heavy text-secondary "></p>
                     <div class="h-12px"></div> -->
 

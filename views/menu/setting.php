@@ -21,7 +21,7 @@
                         <th scope="row"><label for="token_password">تعداد سوال های مسابقه</label></th>
                         <td><input name="token_password" type="text" id="token_password"
                                 value="<?php echo $oni_option[ 'token_password' ] ?>"
-                                class="regular-text  onlyNumbersInput" inputmode="numeric" pattern="\d*">
+                                class="regular-text ">
                         </td>
                     </tr>
                 </tbody>

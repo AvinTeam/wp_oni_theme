@@ -1,6 +1,5 @@
 <?php
     use oniclass\ONIDB;
-    global $exam;
     $all_user_questions   = absint(get_user_meta(get_current_user_id(), 'questions', true));
     $all_user_count_true  = absint(get_user_meta(get_current_user_id(), 'count_true', true));
     $all_user_count_match = absint(get_user_meta(get_current_user_id(), 'count_match', true));

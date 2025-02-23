@@ -130,7 +130,7 @@ function oni_update_option($data)
         'sms_type'          => (isset($data[ 'sms_type' ])) ? sanitize_text_field($data[ 'sms_type' ]) : $oni_option[ 'sms_type' ],
         'notificator_token' => (isset($data[ 'notificator_token' ])) ? sanitize_text_field($data[ 'notificator_token' ]) : $oni_option[ 'notificator_token' ],
 
-        'token_password'   => (isset($data[ 'token_password' ])) ? absint($data[ 'token_password' ]) : $oni_option[ 'token_password' ],
+        'token_password'   => (isset($data[ 'token_password' ])) ? sanitize_text_field($data[ 'token_password' ]) : $oni_option[ 'token_password' ],
 
      ];
 
@@ -518,8 +518,6 @@ function sanitize_text_no_item($item)
 
 function oni_exam()
 {
-
-    $oni_option = oni_start_working();
 
     $onidb    = new ONIDB('question');
     $all_ayeh = $onidb->select();

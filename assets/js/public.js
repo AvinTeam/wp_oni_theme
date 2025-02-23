@@ -97,8 +97,6 @@ if (pageLogin) {
             let toast = new bootstrap.Toast(loginToast);
             toast.show();
 
-            isSendSms = true
-
             endLoading();
 
 
