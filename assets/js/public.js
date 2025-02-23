@@ -376,10 +376,8 @@ jQuery(document).ready(function ($) {
 
                 if (response.success) {
                     $("#endMatch #q-true").html(`${response.data.count_true} جواب درست`);
-                    // $("#endMatch #all-count").html(`${response.data.count_all} امتیاز کسب شده`);
+                    $("#endMatch #all-count").html(`${response.data.score} امتیاز کسب شده`);
                     $("#endMatch").modal("show");
-                } else {
-
                 }
 
             },

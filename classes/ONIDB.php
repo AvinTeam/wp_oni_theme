@@ -191,7 +191,7 @@ class ONIDB
 
     }
 
-    public function sum(string $object, array $data, string $where): int | string
+    public function sum(string $object, array $data, string $where = ""): int | string
     {
 
         $sqlwhere = "";

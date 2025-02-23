@@ -32,7 +32,7 @@ class oni_export extends ONIDB
                 DATE(m.created_at) AS unique_date,
                 u.user_login AS username,
                 COUNT(*) AS total_rows,
-                SUM(m.count_true) AS total_true
+                SUM(m.score) AS total_true
             FROM
                 `$this->tablename` m
             INNER JOIN
@@ -104,6 +104,7 @@ class oni_export extends ONIDB
                 DATE(created_at) AS unique_date,
                 SUM(count_questions) AS total_count_questions,
                 SUM(count_true) AS total_count_true,
+                SUM(score) AS total_score,
                 COUNT(*) AS total_match
 
             FROM `$this->tablename`

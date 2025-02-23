@@ -159,9 +159,9 @@ $all_user_count_true = absint(get_user_meta(get_current_user_id(), 'count_true',
 
                     <p id="q-true" class="f-16px fw-heavy text-secondary "></p>
                     <div class="h-12px"></div>
-                    <!--
+                    
                     <p id="all-count" class="f-16px fw-heavy text-secondary "></p>
-                    <div class="h-12px"></div> -->
+                    <div class="h-12px"></div>
 
                     <a href="/?profile"
                         class="btn btn-secondary h-48px w-100 text-center d-flex flex-row justify-content-center align-items-center gap-3 rounded-8px">

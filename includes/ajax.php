@@ -163,6 +163,7 @@ function oni_sent_question()
         'iduser'          => get_current_user_id(),
         'count_questions' => count($question_list),
         'count_true'      => $count_true,
+        'score'           => $count_true * ONI_ADD_SCORE,
 
      ]);
     if ($insert_match) {
@@ -177,7 +178,7 @@ function oni_sent_question()
         update_user_meta(get_current_user_id(), 'count_match', ($all_user_count_match + 1));
 
         wp_send_json_success([
-            'count_all'  => $count_all,
+            'score'  => $count_true * ONI_ADD_SCORE,
             'count_true' => $count_true,
          ]);
 
@@ -204,9 +205,9 @@ function oniAjaxAllMatch()
         );
 
         if (sizeof($array) == 0) {
-            if(!empty($_POST[ 'date' ])){
-                wp_send_json_success('<div class="alert alert-secondary" role="alert">شما در تاریخ '.$_POST[ 'date' ].' در مسابقه ای شرکت نکردید.</div>');
-  
+            if (! empty($_POST[ 'date' ])) {
+                wp_send_json_success('<div class="alert alert-secondary" role="alert">شما در تاریخ ' . $_POST[ 'date' ] . ' در مسابقه ای شرکت نکردید.</div>');
+
             }
             wp_send_json_success('<div class="alert alert-secondary" role="alert">شما در مسابقه ای شرکت نکردید</div>');
         }
@@ -236,7 +237,7 @@ function oniAjaxAllMatch()
                     <div class="p-12px w-100">
                         <span class="f-14px text-primary-600">امتیاز کسب شده در روز</span>
                         <div class="h-12px"></div>
-                        <span class="fw-bold f-16px text-primary">' . number_format($row->total_count_true) . ' امتیاز</span>
+                        <span class="fw-bold f-16px text-primary">' . number_format($row->total_score) . ' امتیاز</span>
                     </div>
                 </div>
             </div>
@@ -265,7 +266,6 @@ function oniAjaxAllMatch()
             $args[ 'order_by' ] = [ "created_at", 'DESC' ];
 
         }
-
 
         $array = $onidb->select($args);
         $m     = sizeof($array);
@@ -316,7 +316,7 @@ function oniAjaxAllMatch()
                     <div class="p-12px w-100">
                         <span class="f-14px text-primary-600">امتیاز کسب شده</span>
                         <div class="h-12px"></div>
-                        <span class="fw-bold f-16px text-primary">' . number_format($row->count_true) . ' امتیاز</span>
+                        <span class="fw-bold f-16px text-primary">' . number_format($row->score) . ' امتیاز</span>
                     </div>
                 </div>
             </div>

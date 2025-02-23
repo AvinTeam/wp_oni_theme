@@ -9,6 +9,8 @@
     $all_count_true_today      = $matchdl->sum('count_true', [ 'iduser' => get_current_user_id() ], "DATE(`created_at`) = '$this_data'");
     $all_count_questions_today = $matchdl->sum('count_questions', [ 'iduser' => get_current_user_id() ], "DATE(`created_at`) = '$this_data'");
     $all_count_match_today     = $matchdl->num([ 'iduser' => get_current_user_id() ], "DATE(`created_at`) = '$this_data'");
+    $all_score_today     = $matchdl->sum("score",[ 'iduser' => get_current_user_id() ], "DATE(`created_at`) = '$this_data'");
+    $all_score_total     = $matchdl->sum("score",[ 'iduser' => get_current_user_id() ]);
 ?>
 
 <div class="oni-body mx-auto w-100 pb-5 rounded-3 h-100  position-relative">
@@ -48,7 +50,7 @@
         </div>
         <div
             class="all-count w-100 p-10px text-white rounded-8px text-center d-flex flex-column justify-content-center align-items-center ">
-            <span class="fw-heavy f-28px"><?php echo $all_user_count_true ?></span>
+            <span class="fw-heavy f-28px"><?php echo $all_score_total ?></span>
             <div class="h-12px"></div>
             <p class="fw-bold f-12px">مجموع امتیاز کسب شده</p>
         </div>
@@ -65,7 +67,7 @@
         </div>
         <div
             class="today-count w-100 p-10px text-white rounded-8px text-center d-flex flex-column justify-content-center align-items-center ">
-            <span class="fw-heavy f-28px"><?php echo $all_count_true_today ?></span>
+            <span class="fw-heavy f-28px"><?php echo $all_score_today ?></span>
             <div class="h-8px"></div>
             <p class="fw-bold f-12px">مجموع امتیاز کسب شده امروز</p>
         </div>
