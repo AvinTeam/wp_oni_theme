@@ -84,12 +84,12 @@ $all_user_count_true = absint(get_user_meta(get_current_user_id(), 'count_true',
                     4 => $ayeh->option4,
                  ];
 
-                $keys = array_keys($option); // گرفتن کلیدهای آرایه
-                shuffle($keys);              // به‌صورت تصادفی کردن کلیدها
+                $keys = array_keys($option);
+                shuffle($keys);
 
                 $shuffled = [  ];
                 foreach ($keys as $key) {
-                    $shuffled[ $key ] = $option[ $key ]; // اختصاص مقدار به کلید جدید
+                    $shuffled[ $key ] = $option[ $key ];
                 }
 
             ?>

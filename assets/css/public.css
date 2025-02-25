@@ -304,6 +304,14 @@ a {
   font-size: 28px !important;
 }
 
+.fw-500 {
+  font-weight: 500 !important;
+}
+
+.fw-900 {
+  font-weight: 900 !important;
+}
+
 .fw-heavy {
   font-weight: 1000 !important;
 }

@@ -29,7 +29,13 @@
             <?php wp_nonce_field('oni_login_page' . oni_cookie()); ?>
 
             <div id="mobileForm">
-                <img src="<?php echo oni_panel_image('mobile.svg') ?>">
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                    <h2 class="f-22px fw-heavy text-secondary">ورود با شماره همراه</h2>
+                    <div class="h-8px"></div>
+                    <img style="height: 24px;"  src="<?php echo oni_panel_image('line-question.svg') ?>">
+                    <div class="h-8px"></div>
+                    <p class="text-secondary fw-500 f-14px">شماره موبایل خود را وارد نمایید</p>
+                </div>
                 <div class="h-32px"></div>
                 <div class="form-group text-center">
                     <input type="tel" inputmode="numeric" pattern="\d*"
@@ -47,7 +53,13 @@
             </div>
 
             <div id="codeVerification" style="display: none;">
-                <img src="<?php echo oni_panel_image('codeVerify.svg') ?>">
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                    <h2 class="f-22px fw-heavy text-secondary">وارد کردن کد</h2>
+                    <div class="h-8px"></div>
+                    <img style="height: 24px;" src="<?php echo oni_panel_image('line-question.svg') ?>">
+                    <div class="h-8px"></div>
+                    <p class="text-secondary fw-500 f-14px">کد ارسال شده را وارد نمایید</p>
+                </div>
                 <div class="h-32px"></div>
                 <div class="form-group text-center mx-auto" style="width: 203px;">
                     <input autocomplete="one-time-code" type="text" inputmode="numeric" pattern="\d*"
