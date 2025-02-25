@@ -2,7 +2,7 @@
 
 (defined('ABSPATH')) || exit;
 
-define('ONI_VERSION', '2.0.13');
+define('ONI_VERSION', '2.0.14');
 
 define('ONI_PATH', get_template_directory() . "/");
 define('ONI_INCLUDES', ONI_PATH . 'includes/');

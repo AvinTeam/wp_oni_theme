@@ -360,7 +360,6 @@ jQuery(document).ready(function ($) {
         this.value = this.value.replace(/[^0-9]/g, '');
     });
 
-    console.log(oni_js.answers);
     $("#form-question").on("submit", function (e) {
         e.preventDefault();
 

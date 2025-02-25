@@ -78,10 +78,10 @@ $all_user_count_true = absint(get_user_meta(get_current_user_id(), 'count_true',
         <?php foreach ($exam as $index => $ayeh): $question_list .= $ayeh->id . ',';
 
                 $option = [
-                    1 => '1' . $ayeh->option1,
-                    2 => '2' . $ayeh->option2,
-                    3 => '3' . $ayeh->option3,
-                    4 => '4' . $ayeh->option4,
+                    1 => $ayeh->option1,
+                    2 => $ayeh->option2,
+                    3 => $ayeh->option3,
+                    4 => $ayeh->option4,
                  ];
 
                 $keys = array_keys($option); // گرفتن کلیدهای آرایه
