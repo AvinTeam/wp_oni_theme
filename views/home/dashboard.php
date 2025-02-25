@@ -1,6 +1,8 @@
 <?php global $exam;
     $question_list       = '';
 $all_user_count_true = absint(get_user_meta(get_current_user_id(), 'count_true', true)); ?>
+<script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
+
 <div class="oni-body mx-auto  pb-5 rounded-3  w-100">
     <div class="h-32px"></div>
     <header class="w-100 rounded-8px mx-auto d-flex flex-row justify-content-between align-items-center ">
@@ -76,10 +78,10 @@ $all_user_count_true = absint(get_user_meta(get_current_user_id(), 'count_true',
         <?php foreach ($exam as $index => $ayeh): $question_list .= $ayeh->id . ',';
 
                 $option = [
-                    1 => $ayeh->option1,
-                    2 => $ayeh->option2,
-                    3 => $ayeh->option3,
-                    4 => $ayeh->option4,
+                    1 => '1' . $ayeh->option1,
+                    2 => '2' . $ayeh->option2,
+                    3 => '3' . $ayeh->option3,
+                    4 => '4' . $ayeh->option4,
                  ];
 
                 $keys = array_keys($option); // گرفتن کلیدهای آرایه
@@ -127,7 +129,7 @@ $all_user_count_true = absint(get_user_meta(get_current_user_id(), 'count_true',
                     <div class="h-16px"></div>
                     <?php endif; ?>
 
-                    <?php $shuffled_row++; endforeach; ?>
+                    <?php $shuffled_row++;endforeach; ?>
                 </div>
 
             </div>
@@ -150,17 +152,20 @@ $all_user_count_true = absint(get_user_meta(get_current_user_id(), 'count_true',
     <!-- Modal -->
     <div class="modal fade rounded-8px w-75 mx-auto" id="endMatch" tabindex="-1" data-bs-backdrop="static"
         data-bs-keyboard="false" aria-labelledby="endMatchLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-dialog modal-dialog-centered position-relative z-1">
             <div class="modal-content">
 
                 <div class="modal-body d-flex flex-column align-items-center rounded-8px">
                     <img class="mx-auto" src="<?php echo oni_panel_image('endMatch-logo.svg') ?>">
                     <div class="h-12px"></div>
+                    <p class="f-16px fw-heavy text-secondary ">
+                        شما به <span id="q-true"></span> سوال پاسخ صحیح دادید و <span id="all-count"></span> امتیاز
+                        دریافت کردید.
 
-                    <p id="q-true" class="f-16px fw-heavy text-secondary "></p>
+                    </p>
                     <div class="h-12px"></div>
-                    
-                    <p id="all-count" class="f-16px fw-heavy text-secondary "></p>
+                    <p class="f-16px fw-heavy text-secondary ">برای کسب امتیاز بیشتر جهت حضور در قرعه‌کشی
+                        می‌توانید مجدد در مسابقه شرکت کنید.</p>
                     <div class="h-12px"></div>
 
                     <a href="/?profile"
@@ -182,6 +187,11 @@ $all_user_count_true = absint(get_user_meta(get_current_user_id(), 'count_true',
                     </a>
                 </div>
             </div>
+        </div>
+
+        <div id="dotlottie_svg" class="position-fixed top-0 start-0">
+            <dotlottie-player src="https://lottie.host/582e5a29-18c4-4613-9412-6641899680b3/kCg53DGUN1.lottie"
+                background="transparent" speed="1" style="width: 100%; height: 100% " loop autoplay></dotlottie-player>
         </div>
     </div>
 </div>

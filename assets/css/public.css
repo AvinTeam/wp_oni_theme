@@ -143,6 +143,7 @@ a {
   background-color: var(--primary-100-color);
   max-width: 600px;
   padding: 0 20px;
+  min-height: 100vh;
 }
 
 .oni-border-color {
@@ -304,7 +305,7 @@ a {
 }
 
 .fw-heavy {
-  font-weight: 1000;
+  font-weight: 1000 !important;
 }
 
 .h-8px {
@@ -412,7 +413,7 @@ a {
 }
 
 .oni-social a img:hover {
-  filter: brightness(0) saturate(100%) invert(18%) sepia(54%) saturate(1074%) hue-rotate(208deg) brightness(91%) contrast(91%);
+  filter: brightness(0) saturate(100%) invert(23%) sepia(66%) saturate(1064%) hue-rotate(209deg) brightness(96%) contrast(98%);
 }
 
 .cont-bg {

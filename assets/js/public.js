@@ -360,6 +360,7 @@ jQuery(document).ready(function ($) {
         this.value = this.value.replace(/[^0-9]/g, '');
     });
 
+    console.log(oni_js.answers);
     $("#form-question").on("submit", function (e) {
         e.preventDefault();
 
@@ -375,11 +376,14 @@ jQuery(document).ready(function ($) {
             success: function (response) {
 
                 if (response.success) {
-                    $("#endMatch #q-true").html(`${response.data.count_true} جواب درست`);
-                    $("#endMatch #all-count").html(`${response.data.score} امتیاز کسب شده`);
+                    $("#endMatch #q-true").text(response.data.count_true);
+                    $("#endMatch #all-count").text(response.data.score);
                     $("#endMatch").modal("show");
-                }
 
+                    if (Number(response.data.count_true) == 0) {
+                        $('#dotlottie_svg').addClass('d-none');
+                    }
+                }
             },
             error: function (xhr, status, error) {
                 console.error("خطا در درخواست AJAX:", error);
