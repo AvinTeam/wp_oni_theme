@@ -102,7 +102,7 @@ function oni_start_working(): array
                 'sms_type'          => (isset($oni_option[ 'sms_type' ])) ? $oni_option[ 'sms_type' ] : 'tsms',
                 'notificator_token' => (isset($oni_option[ 'notificator_token' ])) ? $oni_option[ 'notificator_token' ] : '',
 
-                'token_password'   => (isset($oni_option[ 'token_password' ])) ? $oni_option[ 'token_password' ] : 'super_secret-key',
+                'token_password'    => (isset($oni_option[ 'token_password' ])) ? $oni_option[ 'token_password' ] : 'super_secret-key',
 
              ]
 
@@ -130,7 +130,7 @@ function oni_update_option($data)
         'sms_type'          => (isset($data[ 'sms_type' ])) ? sanitize_text_field($data[ 'sms_type' ]) : $oni_option[ 'sms_type' ],
         'notificator_token' => (isset($data[ 'notificator_token' ])) ? sanitize_text_field($data[ 'notificator_token' ]) : $oni_option[ 'notificator_token' ],
 
-        'token_password'   => (isset($data[ 'token_password' ])) ? sanitize_text_field($data[ 'token_password' ]) : $oni_option[ 'token_password' ],
+        'token_password'    => (isset($data[ 'token_password' ])) ? sanitize_text_field($data[ 'token_password' ]) : $oni_option[ 'token_password' ],
 
      ];
 
@@ -260,24 +260,19 @@ function oni_send_sms($mobile, $type, $data = [  ])
 {
 
     global $oni_option;
-    $massage = '';
-
-    $result = [
-        'code'    => 0,
-        'massage' => $mobile,
-     ];
 
     // بررسی فرمت شماره موبایل
     if (! preg_match('/^09[0-9]{9}$/', $mobile)) {
-        $result = [
+        return [
             'code'    => -1,
             'massage' => 'شماره موبایل معتبر نیست.',
          ];
     }
 
     if ($type == 'otp') {
+
         if (get_transient('otp_' . $mobile)) {
-            $result = [
+            return [
                 'code'    => -2,
                 'massage' => 'لطفا چند دقیقه دیگر تلاش کنید.',
              ];
@@ -288,21 +283,16 @@ function oni_send_sms($mobile, $type, $data = [  ])
         for ($i = 0; $i < $oni_option[ 'set_code_count' ]; $i++) {
             $otp .= rand(0, 9);
         }
-        set_transient('otp_' . $mobile, $otp, $oni_option[ 'set_timer' ] * MINUTE_IN_SECONDS);
 
-        if ($result[ 'code' ] == 0) {
-            $result = $oni_option[ 'sms_type' ]($mobile, oni_massage_otp($otp));
-            if ($result[ 'code' ] != 1) {
-                delete_transient('otp_' . $mobile);
+        $result = $oni_option[ 'sms_type' ]($mobile, oni_massage_otp($otp));
 
-            }
+        if ($result[ 'code' ] == 1) {
+            set_transient('otp_' . $mobile, $otp, $oni_option[ 'set_timer' ] * MINUTE_IN_SECONDS);
+
+        } else {
+            delete_transient('otp_' . $mobile);
 
         }
-    }
-
-    if ($type == 'foroni_art') {
-        $result = $oni_option[ 'sms_type' ]($mobile, oni_massage_format($data));
-
     }
 
     return $result;

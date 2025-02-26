@@ -93,41 +93,41 @@ $all_user_count_true = absint(get_user_meta(get_current_user_id(), 'count_true',
                 }
 
             ?>
-        <section id="question-<?php echo $index + 1 ?>"
-            class="w-100 rounded-8px  mx-auto d-flex flex-column bg-white p-24px ">
+	        <section id="question-<?php echo $index + 1 ?>"
+	            class="w-100 rounded-8px  mx-auto d-flex flex-column bg-white p-24px ">
 
-            <div class="d-flex flex-row justify-content-between align-items-center">
-                <span class="text-primary-400">سوال <?php echo q_name_row(($index + 1), 1) ?></span>
-                <span class="text-primary-400"><?php echo q_name_row(($index + 1)) ?> از پنج</span>
-            </div>
-            <div class="h-16px"></div>
+	            <div class="d-flex flex-row justify-content-between align-items-center">
+	                <span class="text-primary-400">سوال	                                                        <?php echo q_name_row(($index + 1), 1) ?></span>
+	                <span class="text-primary-400"><?php echo q_name_row(($index + 1)) ?> از پنج</span>
+	            </div>
+	            <div class="h-16px"></div>
 
-            <div class="d-flex flex-column border-top border-top-1 border-primary">
-                <div class="h-24px"></div>
-                <div class="ayeh-question text-center text-primary f-16px fw-bold"><?php echo $ayeh->question ?></div>
-                <div class="h-16px"></div>
-                <div class="text-center">
-                    <img src="<?php echo oni_panel_image('line-question.svg') ?>">
-                </div>
-                <div class="h-24px"></div>
+	            <div class="d-flex flex-column border-top border-top-1 border-primary">
+	                <div class="h-24px"></div>
+	                <div class="ayeh-question text-center text-primary f-16px fw-bold"><?php echo $ayeh->question ?></div>
+	                <div class="h-16px"></div>
+	                <div class="text-center">
+	                    <img src="<?php echo oni_panel_image('line-question.svg') ?>">
+	                </div>
+	                <div class="h-24px"></div>
 
-                <div class="">
+	                <div class="">
 
-                    <?php $shuffled_row = 1;foreach ($shuffled as $key => $value): ?>
-                    <label
-                        class=" label-answer h-96px border border-1 w-100 rounded-12px p-12px d-flex flex-row align-items-center gap-2 "
-                        for="<?php echo $ayeh->id ?>_<?php echo $key ?>">
-                        <div style=" width: 32px ;">
-                            <div class="check-icon"></div>
-                        </div>
-                        <span class="text-justify f-16px"><?php echo $value ?></span>
-                        <input class="opacity-0" id="<?php echo $ayeh->id ?>_<?php echo $key ?>" type="radio"
-                            data-i="<?php echo $index + 1 ?>" data-id="<?php echo $ayeh->id ?>"
-                            value="<?php echo $key ?>" name="Q<?php echo $ayeh->id ?>">
-                    </label>
-                    <?php if ($shuffled_row < 4): ?>
-                    <div class="h-16px"></div>
-                    <?php endif; ?>
+	                    <?php $shuffled_row = 1;foreach ($shuffled as $key => $value): ?>
+	                    <label
+	                        class=" label-answer h-96px border border-1 w-100 rounded-12px p-12px d-flex flex-row align-items-center gap-2 "
+	                        for="<?php echo $ayeh->id ?>_<?php echo $key ?>">
+	                        <div style=" width: 32px ;">
+	                            <div class="check-icon"></div>
+	                        </div>
+	                        <span class="text-justify f-16px"><?php echo $value ?></span>
+	                        <input class="opacity-0" id="<?php echo $ayeh->id ?>_<?php echo $key ?>" type="radio"
+	                            data-i="<?php echo $index + 1 ?>" data-id="<?php echo $ayeh->id ?>"
+	                            value="<?php echo $key ?>" name="Q<?php echo $ayeh->id ?>">
+	                    </label>
+	                    <?php if ($shuffled_row < 4): ?>
+	                    <div class="h-16px"></div>
+	                    <?php endif; ?>
 
                     <?php $shuffled_row++;endforeach; ?>
                 </div>
@@ -158,14 +158,11 @@ $all_user_count_true = absint(get_user_meta(get_current_user_id(), 'count_true',
                 <div class="modal-body d-flex flex-column align-items-center rounded-8px">
                     <img class="mx-auto" src="<?php echo oni_panel_image('endMatch-logo.svg') ?>">
                     <div class="h-12px"></div>
-                    <p class="f-16px fw-heavy text-secondary ">
+                    <p class="f-16px fw-heavy text-secondary text-center">
                         شما به <span id="q-true"></span> سوال پاسخ صحیح دادید و <span id="all-count"></span> امتیاز
-                        دریافت کردید.
-
-                    </p>
+                        دریافت کردید.</p>
                     <div class="h-12px"></div>
-                    <p class="f-16px fw-heavy text-secondary ">برای کسب امتیاز بیشتر جهت حضور در قرعه‌کشی
-                        می‌توانید مجدد در مسابقه شرکت کنید.</p>
+                    <p class="f-16px fw-heavy text-secondary text-center">برای کسب امتیاز بیشتر جهت حضور در قرعه کشی میتوانید مجدد در مسابقه شرکت کنید.</p>
                     <div class="h-12px"></div>
 
                     <a href="/?profile"

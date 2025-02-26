@@ -413,7 +413,7 @@ a {
 }
 
 .oni-form {
-  height: 570px;
+  /* height: 570px; */
 }
 
 .oni-social a img {
@@ -484,10 +484,11 @@ a {
 
 .label-answer .check-icon {
   background-image: url('../image/a-primary.svg');
-  background-size: 20px;
+  background-size: 19px;
   background-repeat: no-repeat;
-  width: 20px;
-  height: 20px;
+  width: 25px;
+  height: 25px;
+  background-position: center;
 }
 
 
@@ -499,10 +500,6 @@ a {
 
 .label-answer.a-error .check-icon {
   background-image: url('../image/a-error.svg');
-  background-size: 20px;
-  background-repeat: no-repeat;
-  width: 20px;
-  height: 20px;
 }
 
 
