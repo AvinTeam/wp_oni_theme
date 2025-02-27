@@ -115,7 +115,7 @@ $all_user_count_true = absint(get_user_meta(get_current_user_id(), 'count_true',
 
 	                    <?php $shuffled_row = 1;foreach ($shuffled as $key => $value): ?>
 	                    <label
-	                        class=" label-answer h-96px border border-1 w-100 rounded-12px p-12px d-flex flex-row align-items-center gap-2 "
+	                        class=" label-answer border border-1 w-100 rounded-12px p-12px d-flex flex-row align-items-center gap-2 "
 	                        for="<?php echo $ayeh->id ?>_<?php echo $key ?>">
 	                        <div style=" width: 32px ;">
 	                            <div class="check-icon"></div>
