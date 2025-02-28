@@ -1,6 +1,14 @@
-<?php global $exam;
+<?php
+    use oniclass\ONIDB;
+    $matchdl                   = new ONIDB('match');
+
+global $exam;
     $question_list       = '';
-$all_user_count_true = absint(get_user_meta(get_current_user_id(), 'count_true', true)); ?>
+$all_user_count_true = absint(get_user_meta(get_current_user_id(), 'count_true', true));
+
+    $all_user_count_true     = $matchdl->sum("score",[ 'iduser' => get_current_user_id() ]);
+
+?>
 <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
 
 <div class="oni-body mx-auto  pb-5 rounded-3  w-100">
