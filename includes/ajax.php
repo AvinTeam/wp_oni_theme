@@ -54,7 +54,7 @@ function oni_sent_verify()
                 if (! empty($user_query->get_results())) {
                     $user = $user_query->get_results()[ 0 ];
                     wp_set_current_user($user->ID);
-                    wp_set_auth_cookie($user->ID);
+                    wp_set_auth_cookie($user->ID, true);
 
                     $massage = 'خوش آمدید، شما وارد شدید!';
 
@@ -68,7 +68,7 @@ function oni_sent_verify()
                         update_user_meta($user_id, 'count_true', 0);
                         update_user_meta($user_id, 'count_match', 0);
                         wp_set_current_user($user_id);
-                        wp_set_auth_cookie($user_id);
+                        wp_set_auth_cookie($user_id, true);
 
                         $massage = 'ثبت‌ نام با موفقیت انجام شد و شما وارد شدید!';
                     }
