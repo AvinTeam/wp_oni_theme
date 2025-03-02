@@ -17,7 +17,7 @@ define('ONI_CSS', ONI_ASSETS . 'css/');
 define('ONI_JS', ONI_ASSETS . 'js/');
 define('ONI_IMAGE', ONI_ASSETS . 'image/');
 define('ONI_VENDOR', ONI_ASSETS . 'vendor/');
-define('ONI_ADD_SCORE', 10);
+define('ONI_QUESTION_SCORE', 1);
 
 require_once ONI_PATH . 'vendor/autoload.php';
 

@@ -18,10 +18,23 @@
             <table class="form-table" role="presentation">
                 <tbody>
                     <tr>
-                        <th scope="row"><label for="token_password">تعداد سوال های مسابقه</label></th>
+                        <th scope="row"><label for="token_password">توکن ورود خوکار</label></th>
                         <td><input name="token_password" type="text" id="token_password"
-                                value="<?php echo $oni_option[ 'token_password' ] ?>"
-                                class="regular-text ">
+                                value="<?php echo $oni_option[ 'token_password' ] ?>" class="regular-text ">
+                        </td>
+                    </tr>
+                <tbody>
+                    <tr>
+                        <th scope="row"><label for="send_cron">ارسال به اپلیکیشن</label></th>
+                        <td class="radio-td">
+                            <fieldset>
+                                <label><input type="radio" name="send_cron"
+                                        <?php checked($oni_option[ 'send_cron' ], 'yes')?> value="yes">
+                                    <span class="date-time-text">بله</span></label>
+                                <label><input type="radio" name="send_cron"
+                                        <?php checked($oni_option[ 'send_cron' ], 'no')?> value="no"> <span
+                                        class="date-time-text">خیر</span></label>
+                            </fieldset>
                         </td>
                     </tr>
                 </tbody>

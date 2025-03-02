@@ -139,9 +139,13 @@ add_action('wp_ajax_oni_sent_question', 'oni_sent_question');
 
 function oni_sent_question()
 {
+    $oni_option = oni_start_working();
+
+    $this_user = wp_get_current_user();
 
     $matchdl = new ONIDB('match');
     $onidb   = new ONIDB('question');
+    $crondb  = new ONIDB('cron');
 
     $count_true = 0;
 
@@ -151,22 +155,56 @@ function oni_sent_question()
 
     $question_list = sanitize_text_no_item(explode(',', $_POST[ 'question_list' ]));
 
+    $array_game = $true_questions = [  ];
     foreach ($question_list as $question) {
 
         $this_question = $onidb->get([ 'id' => $question ]);
 
-        if ($this_question->answer == absint($_POST[ 'Q' . $question ])) {$count_true++;}
+        if ($this_question->answer == absint($_POST[ 'Q' . $question ])) {
+
+            $true_questions[  ] = $question;
+            $array_game[  ]     = [
+                'score'          => ONI_QUESTION_SCORE,
+                'chapter'        => $this_question->chapter,
+                'chapter_number' => $this_question->chapter_number,
+                'verse'          => $this_question->verse,
+                'type'           => $this_question->q_type,
+
+             ];
+
+            $count_true++;
+
+        }
 
     }
+
     $insert_match = $matchdl->insert([
         'eid'             => absint($q) + 1,
         'iduser'          => get_current_user_id(),
         'count_questions' => count($question_list),
+        'true_questions'  => serialize($true_questions),
         'count_true'      => $count_true,
-        'score'           => $count_true * ONI_ADD_SCORE,
-
+        'score'           => $count_true * ONI_QUESTION_SCORE,
      ]);
+
+    $array_send = [
+        'mobile'      => $this_user->mobile,
+        'description' => '',
+        'game_type'   => 'oni',
+        'game'        => $array_game,
+     ];
+
     if ($insert_match) {
+
+        if ($oni_option[ 'send_cron' ] == 'yes' && $count_true) {
+
+            $crondb->insert([
+                'match_id'   => $insert_match,
+                'send_array' => serialize($array_send),
+             ]);
+
+        }
+
         $all_user_questions   = absint(get_user_meta(get_current_user_id(), 'questions', true));
         $all_user_count_true  = absint(get_user_meta(get_current_user_id(), 'count_true', true));
         $all_user_count_match = absint(get_user_meta(get_current_user_id(), 'count_match', true));
@@ -178,7 +216,7 @@ function oni_sent_question()
         update_user_meta(get_current_user_id(), 'count_match', ($all_user_count_match + 1));
 
         wp_send_json_success([
-            'score'  => $count_true * ONI_ADD_SCORE,
+            'score'      => $count_true * ONI_QUESTION_SCORE,
             'count_true' => $count_true,
          ]);
 

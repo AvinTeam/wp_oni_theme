@@ -103,6 +103,7 @@ function oni_start_working(): array
                 'notificator_token' => (isset($oni_option[ 'notificator_token' ])) ? $oni_option[ 'notificator_token' ] : '',
 
                 'token_password'    => (isset($oni_option[ 'token_password' ])) ? $oni_option[ 'token_password' ] : 'super_secret-key',
+                'send_cron'         => (isset($oni_option[ 'send_cron' ])) ? $oni_option[ 'send_cron' ] : 'yes',
 
              ]
 
@@ -131,6 +132,7 @@ function oni_update_option($data)
         'notificator_token' => (isset($data[ 'notificator_token' ])) ? sanitize_text_field($data[ 'notificator_token' ]) : $oni_option[ 'notificator_token' ],
 
         'token_password'    => (isset($data[ 'token_password' ])) ? sanitize_text_field($data[ 'token_password' ]) : $oni_option[ 'token_password' ],
+        'send_cron'         => (isset($data[ 'send_cron' ])) ? sanitize_text_field($data[ 'send_cron' ]) : $oni_option[ 'token_password' ],
 
      ];
 
