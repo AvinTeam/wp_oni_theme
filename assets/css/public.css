@@ -475,10 +475,13 @@ a {
   border-top: 1px solid;
 }
 
+
 #login {
-  background: var(--secondary-color);
-  background: url('../image/vector.png'), linear-gradient(225deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+  background: url('../image/Vector.png'), linear-gradient(-90deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+  text-align: center;
+  background-blend-mode: color-dodge;
   height: 394px;
+
 }
 
 #user-info {

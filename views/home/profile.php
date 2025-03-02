@@ -20,9 +20,9 @@
 
         <div class="d-flex flex-row justify-content-between align-items-center w-75 p-12px bg-white rounded-16px">
             <span class="text-primary f-14px"><?php echo get_user_meta(get_current_user_id(), 'mobile', true) ?></span>
-            <div>
+            <div class="d-flex flex-column flex-sm-row justify-content-center align-items-center row-gap-sm-0 row-gap-2">
                 <a href="/" style="line-height: 2;" class="btn btn-secondary rounded-8px my-4px f-14px">آزمون جدید</a>
-                <a id="oni-logout" style=" line-height: 2;  " class="btn btn-outline-primary my-4px"><img
+                <a id="oni-logout" style=" line-height: 2;  " class="btn btn-outline-primary my-4px f-14px"><img
                         class="p-0 m-0" src="<?php echo oni_panel_image('logout.svg') ?>"></a>
             </div>
 

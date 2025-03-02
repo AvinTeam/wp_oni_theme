@@ -28,11 +28,11 @@
         <form id="loginForm">
             <?php wp_nonce_field('oni_login_page' . oni_cookie()); ?>
 
-            <div id="mobileForm" >
+            <div id="mobileForm">
                 <div class="d-flex flex-column justify-content-center align-items-center">
                     <h2 class="f-22px fw-heavy text-secondary">ورود با شماره همراه</h2>
                     <div class="h-8px"></div>
-                    <img style="height: 24px;"  src="<?php echo oni_panel_image('line-question.svg') ?>">
+                    <img style="height: 24px;" src="<?php echo oni_panel_image('line-question.svg') ?>">
                     <div class="h-8px"></div>
                     <p class="text-secondary fw-500 f-14px">شماره موبایل خود را وارد نمایید</p>
                 </div>
@@ -46,7 +46,7 @@
                 <div class="form-group d-grid ">
                     <button type="submit" disabled id="send-code"
                         class="btn btn-secondary h-48px w-100 text-center py-3 d-flex flex-row justify-content-center align-items-center gap-3 rounded-8px">
-                        <img src="<?php echo oni_panel_image('btn-icon.png') ?>">
+                        <img src="<?php echo oni_panel_image('send_code.svg') ?>">
                         <span>دریافت کد</span>
                     </button>
                 </div>
@@ -80,13 +80,13 @@
                 <div class="form-group ">
                     <button type="submit" disabled id="verifyCode"
                         class="btn btn-secondary h-48px w-100 text-center py-3 d-flex flex-row justify-content-center align-items-center gap-3 rounded-8px">
-                        <img src="<?php echo oni_panel_image('btn-icon.png') ?>">
+                        <img src="<?php echo oni_panel_image('send_verify.svg') ?>">
                         <span>تایید و ورود</span>
                     </button>
                     <div class="h-12px"></div>
                     <button type="button" id="editNumber"
                         class="btn btn-outline-secondary h-48px w-100 text-center py-3 d-flex flex-row justify-content-center align-items-center gap-3 rounded-8px">
-                        <img src="<?php echo oni_panel_image('btn-icon.png') ?>">
+                        <img src="<?php echo oni_panel_image('editNumber.svg') ?>">
                         <span>تغییر شماره</span>
                     </button>
                 </div>
@@ -113,8 +113,8 @@
             </div>
         </div>
     </div>
-    
-<div class="toast-container position-fixed top-0 p-3">
+
+    <div class="toast-container position-fixed top-0 p-3">
         <div id="loginToast" class="toast align-items-center text-white bg-danger " role="alert" aria-live="assertive"
             aria-atomic="true">
             <div class="d-flex">
@@ -127,7 +127,7 @@
         </div>
     </div>
 
- 
+
 </div>
 
 
@@ -141,7 +141,7 @@
 
 
 
-<!-- 
+<!--
     <div class="toast-container position-fixed bottom-0 end-0 p-3">
   <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="toast-header">

@@ -27,3 +27,17 @@ function custom_login_cookie_expiration($expiration)
     return 30 * DAY_IN_SECONDS;
 }
 add_filter('auth_cookie_expiration', 'custom_login_cookie_expiration');
+
+
+
+
+function add_custom_cron_schedule($schedules)
+{
+    $schedules[ 'every_second' ] = [
+        'interval' => 1,
+        'display'  => 'every_second',
+     ];
+    return $schedules;
+}
+
+add_filter('cron_schedules', 'add_custom_cron_schedule');

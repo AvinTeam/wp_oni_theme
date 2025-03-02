@@ -18,6 +18,7 @@ define('ONI_JS', ONI_ASSETS . 'js/');
 define('ONI_IMAGE', ONI_ASSETS . 'image/');
 define('ONI_VENDOR', ONI_ASSETS . 'vendor/');
 define('ONI_QUESTION_SCORE', 1);
+define('ONI_TOKEN', '1|L6niilLOBERWI0P6ftbfDLT7hfmry7iut7geWdD85e2f5836');
 
 require_once ONI_PATH . 'vendor/autoload.php';
 
@@ -32,6 +33,7 @@ require_once ONI_INCLUDES . '/jdf.php';
 require_once ONI_CLASS . '/ONIDB.php';
 require_once ONI_CLASS . '/EXPORTCLASS.php';
 require_once ONI_CLASS . '/Cipher.php';
+require_once ONI_INCLUDES . '/cron.php';
 
 $oni_option = oni_start_working();
 

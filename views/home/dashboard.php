@@ -176,19 +176,19 @@ $all_user_count_true = absint(get_user_meta(get_current_user_id(), 'count_true',
 
                     <a href="/?profile"
                         class="btn btn-secondary h-48px w-100 text-center d-flex flex-row justify-content-center align-items-center gap-3 rounded-8px">
-                        <img src="<?php echo oni_panel_image('btn-icon.png') ?>">
+                        <img src="<?php echo oni_panel_image('btn-profile.svg') ?>">
                         <span>مشاهده نتایج اخیر</span>
                     </a>
                     <div class="h-12px"></div>
                     <button onclick="location.reload()"
                         class="btn btn-outline-secondary h-48px w-100 text-center d-flex flex-row justify-content-center align-items-center gap-3 rounded-8px">
-                        <img src="<?php echo oni_panel_image('btn-icon.png') ?>">
+                        <img src="<?php echo oni_panel_image('btn-back.svg') ?>">
                         <span>آزمون مجدد</span>
                     </button>
                     <div class="h-12px"></div>
                     <a href="https://zendegibaayeha.ir" target="_blank"
                         class="btn btn-outline-secondary h-48px w-100 text-center d-flex flex-row justify-content-center align-items-center gap-3 rounded-8px">
-                        <img src="<?php echo oni_panel_image('btn-icon.png') ?>">
+                        <img src="<?php echo oni_panel_image('btn-home.svg') ?>">
                         <span>صفحه نخست</span>
                     </a>
                 </div>

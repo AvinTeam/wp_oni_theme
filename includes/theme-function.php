@@ -82,10 +82,6 @@ function oni_remote(string $url)
 
 function oni_start_working(): array
 {
-
-    if (! isset($_GET[ 'avin_cron' ])) {
-        oni_cookie();
-    }
     $oni_option = get_option('oni_option');
 
     if (! isset($oni_option[ 'version' ]) || version_compare(ONI_VERSION, $oni_option[ 'version' ], '>')) {
