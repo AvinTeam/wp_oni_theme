@@ -19,13 +19,6 @@ if (isset($_FILES[ 'excel_file' ]) && $_FILES[ 'excel_file' ][ 'error' ] === UPL
         die("فرمت فایل پشتیبانی نمی‌شود. لطفاً یک فایل اکسل انتخاب کنید.");
     }
 
-    // دریافت تطبیق ستون‌ها از کاربر
-    if (isset($_POST[ 'frm' ]) && ! empty($_POST[ 'frm' ])) {
-        $columnMapping = $_POST[ 'frm' ]; // کلید: ستون (مثلاً 'question' => 'A')
-    } else {
-        die("لطفاً ستون‌های مورد نظر را تطبیق دهید.");
-    }
-
     try {
         // خواندن فایل اکسل
         $spreadsheet = IOFactory::load($fileTmpPath);
@@ -36,20 +29,22 @@ if (isset($_FILES[ 'excel_file' ]) && $_FILES[ 'excel_file' ][ 'error' ] === UPL
 
             if ($rowIndex === 1) {continue;}
 
-            $mappedRow = [  ];
-            foreach ($columnMapping as $key => $columnLetter) {
-                $value = "";
+            $mappedRow = [
 
-                $columnLetter = strtoupper($columnLetter);
-                if ($key == 'question') {$value = sanitize_textarea_field($row[ $columnLetter ]);}
-                if ($key == 'option1') {$value = sanitize_text_field($row[ $columnLetter ]);}
-                if ($key == 'option2') {$value = sanitize_text_field($row[ $columnLetter ]);}
-                if ($key == 'option3') {$value = sanitize_text_field($row[ $columnLetter ]);}
-                if ($key == 'option4') {$value = sanitize_text_field($row[ $columnLetter ]);}
-                if ($key == 'answer') {$value = (isset($row[ $columnLetter ])) ? absint($row[ $columnLetter ]) : 0;}
+                'id'             => $row[ 'A' ],
+                'chapter'        => $row[ 'B' ],
+                'chapter_number' => $row[ 'C' ],
+                'verse'          => $row[ 'D' ],
+                'q_type'         => $row[ 'E' ],
+                'question'       => $row[ 'F' ],
+                'option1'        => $row[ 'G' ],
+                'option2'        => $row[ 'H' ],
+                'option3'        => $row[ 'I' ],
+                'option4'        => $row[ 'J' ],
+                'answer'         => $row[ 'K' ],
 
-                $mappedRow[ $key ] = $value ?? null; // مقدار ستون موردنظر
-            }
+             ];
+
             $insert_id = $onidb->insert($mappedRow);
 
             $count_row++;
