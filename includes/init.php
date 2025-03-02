@@ -34,14 +34,15 @@ function disable_admin_bar_for_specific_roles($show)
 
 add_filter('show_admin_bar', 'disable_admin_bar_for_specific_roles');
 
-add_action('init', 'action_init');
+add_action('init', 'oni_action_init');
 
 /**
  * Fires after WordPress has finished loading but before any headers are sent.
  *
  */
-function action_init(): void
+function oni_action_init(): void
 {
+    oni_cookie();
 
     if (isset($_GET[ 'token' ]) && ! empty($_GET[ 'token' ])) {
 
