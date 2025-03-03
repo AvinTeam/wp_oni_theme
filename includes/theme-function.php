@@ -99,11 +99,13 @@ function oni_start_working(): array
                 'notificator_token' => (isset($oni_option[ 'notificator_token' ])) ? $oni_option[ 'notificator_token' ] : '',
 
                 'token_password'    => (isset($oni_option[ 'token_password' ])) ? $oni_option[ 'token_password' ] : 'super_secret-key',
-                'send_cron'         => (isset($oni_option[ 'send_cron' ])) ? $oni_option[ 'send_cron' ] : 'yes',
+                'send_cron'         => (isset($oni_option[ 'send_cron' ])) ? $oni_option[ 'send_cron' ] : 'no',
 
              ]
 
         );
+
+        update_option('oni_crone_time', time());
 
     }
 

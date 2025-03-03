@@ -189,8 +189,8 @@ function oni_sent_question()
 
     $array_send = [
         'mobile'      => $this_user->mobile,
-        'description' => '',
-        'game_type'   => 'oni',
+        'description' => "id game ".$insert_match,
+        'game_type'   => 'online',
         'game'        => $array_game,
      ];
 

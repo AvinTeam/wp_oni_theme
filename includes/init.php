@@ -86,10 +86,10 @@ function oni_action_init(): void
     }
 }
 
-function schedule_my_custom_cron()
-{
-    if (! wp_next_scheduled('avin_it_cron_job')) {
-        wp_schedule_event(time(), 'every_second', 'avin_it_cron_job');
-    }
-}
-add_action('wp', 'schedule_my_custom_cron');
+// function schedule_my_custom_cron()
+// {
+//     if (! wp_next_scheduled('avin_it_cron_job')) {
+//         wp_schedule_event(time(), 'every_second', 'avin_it_cron_job');
+//     }
+// }
+// add_action('wp', 'schedule_my_custom_cron');

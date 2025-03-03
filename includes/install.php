@@ -28,10 +28,10 @@ function oni_row_install()
         }
     }
 
-    $timestamp = wp_next_scheduled('avin_it_cron_job');
-    if ($timestamp) {
-        wp_unschedule_event($timestamp, 'avin_it_cron_job');
-    }
+    // $timestamp = wp_next_scheduled('avin_it_cron_job');
+    // if ($timestamp) {
+    //     wp_unschedule_event($timestamp, 'avin_it_cron_job');
+    // }
 
 
 

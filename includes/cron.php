@@ -5,12 +5,11 @@ use oniclass\ONIDB;
 (defined('ABSPATH')) || exit;
 
 // افزودن اکشن کرون
-add_action('avin_it_cron_job', 'avin_it_cron_function');
+//add_action('avin_it_cron_job', 'avin_it_cron_function');
 
 function avin_it_cron_function()
 {
-
-    notificator('foreach', 'start');
+    $api_url = ' http://94.232.173.178:31963/api/rabbitMq';
 
     $crondb        = new ONIDB('cron');
     $cron_error_db = new ONIDB('cron_error');
@@ -21,15 +20,11 @@ function avin_it_cron_function()
 
         $error_message = '';
 
-        $get_error = 0;
-
         $tracking = (absint($row->tracking) + 1);
 
         $data  = [ 'tracking' => $tracking ];
         $where = [ 'id' => $row->id ];
         $crondb->update($data, $where);
-
-        $api_url = 'http://172.16.131.33:68/api/rabbitMq';
 
         $response = wp_remote_post(
             $api_url,
@@ -44,8 +39,6 @@ function avin_it_cron_function()
 
         if (is_wp_error($response)) {
 
-            $get_error = 1;
-
             $error_message = $response->get_error_message();
 
         } else {
@@ -58,25 +51,34 @@ function avin_it_cron_function()
                 $crondb->delete([ 'id' => $row->id ]);
 
             } else {
-                $get_error = 1;
 
                 $error_message = $data->message;
 
             }
 
-            if ($get_error == 1 && $tracking > 5) {
+        }
 
-                $crondb->delete([ 'id' => $row->id ]);
+        if (! empty($error_message) && $tracking >= 5) {
 
-                $cron_error_db->insert([
-                    'match_id'   => $row->match_id,
-                    'send_array' => $row->send_array,
-                    'cron_error' => $error_message,
-                 ]);
-            }
+            $crondb->delete([ 'id' => $row->id ]);
 
+            $cron_error_db->insert([
+                'match_id'   => $row->match_id,
+                'send_array' => $row->send_array,
+                'cron_error' => $error_message,
+             ]);
         }
 
     }
+
+}
+
+$oni_crone_time = get_option('oni_crone_time');
+
+if ( !$oni_crone_time ||  intval($oni_crone_time) + 10 < time()) {
+
+    avin_it_cron_function();
+
+    update_option('oni_crone_time', time());
 
 }

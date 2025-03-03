@@ -688,7 +688,13 @@ a {
 
 }
 
-@media (max-width: 576px) {}
+@media (max-width: 576px) {
+
+  header .w-75 {
+    width: 90% !important;
+  }
+
+}
 
 /* استایل پوشش (Overlay) */
 .overlay {
