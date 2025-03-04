@@ -328,7 +328,7 @@ jQuery(document).ready(function ($) {
 
         if (countAnswer == numberOfElements) {
 
-            $('button[type=submit]').removeAttr('disabled');
+            $('button[type=submit]#verifyCode').removeAttr('disabled');
         }
 
 
@@ -362,6 +362,10 @@ jQuery(document).ready(function ($) {
 
     $("#form-question").on("submit", function (e) {
         e.preventDefault();
+
+
+        $('button[type=submit]#verifyCode').attr('disabled', 'disabled');
+
 
         let formData = new FormData(this);
         formData.append("action", "oni_sent_question");
@@ -400,7 +404,6 @@ jQuery(document).ready(function ($) {
         $("#overlay").css("display", "flex").hide().fadeIn();
         $("body").addClass("no-scroll");
         $('#all_result_match').html('');
-
 
         const formData = {
             action: 'oniAjaxAllMatch',

@@ -6,6 +6,7 @@ class ONIDB
 
     protected $wpdb;
     protected $tablename;
+    public $this_q;
 
     public function __construct($table)
     {
@@ -21,6 +22,9 @@ class ONIDB
 
         $format = [  ];
         foreach ($data as $key => $value) {
+
+            if (is_array($value)) {$value = serialize($value);}
+
             $data[ $key ] = $value;
             $format[  ]   = $this->set_type($value);
 
@@ -163,6 +167,7 @@ class ONIDB
             }
         }
 
+
         if (isset($args[ 's' ])) {
             $where .= $this->wpdb->prepare(" AND %i LIKE %s", $args[ 's' ][ 0 ], '%' . $args[ 's' ][ 1 ] . '%');
         }
@@ -187,6 +192,15 @@ class ONIDB
         $mpn_row = $this->wpdb->get_results(
             "SELECT $star FROM `$this->tablename` WHERE  $where "
         );
+
+
+
+
+        $this->this_q = "SELECT $star FROM `$this->tablename` WHERE  $where ";
+
+
+
+
         return $mpn_row;
 
     }

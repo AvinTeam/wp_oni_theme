@@ -7,16 +7,36 @@ use oniclass\ONIDB;
 // افزودن اکشن کرون
 //add_action('avin_it_cron_job', 'avin_it_cron_function');
 
+$crondb        = new ONIDB('cron');
+$cron_error_db = new ONIDB('cron_error');
+
+$crondb->insert([
+    'cron_type'  => 'ip',
+    'send_array' => [
+        'ip'            => $_SERVER[ 'REMOTE_ADDR' ],
+        'user-agent'    => $_SERVER[ 'HTTP_USER_AGENT' ],
+        'game_platform' => 'online',
+
+     ],
+ ]);
+
 function avin_it_cron_function()
 {
-    $api_url = ' http://94.232.173.178:31963/api/rabbitMq';
+    $api_url = ' http://94.232.173.178:31963/api/';
 
     $crondb        = new ONIDB('cron');
     $cron_error_db = new ONIDB('cron_error');
 
-    $my_res = $crondb->select([ 'per_page' => 50 ]);
+    $my_res = $crondb->select([ 
+        'per_page' => 50,
+        'data' => [
+            'cron_type' => 'game'
+        ],
+    ]);
 
     foreach ($my_res as $row) {
+
+        $ap_u = ($row->cron_type == 'ip') ? 'ipLog' : 'rabbitMq';
 
         $error_message = '';
 
@@ -27,7 +47,7 @@ function avin_it_cron_function()
         $crondb->update($data, $where);
 
         $response = wp_remote_post(
-            $api_url,
+            $api_url . $ap_u,
             [
                 'timeout' => 1000,
                 'headers' => [
@@ -63,13 +83,36 @@ function avin_it_cron_function()
             $crondb->delete([ 'id' => $row->id ]);
 
             $cron_error_db->insert([
-                'match_id'   => $row->match_id,
+                'cron_type'  => $row->cron_type,
                 'send_array' => $row->send_array,
                 'cron_error' => $error_message,
              ]);
         }
 
     }
+
+}
+
+if (isset($_GET[ 'mrr_cron_error' ])) {
+    $my_res = $cron_error_db->select();
+
+    foreach ($my_res as $row) {
+
+        $cron_error_db->delete([ 'id' => $row->id ]);
+
+        $crondb->insert([
+            'cron_type'  => $row->cron_type,
+            'send_array' => $row->send_array,
+         ]);
+
+    }
+
+    if (absint($cron_error_db->num()) == 0) {
+
+        $cron_error_db->empty();
+    }
+
+    exit;
 
 }
 

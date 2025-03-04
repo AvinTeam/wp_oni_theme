@@ -35,21 +35,6 @@ function oni_row_install()
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     global $wpdb;
     require_once ABSPATH . 'wp-admin/includes/upgrade.php';
     $wpdb_collate = $wpdb->collate;
@@ -90,7 +75,7 @@ function oni_row_install()
     $table_cron_row = $wpdb->prefix . 'oni_cron';
     $sql_cron       = "CREATE TABLE IF NOT EXISTS `$table_cron_row`(
                         `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-                        `match_id` bigint unsigned NOT NULL,
+                        `cron_type` varchar(10) COLLATE $wpdb_collate NOT NULL,,
                         `send_array` text COLLATE $wpdb_collate NOT NULL,
                         `tracking` int NOT NULL DEFAULT '0',
                         `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -102,7 +87,7 @@ function oni_row_install()
     $table_cron_row = $wpdb->prefix . 'oni_cron_error';
     $sql_cron_error = "CREATE TABLE IF NOT EXISTS `$table_cron_row` (
                         `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-                        `match_id` bigint unsigned NOT NULL,
+                        `cron_type` varchar(10) COLLATE $wpdb_collate NOT NULL,,
                         `send_array` text NOT NULL,
                         `error_code` int NOT NULL,
                         `cron_error` longtext NOT NULL,

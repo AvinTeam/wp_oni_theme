@@ -2,7 +2,9 @@
 
 (defined('ABSPATH')) || exit;
 
-define('ONI_VERSION', '2.1.5');
+date_default_timezone_set('Asia/Tehran');
+
+define('ONI_VERSION', '2.2.4');
 
 define('ONI_PATH', get_template_directory() . "/");
 define('ONI_INCLUDES', ONI_PATH . 'includes/');

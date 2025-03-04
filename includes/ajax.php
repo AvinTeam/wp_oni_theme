@@ -185,11 +185,12 @@ function oni_sent_question()
         'true_questions'  => serialize($true_questions),
         'count_true'      => $count_true,
         'score'           => $count_true * ONI_QUESTION_SCORE,
+        'created_at'      => date('Y-m-d H:i:s'),
      ]);
 
     $array_send = [
         'mobile'      => $this_user->mobile,
-        'description' => "id game ".$insert_match,
+        'description' => "id game " . $insert_match,
         'game_type'   => 'online',
         'game'        => $array_game,
      ];
@@ -199,7 +200,7 @@ function oni_sent_question()
         if ($oni_option[ 'send_cron' ] == 'yes' && $count_true) {
 
             $crondb->insert([
-                'match_id'   => $insert_match,
+                'cron_type'  => 'game',
                 'send_array' => serialize($array_send),
              ]);
 
@@ -293,7 +294,7 @@ function oniAjaxAllMatch()
         $string_all_match = '';
 
         $args = [
-            'date'  => [ 'iduser' => get_current_user_id() ],
+            'data'  => [ 'iduser' => get_current_user_id() ],
             'where' => "DATE(`created_at`) = '$this_date'",
 
          ];
@@ -302,11 +303,11 @@ function oniAjaxAllMatch()
             $args[ 'order_by' ] = [ "count_true", $_POST[ 'sort' ] ];
         } else {
             $args[ 'order_by' ] = [ "created_at", 'DESC' ];
-
         }
 
         $array = $onidb->select($args);
-        $m     = sizeof($array);
+
+        $m = sizeof($array);
         if (sizeof($array) == 0) {
             wp_send_json_success('<div class="alert alert-secondary" role="alert">شما امروز در مسابقه ای شرکت نکردید</div>');
         }
