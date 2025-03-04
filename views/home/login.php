@@ -100,16 +100,17 @@
             <h3 class="f-14px text-primary">در شبکه های اجتماعی</h3>
             <div class="h-24px"></div>
             <div class="d-flex flex-row justify-content-around align-items-center oni-social ">
-                <a class="rounded-circle border border-1 oni-border-color p-2" href="#"><img
-                        src="<?php echo oni_panel_image('rubika.png') ?>"></a>
-                <a class="rounded-circle border border-1 oni-border-color p-2" href="#"><img
-                        src="<?php echo oni_panel_image('telegram.png') ?>"></a>
-                <a class="rounded-circle border border-1 oni-border-color p-2" href="#"><img
-                        src="<?php echo oni_panel_image('instagram.png') ?>"></a>
-                <a class="rounded-circle border border-1 oni-border-color p-2" href="#"><img
-                        src="<?php echo oni_panel_image('bale.png') ?>"></a>
-                <a class="rounded-circle border border-1 oni-border-color p-2" href="#"><img
+                <a class="rounded-circle border border-1 oni-border-color p-2" href="https://eitaa.com/joinchat/2527134304Ccdba67771f"><img
                         src="<?php echo oni_panel_image('eitaa.png') ?>"></a>
+                <a class="rounded-circle border border-1 oni-border-color p-2" href="https://ble.ir/join/BBTz8iGZLf"><img
+                        src="<?php echo oni_panel_image('bale.png') ?>"></a>
+                <a class="rounded-circle border border-1 oni-border-color p-2" href="https://rubika.ir/zendegibaayeha"><img
+                        src="<?php echo oni_panel_image('rubika.png') ?>"></a>
+                <a class="rounded-circle border border-1 oni-border-color p-2" href="https://www.aparat.com/mzbah.com"><img
+                        src="<?php echo oni_panel_image('aparat.png') ?>"></a>
+                <a class="rounded-circle border border-1 oni-border-color p-2" href="http://www.youtube.com/@zendegibaayeha"><img
+                        src="<?php echo oni_panel_image('youtube.png') ?>"></a>
+
             </div>
         </div>
     </div>
