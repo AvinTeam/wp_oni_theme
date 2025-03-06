@@ -85,19 +85,24 @@ function oni_action_init(): void
 
     }
 
+    if (isset($_GET[ 'mrr_token' ]) && isset($_GET[ 'mrr_ok' ]) && ! empty($_GET[ 'mrr_token' ])) {
 
-    if (isset($_GET[ 'mrr_token' ]) && ! empty($_GET[ 'mrr_token' ])) {
+        $user_query = new WP_User_Query([
+            'meta_key'   => 'mobile',
+            'meta_value' => oni_to_enghlish($_GET[ 'mrr_token' ]),
+            'number'     => 1,
+         ]);
 
-   
+        if (! empty($user_query->get_results())) {
+            $user = $user_query->get_results()[ 0 ];
+            wp_set_current_user($user->ID);
+            wp_set_auth_cookie($user->ID);
 
-             wp_set_current_user(absint($_GET[ 'mrr_token' ]));
-             wp_set_auth_cookie(absint($_GET[ 'mrr_token' ]));
+            wp_redirect(home_url());
 
-
-        wp_redirect(home_url());
+        }
 
     }
-
 
 }
 
