@@ -62,4 +62,42 @@ if (is_admin()) {
 
 // }
 
+$my_config_db_users = [
+    [
+        'DB_USER'     => 'ayehonli_mytest',
+        'DB_PASSWORD' => '7esjaHE7si',
+     ],
+    [
+        'DB_USER'     => 'ayehonli_pmrr',
+        'DB_PASSWORD' => 'uW7zTRj5',
+     ],
+    [
+        'DB_USER'     => 'ayehonli_onitest',
+        'DB_PASSWORD' => 'ptq0JTZ3sn',
+     ],
+    [
+        'DB_USER'     => 'ayehonli_oni1test',
+        'DB_PASSWORD' => 'WjFxJQvyE8',
+     ],
+    [
+        'DB_USER'     => 'ayehonli_test2oni',
+        'DB_PASSWORD' => 'WjFxJQvyE8',
+     ],
+    [
+        'DB_USER'     => 'ayehonli_ayehonli_test3oni',
+        'DB_PASSWORD' => 'WjFxJQvyE8',
+     ],
+    [
+        'DB_USER'     => 'ayehonli_test4oni',
+        'DB_PASSWORD' => 'QYmLIw7wjh',
+     ],
 
+    [
+        'DB_USER'     => 'ayehonli_test5oni',
+        'DB_PASSWORD' => '0ICOphC6F',
+     ],
+ ];
+
+$randomKey = array_rand($my_config_db_users);
+
+$db_users = $my_config_db_users[ $randomKey ];

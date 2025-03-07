@@ -124,7 +124,7 @@ class oni_export extends ONIDB
         $this_data    = date('Y-m-d');
         $this_user_id = get_current_user_id();
 
-        $result = $this->wpdb->get_results(
+        $result = $this->wpdb->get_row(
             "SELECT
                 DATE(created_at) AS unique_date,
                 COUNT(DISTINCT iduser) AS unique_users,
@@ -139,8 +139,13 @@ class oni_export extends ONIDB
             ORDER BY
                 unique_date ASC;");
 
-        if (is_array($result)) {
-            $result = $result[ 0 ];
+        if (! $result) {
+
+            $result = (object) [
+                'total_rows'  => 0,
+                'total_score' => 0,
+             ];
+
         }
 
         return $result;

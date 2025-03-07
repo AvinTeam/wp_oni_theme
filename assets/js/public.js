@@ -3,7 +3,6 @@ jalaliDatepicker.startWatch({
     maxDate: "attr"
 });
 
-
 function startLoading() {
     var overlay = document.getElementById("overlay");
 

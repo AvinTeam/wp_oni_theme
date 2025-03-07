@@ -27,12 +27,16 @@ function avin_it_cron_function()
     $crondb        = new ONIDB('cron');
     $cron_error_db = new ONIDB('cron_error');
 
-    $my_res = $crondb->select([ 
+    $my_res = $crondb->select([
         'per_page' => 50,
-        'data' => [
-            'cron_type' => 'game'
-        ],
-    ]);
+        'order_by' => [
+            'id',
+            'DESC',
+         ],
+        'data'     => [
+            'cron_type' => 'game',
+         ],
+     ]);
 
     foreach ($my_res as $row) {
 
@@ -118,9 +122,9 @@ if (isset($_GET[ 'mrr_cron_error' ])) {
 
 $oni_crone_time = get_option('oni_crone_time');
 
-if ( !$oni_crone_time ||  intval($oni_crone_time) + 1000 < time()) {
+if (! $oni_crone_time || intval($oni_crone_time) + 10 < time()) {
 
-    //avin_it_cron_function();
+    avin_it_cron_function();
 
     update_option('oni_crone_time', time());
 
