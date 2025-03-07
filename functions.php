@@ -4,7 +4,7 @@
 
 date_default_timezone_set('Asia/Tehran');
 
-define('ONI_VERSION', '2.2.12');
+define('ONI_VERSION', '2.2.13');
 
 define('ONI_PATH', get_template_directory() . "/");
 define('ONI_INCLUDES', ONI_PATH . 'includes/');

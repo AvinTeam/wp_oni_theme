@@ -1,15 +1,17 @@
 <?php
-    use oniclass\ONIDB;
+
+    use oniclass\oni_export;
     $all_user_questions   = absint(get_user_meta(get_current_user_id(), 'questions', true));
     $all_user_count_true  = absint(get_user_meta(get_current_user_id(), 'count_true', true));
     $all_user_count_match = absint(get_user_meta(get_current_user_id(), 'count_match', true));
 
     $all_score_total = absint(get_user_meta(get_current_user_id(), 'score_total', true));
 
-    $matchdl               = new ONIDB('match');
-    $this_data             = date('Y-m-d');
-    $all_count_match_today = $matchdl->num([ 'iduser' => get_current_user_id() ], "DATE(`created_at`) = '$this_data'");
-    $all_score_today       = $matchdl->sum("score", [ 'iduser' => get_current_user_id() ], "DATE(`created_at`) = '$this_data'");
+    $this_data = date('Y-m-d');
+
+    $oni_export = new oni_export('match');
+    $all_today  = $oni_export->get_today();
+
 ?>
 
 <div class="oni-body mx-auto w-100 pb-5 rounded-3 h-100  position-relative">
@@ -60,13 +62,14 @@
 
         <div
             class="today-match w-100 p-10px text-white rounded-8px text-center d-flex flex-column justify-content-center align-items-center ">
-            <span class="fw-heavy f-28px"><?php echo $all_count_match_today ?></span>
+            <span class="fw-heavy f-28px"><?php echo(number_format($all_today->total_rows)) ?>
+            </span>
             <div class="h-8px"></div>
             <p class="fw-bold f-12px">تعداد شرکت در مسابقه امروز</p>
         </div>
         <div
             class="today-count w-100 p-10px text-white rounded-8px text-center d-flex flex-column justify-content-center align-items-center ">
-            <span class="fw-heavy f-28px"><?php echo $all_score_today ?></span>
+            <span class="fw-heavy f-28px"><?php echo number_format($all_today->total_score) ?></span>
             <div class="h-8px"></div>
             <p class="fw-bold f-12px">مجموع امتیاز کسب شده امروز</p>
         </div>

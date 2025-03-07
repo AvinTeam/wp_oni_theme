@@ -119,6 +119,34 @@ class oni_export extends ONIDB
 
     }
 
+    public function get_today()
+    {
+        $this_data    = date('Y-m-d');
+        $this_user_id = get_current_user_id();
+
+        $result = $this->wpdb->get_results(
+            "SELECT
+                DATE(created_at) AS unique_date,
+                COUNT(DISTINCT iduser) AS unique_users,
+                COUNT(*) AS total_rows,
+                SUM(score) AS total_score
+            FROM
+                `$this->tablename`
+
+              WHERE `iduser` = $this_user_id AND DATE(`created_at`) = '$this_data'
+            GROUP BY
+                DATE(created_at)
+            ORDER BY
+                unique_date ASC;");
+
+        if (is_array($result)) {
+            $result = $result[ 0 ];
+        }
+
+        return $result;
+
+    }
+
     public function get_exam()
     {
 
