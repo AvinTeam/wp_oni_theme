@@ -67,6 +67,7 @@ function oni_sent_verify()
                         update_user_meta($user_id, 'questions', 0);
                         update_user_meta($user_id, 'count_true', 0);
                         update_user_meta($user_id, 'count_match', 0);
+                        update_user_meta($user_id, 'score_total', 0);
                         wp_set_current_user($user_id);
                         wp_set_auth_cookie($user_id, true);
 
@@ -209,15 +210,21 @@ function oni_sent_question()
         $all_user_questions   = absint(get_user_meta(get_current_user_id(), 'questions', true));
         $all_user_count_true  = absint(get_user_meta(get_current_user_id(), 'count_true', true));
         $all_user_count_match = absint(get_user_meta(get_current_user_id(), 'count_match', true));
+        $all_user_score_total = absint(get_user_meta(get_current_user_id(), 'score_total', true));
 
         $count_all = ($all_user_count_true + $count_true);
+
+        $score = $count_true * ONI_QUESTION_SCORE;
 
         update_user_meta(get_current_user_id(), 'questions', ($all_user_questions + count($question_list)));
         update_user_meta(get_current_user_id(), 'count_true', $count_all);
         update_user_meta(get_current_user_id(), 'count_match', ($all_user_count_match + 1));
 
+        update_user_meta(get_current_user_id(), 'score_total', ($all_user_score_total + $score));
+
+
         wp_send_json_success([
-            'score'      => $count_true * ONI_QUESTION_SCORE,
+            'score'      => $score,
             'count_true' => $count_true,
          ]);
 

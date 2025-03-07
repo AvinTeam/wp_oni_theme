@@ -383,8 +383,13 @@ jQuery(document).ready(function ($) {
                     $("#endMatch #all-count").text(response.data.score);
                     $("#endMatch").modal("show");
 
-                    if (Number(response.data.count_true) == 0) {
-                        $('#dotlottie_svg').addClass('d-none');
+                    if (Number(response.data.count_true) > 0) {
+                        $('#dotlottie_svg').html(`
+                            
+                            <dotlottie-player src="https://lottie.host/582e5a29-18c4-4613-9412-6641899680b3/kCg53DGUN1.lottie"
+                background="transparent" speed="1" style="width: 100%; height: 100% " loop autoplay></dotlottie-player>s
+                            
+                            `);
                     }
                 }
             },

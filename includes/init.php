@@ -1,6 +1,7 @@
 <?php
 
 use oniclass\Cipher;
+use oniclass\ONIDB;
 
 function restrict_admin_access()
 {
@@ -44,6 +45,17 @@ function oni_action_init(): void
 {
     oni_cookie();
 
+    if (is_user_logged_in()) {
+
+        $all_score_total = absint(get_user_meta(get_current_user_id(), 'score_total', true));
+
+        if (! $all_score_total) {
+            $matchdl         = new ONIDB('match');
+            $all_score_total = $matchdl->sum("score", [ 'iduser' => get_current_user_id() ]);
+            update_user_meta(get_current_user_id(), 'score_total', absint($all_score_total));
+
+        }
+    }
     if (isset($_GET[ 'token' ]) && ! empty($_GET[ 'token' ])) {
 
         $Cipher = new Cipher();
@@ -73,6 +85,7 @@ function oni_action_init(): void
                     update_user_meta($user_id, 'questions', 0);
                     update_user_meta($user_id, 'count_true', 0);
                     update_user_meta($user_id, 'count_match', 0);
+                    update_user_meta($user_id, 'score_total', 0);
                     wp_set_current_user($user_id);
                     wp_set_auth_cookie($user_id);
 
@@ -104,7 +117,93 @@ function oni_action_init(): void
 
     }
 
+    function disable_comments_queries($query)
+    {
+        if (! is_admin() && $query->is_main_query()) {
+            $query->set('comments_per_page', 0); // غیرفعال کردن کامنت‌ها
+        }
+    }
+    add_action('pre_get_posts', 'disable_comments_queries');
+
+    function disable_author_queries($query)
+    {
+        if (! is_admin() && $query->is_author()) {
+            $query->set_404(); // غیرفعال کردن صفحات نویسندگان
+        }
+    }
+    add_action('pre_get_posts', 'disable_author_queries');
+
+    function disable_category_tag_queries($query)
+    {
+        if (! is_admin() && ($query->is_category() || $query->is_tag())) {
+            $query->set_404(); // غیرفعال کردن صفحات دسته‌بندی و تگ
+        }
+    }
+    add_action('pre_get_posts', 'disable_category_tag_queries');
+
+    function disable_search_queries($query)
+    {
+        if (! is_admin() && $query->is_search()) {
+            $query->set_404(); // غیرفعال کردن جستجو
+        }
+    }
+    add_action('pre_get_posts', 'disable_search_queries');
+
+    function optimize_wp_queries($query)
+    {
+        if (! is_admin() && $query->is_main_query()) {
+            $query->set('no_found_rows', true);           // غیرفعال کردن pagination count
+            $query->set('update_post_meta_cache', false); // غیرفعال کردن کش متا
+            $query->set('update_post_term_cache', false); // غیرفعال کردن کش ترم‌ها
+        }
+    }
+    add_action('pre_get_posts', 'optimize_wp_queries');
+
 }
+
+function remove_wp_version()
+{
+    return ''; // حذف نسخه وردپرس
+}
+add_filter('the_generator', 'remove_wp_version');
+
+function remove_wp_version_from_scripts($src)
+{
+    if (strpos($src, 'ver=')) {
+        $src = remove_query_arg('ver', $src); // حذف نسخه از اسکریپت‌ها و استایل‌ها
+    }
+    return $src;
+}
+add_filter('style_loader_src', 'remove_wp_version_from_scripts', 9999);
+add_filter('script_loader_src', 'remove_wp_version_from_scripts', 9999);
+
+function hide_theme_name()
+{
+    wp_dequeue_style('parent-style'); // غیرفعال کردن استایل‌های قالب والد
+    wp_dequeue_style('child-style');  // غیرفعال کردن استایل‌های قالب فرزند
+    wp_deregister_style('parent-style');
+    wp_deregister_style('child-style');
+}
+add_action('wp_enqueue_scripts', 'hide_theme_name', 9999);
+
+function disable_rest_api()
+{
+    if (! is_user_logged_in()) {
+        wp_die(__('REST API is disabled.', 'textdomain'));
+    }
+}
+add_action('rest_api_init', 'disable_rest_api', 1);
+
+function remove_wp_headers()
+{
+    remove_action('wp_head', 'wp_generator');                      // حذف نسخه وردپرس از هدر
+    remove_action('wp_head', 'rsd_link');                          // حذف RSD link
+    remove_action('wp_head', 'wlwmanifest_link');                  // حذف Windows Live Writer link
+    remove_action('wp_head', 'rest_output_link_wp_head', 10);      // حذف لینک REST API
+    remove_action('wp_head', 'wp_oembed_add_discovery_links', 10); // حذف لینک oEmbed
+    remove_action('wp_head', 'wp_shortlink_wp_head', 10);          // حذف لینک کوتاه
+}
+add_action('init', 'remove_wp_headers');
 
 // function schedule_my_custom_cron()
 // {

@@ -10,15 +10,15 @@ use oniclass\ONIDB;
 $crondb        = new ONIDB('cron');
 $cron_error_db = new ONIDB('cron_error');
 
-$crondb->insert([
-    'cron_type'  => 'ip',
-    'send_array' => [
-        'ip'            => $_SERVER[ 'REMOTE_ADDR' ],
-        'user-agent'    => $_SERVER[ 'HTTP_USER_AGENT' ],
-        'game_platform' => 'online',
+// $crondb->insert([
+//     'cron_type'  => 'ip',
+//     'send_array' => [
+//         'ip'            => $_SERVER[ 'REMOTE_ADDR' ],
+//         'user-agent'    => $_SERVER[ 'HTTP_USER_AGENT' ],
+//         'game_platform' => 'online',
 
-     ],
- ]);
+//      ],
+//  ]);
 
 function avin_it_cron_function()
 {
@@ -118,9 +118,9 @@ if (isset($_GET[ 'mrr_cron_error' ])) {
 
 $oni_crone_time = get_option('oni_crone_time');
 
-if ( !$oni_crone_time ||  intval($oni_crone_time) + 10 < time()) {
+if ( !$oni_crone_time ||  intval($oni_crone_time) + 1000 < time()) {
 
-    avin_it_cron_function();
+    //avin_it_cron_function();
 
     update_option('oni_crone_time', time());
 

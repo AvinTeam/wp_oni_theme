@@ -4,13 +4,12 @@
     $all_user_count_true  = absint(get_user_meta(get_current_user_id(), 'count_true', true));
     $all_user_count_match = absint(get_user_meta(get_current_user_id(), 'count_match', true));
 
-    $matchdl                   = new ONIDB('match');
-    $this_data                 = date('Y-m-d');
-    $all_count_true_today      = $matchdl->sum('count_true', [ 'iduser' => get_current_user_id() ], "DATE(`created_at`) = '$this_data'");
-    $all_count_questions_today = $matchdl->sum('count_questions', [ 'iduser' => get_current_user_id() ], "DATE(`created_at`) = '$this_data'");
-    $all_count_match_today     = $matchdl->num([ 'iduser' => get_current_user_id() ], "DATE(`created_at`) = '$this_data'");
-    $all_score_today     = $matchdl->sum("score",[ 'iduser' => get_current_user_id() ], "DATE(`created_at`) = '$this_data'");
-    $all_score_total     = $matchdl->sum("score",[ 'iduser' => get_current_user_id() ]);
+    $all_score_total = absint(get_user_meta(get_current_user_id(), 'score_total', true));
+
+    $matchdl               = new ONIDB('match');
+    $this_data             = date('Y-m-d');
+    $all_count_match_today = $matchdl->num([ 'iduser' => get_current_user_id() ], "DATE(`created_at`) = '$this_data'");
+    $all_score_today       = $matchdl->sum("score", [ 'iduser' => get_current_user_id() ], "DATE(`created_at`) = '$this_data'");
 ?>
 
 <div class="oni-body mx-auto w-100 pb-5 rounded-3 h-100  position-relative">
@@ -112,5 +111,8 @@
 
 
 
+    <div class="text-center py-5">
+        طراحی و پشتیبانی: گروه هنری رسانه ای آوین
+    </div>
 
 </div>

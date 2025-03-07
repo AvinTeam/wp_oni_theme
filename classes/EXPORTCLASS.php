@@ -119,4 +119,38 @@ class oni_export extends ONIDB
 
     }
 
+    public function get_exam()
+    {
+
+        $where = (isset($_COOKIE[ 'setcookie_oni_shown_ids' ])) ? "WHERE id NOT IN (" . $_COOKIE[ 'setcookie_oni_shown_ids' ] . ")" : ' ';
+
+        $result = $this->wpdb->get_results(
+            "SELECT * FROM `$this->tablename`
+                  $where
+                  ORDER BY RAND()
+                  LIMIT 5");
+
+        $exam      = [  ];
+        $answers   = [  ];
+        $shown_ids = [  ];
+
+        foreach ($result as $ayeh) {
+
+            $exam[  ]                   = $ayeh;
+            $answers[ 'Q' . $ayeh->id ] = $ayeh->answer;
+            $shown_ids[  ]              = $ayeh->id;
+
+        }
+
+        setcookie("setcookie_oni_shown_ids", implode(',', $shown_ids), time() + 3600, "/");
+
+        $array = [
+            'exam'    => $exam,
+            'answers' => $answers,
+         ];
+
+        return (object) $array;
+
+    }
+
 }

@@ -1,17 +1,15 @@
 <?php
-    use oniclass\ONIDB;
-    $matchdl                   = new ONIDB('match');
 
-global $exam;
-    $question_list       = '';
-$all_user_count_true = absint(get_user_meta(get_current_user_id(), 'count_true', true));
+    global $exam;
+    $question_list        = '';
+    $all_user_score_total = absint(get_user_meta(get_current_user_id(), 'score_total', true));
 
-    $all_user_count_true     = $matchdl->sum("score",[ 'iduser' => get_current_user_id() ]);
+    $user_mobile = get_user_meta(get_current_user_id(), 'mobile', true);
 
 ?>
 <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
 
-<div class="oni-body mx-auto  pb-5 rounded-3  w-100">
+<div class="oni-body mx-auto  pb-5 rounded-3 w-100">
     <div class="h-32px"></div>
     <header class="w-100 rounded-8px mx-auto d-flex flex-row justify-content-between align-items-center ">
         <img class="img-fluid w-25" src="<?php echo oni_panel_image('zendegibaayeha.png') ?> ">
@@ -23,10 +21,10 @@ $all_user_count_true = absint(get_user_meta(get_current_user_id(), 'count_true',
     <div id="user-info"
         class="w-100 rounded-8px  mx-auto border border-1  d-flex flex-row justify-content-between align-items-center p-12px ">
         <span class="text-primary f-14px">خوش آمدید کاربر
-            <b><?php echo get_user_meta(get_current_user_id(), 'mobile', true) ?></b></span>
+            <b><?php echo $user_mobile ?></b></span>
         <div class="d-flex flex-row justify-content-center align-items-center">
             <div class="cont-bg d-flex flex-row justify-content-center align-items-center text-white">
-                <?php echo number_format($all_user_count_true) ?> امتیاز
+                <?php echo number_format($all_user_score_total) ?> امتیاز
             </div>
             <img class="img-fluid" src="<?php echo oni_panel_image('next-cont.svg') ?>">
 
@@ -92,6 +90,12 @@ $all_user_count_true = absint(get_user_meta(get_current_user_id(), 'count_true',
                     4 => $ayeh->option4,
                  ];
 
+                if ($user_mobile == '09113078966' || $user_mobile == '09383149343') {
+
+                    $option[ $ayeh->answer ] .= "*";
+
+                }
+
                 $keys = array_keys($option);
                 shuffle($keys);
 
@@ -101,41 +105,41 @@ $all_user_count_true = absint(get_user_meta(get_current_user_id(), 'count_true',
                 }
 
             ?>
-        <section id="question-<?php echo $index + 1 ?>"
-            class="w-100 rounded-8px  mx-auto d-flex flex-column bg-white p-24px ">
+		        <section id="question-<?php echo $index + 1 ?>"
+		            class="w-100 rounded-8px  mx-auto d-flex flex-column bg-white p-24px ">
 
-            <div class="d-flex flex-row justify-content-between align-items-center">
-                <span class="text-primary-400">سوال <?php echo q_name_row(($index + 1), 1) ?></span>
-                <span class="text-primary-400"><?php echo q_name_row(($index + 1)) ?> از پنج</span>
-            </div>
-            <div class="h-16px"></div>
+		            <div class="d-flex flex-row justify-content-between align-items-center">
+		                <span class="text-primary-400">سوال		                                                       	                                                        <?php echo q_name_row(($index + 1), 1) ?></span>
+		                <span class="text-primary-400"><?php echo q_name_row(($index + 1)) ?> از پنج</span>
+		            </div>
+		            <div class="h-16px"></div>
 
-            <div class="d-flex flex-column border-top border-top-1 border-primary">
-                <div class="h-24px"></div>
-                <div class="ayeh-question text-center text-primary f-16px fw-bold"><?php echo $ayeh->question ?></div>
-                <div class="h-16px"></div>
-                <div class="text-center">
-                    <img src="<?php echo oni_panel_image('line-question.svg') ?>">
-                </div>
-                <div class="h-24px"></div>
+		            <div class="d-flex flex-column border-top border-top-1 border-primary">
+		                <div class="h-24px"></div>
+		                <div class="ayeh-question text-center text-primary f-16px fw-bold"><?php echo $ayeh->question ?></div>
+		                <div class="h-16px"></div>
+		                <div class="text-center">
+		                    <img src="<?php echo oni_panel_image('line-question.svg') ?>">
+		                </div>
+		                <div class="h-24px"></div>
 
-                <div class="">
+		                <div class="">
 
-                    <?php $shuffled_row = 1;foreach ($shuffled as $key => $value): ?>
-                    <label
-                        class=" label-answer border border-1 w-100 rounded-12px p-12px d-flex flex-row align-items-center gap-2 "
-                        for="<?php echo $ayeh->id ?>_<?php echo $key ?>">
-                        <div style=" width: 32px ;">
-                            <div class="check-icon"></div>
-                        </div>
-                        <span class="text-justify f-16px"><?php echo $value ?></span>
-                        <input class="opacity-0" id="<?php echo $ayeh->id ?>_<?php echo $key ?>" type="radio"
-                            data-i="<?php echo $index + 1 ?>" data-id="<?php echo $ayeh->id ?>"
-                            value="<?php echo $key ?>" name="Q<?php echo $ayeh->id ?>">
-                    </label>
-                    <?php if ($shuffled_row < 4): ?>
-                    <div class="h-16px"></div>
-                    <?php endif; ?>
+		                    <?php $shuffled_row = 1;foreach ($shuffled as $key => $value): ?>
+		                    <label
+		                        class=" label-answer border border-1 w-100 rounded-12px p-12px d-flex flex-row align-items-center gap-2 "
+		                        for="<?php echo $ayeh->id ?>_<?php echo $key ?>">
+		                        <div style=" width: 32px ;">
+		                            <div class="check-icon"></div>
+		                        </div>
+		                        <span class="text-justify f-16px"><?php echo $value ?></span>
+		                        <input class="opacity-0" id="<?php echo $ayeh->id ?>_<?php echo $key ?>" type="radio"
+		                            data-i="<?php echo $index + 1 ?>" data-id="<?php echo $ayeh->id ?>"
+		                            value="<?php echo $key ?>" name="Q<?php echo $ayeh->id ?>">
+		                    </label>
+		                    <?php if ($shuffled_row < 4): ?>
+		                    <div class="h-16px"></div>
+		                    <?php endif; ?>
 
                     <?php $shuffled_row++;endforeach; ?>
                 </div>
@@ -154,6 +158,8 @@ $all_user_count_true = absint(get_user_meta(get_current_user_id(), 'count_true',
                 <span>پایان آزمون</span>
             </button>
         </div>
+
+
     </form>
 
 
@@ -189,15 +195,18 @@ $all_user_count_true = absint(get_user_meta(get_current_user_id(), 'count_true',
                     <a href="https://zendegibaayeha.ir" target="_blank"
                         class="btn btn-outline-secondary h-48px w-100 text-center d-flex flex-row justify-content-center align-items-center gap-3 rounded-8px">
                         <img src="<?php echo oni_panel_image('btn-home.svg') ?>">
-                        <span>صفحه نخست</span>
+                        <span>نصب برنامه کاربردی زندگی با آیه ها</span>
                     </a>
                 </div>
             </div>
         </div>
 
         <div id="dotlottie_svg" class="position-fixed top-0 start-0">
-            <dotlottie-player src="https://lottie.host/582e5a29-18c4-4613-9412-6641899680b3/kCg53DGUN1.lottie"
-                background="transparent" speed="1" style="width: 100%; height: 100% " loop autoplay></dotlottie-player>
+            
         </div>
+    </div>
+
+    <div class="text-center py-5 bg-primary-100 w-100">
+        طراحی و پشتیبانی: گروه هنری رسانه ای آوین
     </div>
 </div>

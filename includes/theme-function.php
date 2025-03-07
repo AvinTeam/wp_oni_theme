@@ -1,5 +1,6 @@
 <?php
 
+use oniclass\oni_export;
 use oniclass\ONIDB;
 
 (defined('ABSPATH')) || exit;
@@ -130,7 +131,7 @@ function oni_update_option($data)
         'notificator_token' => (isset($data[ 'notificator_token' ])) ? sanitize_text_field($data[ 'notificator_token' ]) : $oni_option[ 'notificator_token' ],
 
         'token_password'    => (isset($data[ 'token_password' ])) ? sanitize_text_field($data[ 'token_password' ]) : $oni_option[ 'token_password' ],
-        'send_cron'         => (isset($data[ 'send_cron' ])) ? sanitize_text_field($data[ 'send_cron' ]) : $oni_option[ 'token_password' ],
+        'send_cron'         => (isset($data[ 'send_cron' ])) ? sanitize_text_field($data[ 'send_cron' ]) : $oni_option[ 'send_cron' ],
 
      ];
 
@@ -514,32 +515,47 @@ function sanitize_text_no_item($item)
 function oni_exam()
 {
 
-    $onidb    = new ONIDB('question');
-    $all_ayeh = $onidb->select();
+    // $onidb    = new ONIDB('question');
+    // $all_ayeh = $onidb->select();
 
-    $random_numbers = [  ];
-    $exam           = [  ];
-    $answers        = [  ];
-    $stop_condition = false;
+    // $random_numbers = [  ];
+    // $exam           = [  ];
+    // $answers        = [  ];
+    // $stop_condition = false;
 
-    while (! $stop_condition) {
-        $random_number = rand(1, $onidb->num() - 1);
+    // while (! $stop_condition) {
+    //     $random_number = rand(1, $onidb->num() - 1);
 
-        if (! in_array($random_number, $random_numbers)) {
-            $random_numbers[  ] = $random_number;
+    //     if (! in_array($random_number, $random_numbers)) {
+    //         $random_numbers[  ] = $random_number;
 
-            $ayeh                       = $all_ayeh[ $random_number ];
-            $exam[  ]                   = $ayeh;
-            $answers[ 'Q' . $ayeh->id ] = $ayeh->answer;
+    //         $ayeh                       = $all_ayeh[ $random_number ];
+    //         $exam[  ]                   = $ayeh;
+    //         $answers[ 'Q' . $ayeh->id ] = $ayeh->answer;
 
-            if (count($random_numbers) == 5) {
-                $stop_condition = true;
-            }
-        }
-    }
-    $GLOBALS[ 'exam' ] = $exam;
+    //         if (count($random_numbers) == 5) {
+    //             $stop_condition = true;
+    //         }
+    //     }
+    // }
 
-    return $answers;
+
+
+
+
+
+
+    $oni_export = new oni_export('question');
+    $my_exam =$oni_export->get_exam();
+
+
+
+
+
+
+    $GLOBALS[ 'exam' ] = $my_exam->exam;
+
+    return $my_exam->answers;
 }
 
 function generate_uuid()
