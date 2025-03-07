@@ -114,8 +114,7 @@
 
 
 
-    <div class="text-center py-5">
-        طراحی و پشتیبانی: گروه هنری رسانه ای آوین
+    <div class="text-center py-4 bg-primary-100 w-100">
+        <a href="https://avinmedia.ir/" class="text-primary" target="_blank">طراحی و پشتیبانی: گروه هنری رسانه ای آوین</a>
     </div>
-
 </div>
