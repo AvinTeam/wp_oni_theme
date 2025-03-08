@@ -36,29 +36,58 @@ class Rabbitmq
     protected function send_message_to_queue($message_body)
     {
         $connection = $this->connection;
-        if (empty($connection)) {
-            return false;
+        if (! $connection) {
+            return 'خطا: اتصال به RabbitMQ برقرار نشد.';
         }
 
-        $channel = $connection->channel();
-        $channel->exchange_declare($this->exchange_name, 'direct', false, true, false);
+        try {
+            $channel = $connection->channel();
 
-        $channel->queue_declare($this->queue_name, false, true, false, false);
+            // تعریف Exchange
+            $channel->exchange_declare($this->exchange_name, 'direct', false, true, false);
 
-        $msg = new AMQPMessage($message_body, [ 'delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT ]);
-        // $channel->basic_publish($msg, '', $this->queue_name);
-        // $channel->basic_publish($msg, $this->exchange_name, $this->routing_key);
-        $channel->basic_publish($msg, $this->exchange_name, $this->queue_name);
+            // تعریف Queue
+            $channel->queue_declare($this->queue_name, false, true, false, false);
 
-        $channel->close();
-        $connection->close();
+            // ایجاد پیام
+            $msg = new AMQPMessage($message_body, [ 'delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT ]);
 
-        return true;
+            // ارسال پیام
+            $channel->basic_publish($msg, $this->exchange_name, $this->routing_key);
 
+            // بستن کانال و اتصال
+            $channel->close();
+            $connection->close();
+
+            return true; // ارسال موفقیت‌آمیز
+        } catch (Exception $e) {
+            // لاگ خطا
+            error_log('RabbitMQ Error: ' . $e->getMessage());
+
+            // بستن کانال و اتصال در صورت وجود
+            if (isset($channel)) {
+                try {
+                    $channel->close();
+                } catch (Exception $e) {
+                    error_log('RabbitMQ Channel Close Error: ' . $e->getMessage());
+                }
+            }
+            if (isset($connection)) {
+                try {
+                    $connection->close();
+                } catch (Exception $e) {
+                    error_log('RabbitMQ Connection Close Error: ' . $e->getMessage());
+                }
+            }
+
+            return 'خطا در ارسال پیام به RabbitMQ: ' . $e->getMessage();
+        }
     }
 
     public function set($inputs)
     {
+
+        $my_array = [  ];
 
         $row_send = 0;
         foreach ($inputs[ 'game' ] as $input) {
@@ -78,13 +107,23 @@ class Rabbitmq
                 'created_at'     => current_time('mysql'),
              ];
 
-            $send = $this->send_message_to_queue(json_encode($message));
-            if ($send) {
+            $my_array[  ] = $send = $this->send_message_to_queue(json_encode($message));
+
+            if ($send === true) {
                 $row_send++;
+
+            } else {
+                return $send; // نمایش پیام خطا
             }
+
         }
 
-        return $row_send;
+        $array = [
+            'my_array' => $my_array,
+            'row_send' => $row_send,
+         ];
+
+        return $array;
 
     }
 

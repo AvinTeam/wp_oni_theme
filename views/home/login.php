@@ -108,7 +108,7 @@
                 <a class="rounded-circle border border-1 oni-border-color p-2"
                     href="https://rubika.ir/zendegibaayeha"><img src="<?php echo oni_panel_image('rubika.png') ?>"></a>
                 <a class="rounded-circle border border-1 oni-border-color p-2"
-                    href="https://www.aparat.com/mzbah.com"><img src="<?php echo oni_panel_image('aparat.png') ?>"></a>
+                    href="https://www.aparat.com/zendegibaayeha"><img src="<?php echo oni_panel_image('aparat.png') ?>"></a>
                 <a class="rounded-circle border border-1 oni-border-color p-2"
                     href="http://www.youtube.com/@zendegibaayeha"><img
                         src="<?php echo oni_panel_image('youtube.png') ?>"></a>

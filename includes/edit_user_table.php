@@ -33,8 +33,7 @@ function show_institute_posts_count($output, $column_name, $user_id)
 function add_csv_export_button()
 {
     if (is_admin() && 'users.php' === $GLOBALS[ 'pagenow' ]) {
-        echo '<div class="alignleft actions"><a href="' . esc_url(add_query_arg('action', 'user_csv', get_current_relative_url())) . '" class="button button-primary">خروجی CSV</a></div>';
-        echo '<div class="alignleft actions"><a href="' . esc_url(add_query_arg('action', 'user_exel', get_current_relative_url())) . '" class="button button-primary">خروجی EXEL</a></div>';
+        echo '<div class="alignleft actions"><a href="' . esc_url(add_query_arg('action', 'user_excel', get_current_relative_url())) . '" class="button button-primary">خروجی EXCEL</a></div>';
     }
 }
 add_action('manage_users_extra_tablenav', 'add_csv_export_button');

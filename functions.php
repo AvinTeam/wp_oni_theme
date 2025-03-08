@@ -6,7 +6,7 @@ use Dotenv\Dotenv;
 
 date_default_timezone_set('Asia/Tehran');
 
-define('ONI_VERSION', '2.2.21');
+define('ONI_VERSION', '2.2.24');
 
 define('ONI_PATH', get_template_directory() . "/");
 define('ONI_INCLUDES', ONI_PATH . 'includes/');
@@ -43,6 +43,7 @@ require_once ONI_CLASS . '/Cipher.php';
 require_once ONI_CLASS . '/Rabbitmq.php';
 require_once ONI_INCLUDES . '/rabbitmq.php';
 require_once ONI_INCLUDES . '/cron.php';
+require_once ONI_INCLUDES . '/handle_download.php';
 
 $oni_option = oni_start_working();
 
@@ -68,5 +69,3 @@ if (is_admin()) {
 // exit;
 
 // }
-
-
