@@ -72,6 +72,9 @@ function oni_sent_verify()
                         wp_set_auth_cookie($user_id, true);
 
                         $massage = 'ثبت‌ نام با موفقیت انجام شد و شما وارد شدید!';
+                    } else {
+                        wp_send_json_error('لطفا دوباره تلاش کنید', 403);
+
                     }
 
                 }
@@ -221,7 +224,6 @@ function oni_sent_question()
         update_user_meta(get_current_user_id(), 'count_match', ($all_user_count_match + 1));
 
         update_user_meta(get_current_user_id(), 'score_total', ($all_user_score_total + $score));
-
 
         wp_send_json_success([
             'score'      => $score,

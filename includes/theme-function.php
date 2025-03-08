@@ -1,7 +1,6 @@
 <?php
 
 use oniclass\oni_export;
-use oniclass\ONIDB;
 
 (defined('ABSPATH')) || exit;
 
@@ -222,8 +221,8 @@ function tsms($mobile, $massage)
     $response = json_decode(wp_remote_retrieve_body($response));
 
     $result = [
-        'code'    => ($response->code == 200) ? 1 : $response->code,
-        'massage' => ($response->code == 200) ? 'پیام با موفقیت ارسال شد' : 'پیام به خطا خورده است',
+        'code'    => (absint($response->code) == 200) ? 1 : intval($response->code),
+        'massage' => (absint($response->code) == 200) ? 'پیام با موفقیت ارسال شد' : 'پیام به خطا خورده است',
      ];
     return $result;
 
@@ -539,19 +538,8 @@ function oni_exam()
     //     }
     // }
 
-
-
-
-
-
-
     $oni_export = new oni_export('question');
-    $my_exam =$oni_export->get_exam();
-
-
-
-
-
+    $my_exam    = $oni_export->get_exam();
 
     $GLOBALS[ 'exam' ] = $my_exam->exam;
 
