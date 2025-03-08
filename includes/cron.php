@@ -61,6 +61,24 @@ function avin_it_cron_function()
                 'body'    => json_encode(unserialize($row->send_array)),
              ]);
 
+
+
+
+             $response = wp_remote_post(
+                $api_url . 'rabbitMq',
+                [
+                    'timeout' => 1000,
+                    'headers' => [
+                        'Authorization' => 'Bearer ' . ONI_TOKEN, // ارسال توکن در هدر
+                        'Content-Type'  => 'application/json',    // نوع محتوای بدنه
+                     ],
+                    'body'    => json_encode(unserialize($row->send_array)),
+                 ]);
+    
+
+
+
+
         if (is_wp_error($response)) {
 
             $error_message = $response->get_error_message();

@@ -1,10 +1,12 @@
 <?php
 
+use Dotenv\Dotenv;
+
 (defined('ABSPATH')) || exit;
 
 date_default_timezone_set('Asia/Tehran');
 
-define('ONI_VERSION', '2.2.16');
+define('ONI_VERSION', '2.2.21');
 
 define('ONI_PATH', get_template_directory() . "/");
 define('ONI_INCLUDES', ONI_PATH . 'includes/');
@@ -24,6 +26,9 @@ define('ONI_TOKEN', '1|L6niilLOBERWI0P6ftbfDLT7hfmry7iut7geWdD85e2f5836');
 
 require_once ONI_PATH . 'vendor/autoload.php';
 
+$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
 require_once ONI_CORE . '/accesses.php';
 require_once ONI_INCLUDES . '/theme_filter.php';
 require_once ONI_INCLUDES . '/theme-function.php';
@@ -35,6 +40,8 @@ require_once ONI_INCLUDES . '/jdf.php';
 require_once ONI_CLASS . '/ONIDB.php';
 require_once ONI_CLASS . '/EXPORTCLASS.php';
 require_once ONI_CLASS . '/Cipher.php';
+require_once ONI_CLASS . '/Rabbitmq.php';
+require_once ONI_INCLUDES . '/rabbitmq.php';
 require_once ONI_INCLUDES . '/cron.php';
 
 $oni_option = oni_start_working();
@@ -62,42 +69,4 @@ if (is_admin()) {
 
 // }
 
-$my_config_db_users = [
-    [
-        'DB_USER'     => 'ayehonli_mytest',
-        'DB_PASSWORD' => '7esjaHE7si',
-     ],
-    [
-        'DB_USER'     => 'ayehonli_pmrr',
-        'DB_PASSWORD' => 'uW7zTRj5',
-     ],
-    [
-        'DB_USER'     => 'ayehonli_onitest',
-        'DB_PASSWORD' => 'ptq0JTZ3sn',
-     ],
-    [
-        'DB_USER'     => 'ayehonli_oni1test',
-        'DB_PASSWORD' => 'WjFxJQvyE8',
-     ],
-    [
-        'DB_USER'     => 'ayehonli_test2oni',
-        'DB_PASSWORD' => 'WjFxJQvyE8',
-     ],
-    [
-        'DB_USER'     => 'ayehonli_ayehonli_test3oni',
-        'DB_PASSWORD' => 'WjFxJQvyE8',
-     ],
-    [
-        'DB_USER'     => 'ayehonli_test4oni',
-        'DB_PASSWORD' => 'QYmLIw7wjh',
-     ],
 
-    [
-        'DB_USER'     => 'ayehonli_test5oni',
-        'DB_PASSWORD' => '0ICOphC6F',
-     ],
- ];
-
-$randomKey = array_rand($my_config_db_users);
-
-$db_users = $my_config_db_users[ $randomKey ];

@@ -57,6 +57,10 @@ function oni_row_install()
 
     dbDelta($sql_question);
 
+
+
+    
+
     $table_match_row = $wpdb->prefix . 'oni_match';
     $sql_match       = "CREATE TABLE IF NOT EXISTS `$table_match_row` (
                         `id` bigint unsigned NOT NULL AUTO_INCREMENT,
