@@ -15,6 +15,7 @@
 <div class="overlay" id="overlay">
     <div class="loader"></div>
 </div>
+<script type="text/javascript">;!(function(w,d) {'use strict';d.write('<div id="amarfa-stats-14337" style="display: inline-block"></div>');d.write('<'+'sc'+'ript type="text/javasc'+'ri'+'pt" src="//amarfa.ir/stats/14337.js" async><'+'/'+'scri'+'pt>');})(this,document);</script>
 </body>
 
 </html>

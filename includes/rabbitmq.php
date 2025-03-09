@@ -4,39 +4,15 @@ use oniclass\Rabbitmq;
 
 if (isset($_GET[ 'rab_test' ])) {
 
-    $inputs = [
-        'mobile'      => '09383149343',
-        'description' => 'id game 52',
-        'game'        => [
-            [
-                'score'          => 30,
-                'chapter'        => 'احزاب',
-                'chapter_number' => 33,
-                'verse'          => 23,
-                'type'           => 'تبیین',
-
-             ],
-         ],
-
-     ];
-
-    $rabbitmq = new Rabbitmq;
-
-    $testq = $rabbitmq->set($inputs);
-
-    print_r($testq);
-
-    echo '<br>';
-
-
-
+    echo '0<br>';
 
     $inputs = [
         'mobile'      => '09113078966',
-        'description' => 'id game 52',
+        'description' => 'id game 53',
+        'game_type'   => 'online',
         'game'        => [
             [
-                'score'          => 50,
+                'score'          => 1,
                 'chapter'        => 'احزاب',
                 'chapter_number' => 33,
                 'verse'          => 23,
@@ -70,6 +46,9 @@ if (isset($_GET[ 'rab_test' ])) {
     } else {
 
         $body = wp_remote_retrieve_body($response);
+        print_r($body);
+        echo '<br>';
+
         $data = json_decode($body);
 
         if (isset($data->success) && $data->success) {
@@ -89,14 +68,65 @@ if (isset($_GET[ 'rab_test' ])) {
 
     }
 
+    echo '<br>';
 
+// ایجاد یک نمونه از کلاس Rabbitmq
+    $rabbitmq = new Rabbitmq();
 
+// بررسی اتصال
+    if (! $rabbitmq->isConnected()) {
+        die("اتصال به RabbitMQ ناموفق بود.\n");
+    }
 
+    $inputs = [
+        'mobile'      => '09113078966',
+        'description' => 'id game 55',
+        'game_type'   => 'online',
+        'game'        => [
+            [
+                'score'          => 1,
+                'chapter'        => 'زمر',
+                'chapter_number' => 39,
+                'verse'          => 18,
+                'type'           => 'تبیین',
 
+             ],
+         ],
 
+     ];
 
+    $row_res = 0;
 
-    
+    foreach ($inputs[ 'game' ] as $input) {
+        $message = [
+            'game_id'        => null,
+            'question_id'    => null,
+            "description"    => $inputs[ 'description' ] ?? null,
+            'direction'      => 'in',
+            'game_type'      => $inputs[ 'game_type' ] ?? null,
+            'chapter'        => $input[ 'chapter' ] ?? null,
+            'chapter_number' => $input[ 'chapter_number' ] ?? null,
+            'verse'          => $input[ 'verse' ] ?? null,
+            'part'           => $input[ 'part' ] ?? null,
+            'type'           => $input[ 'type' ] ?? null,
+            'score'          => $input[ 'score' ] ?? null,
+            'winners'        => [ $inputs[ 'mobile' ] ], // Convert Collection to array
+            'created_at'     => current_time('mysql'),
+         ];
+
+        $result = $rabbitmq->send_message_to_queue(json_encode($inputs));
+
+        if ($result === true) {
+            echo "پیام با موفقیت ارسال شد.\n";
+            $row_res++;
+        } else {
+            echo $result; // نمایش پیام خطا
+        }
+
+        echo '<br>';
+    }
+
+    echo $row_res;
+
     exit;
 }
-

@@ -221,8 +221,8 @@ function tsms($mobile, $massage)
     $response = json_decode(wp_remote_retrieve_body($response));
 
     $result = [
-        'code'    => (absint($response->code) == 200) ? 1 : intval($response->code),
-        'massage' => (absint($response->code) == 200) ? 'پیام با موفقیت ارسال شد' : 'پیام به خطا خورده است',
+        'code'    => (! is_null($response->code) && absint($response->code) == 200) ? 1 : intval($response->code),
+        'massage' => (! is_null($response->code) && absint($response->code) == 200) ? 'پیام با موفقیت ارسال شد' : 'پیام به خطا خورده است',
      ];
     return $result;
 

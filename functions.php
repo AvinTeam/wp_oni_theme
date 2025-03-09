@@ -6,9 +6,9 @@ use Dotenv\Dotenv;
 
 date_default_timezone_set('Asia/Tehran');
 
-enable_maintenance_mode();
+//enable_maintenance_mode();
 
-define('ONI_VERSION', '2.2.24');
+define('ONI_VERSION', '2.3.1');
 
 define('ONI_PATH', get_template_directory() . "/");
 define('ONI_INCLUDES', ONI_PATH . 'includes/');
