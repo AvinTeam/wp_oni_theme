@@ -5,7 +5,7 @@ use oniclass\Rabbitmq;
 if (isset($_GET[ 'rab_test' ])) {
 
     $inputs = [
-        'mobile'      => '09113078966',
+        'mobile'      => '09383149343',
         'description' => 'id game 52',
         'game'        => [
             [
@@ -32,7 +32,7 @@ if (isset($_GET[ 'rab_test' ])) {
 
 
     $inputs = [
-        'mobile'      => '09360970307',
+        'mobile'      => '09113078966',
         'description' => 'id game 52',
         'game'        => [
             [

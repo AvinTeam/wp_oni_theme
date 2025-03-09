@@ -142,8 +142,8 @@ $oni_crone_time = get_option('oni_crone_time');
 
 if (! $oni_crone_time || intval($oni_crone_time) + 10 < time()) {
 
-    avin_it_cron_function();
+    // avin_it_cron_function();
 
-    update_option('oni_crone_time', time());
+    // update_option('oni_crone_time', time());
 
 }
