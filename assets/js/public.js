@@ -361,6 +361,11 @@ jQuery(document).ready(function ($) {
 
     $("#form-question").on("submit", function (e) {
         e.preventDefault();
+        $("#overlay").css("display", "flex").hide().fadeIn();
+        $("body").addClass("no-scroll");
+
+
+
 
 
         $('button[type=submit]#verifyCode').attr('disabled', 'disabled');
@@ -392,9 +397,47 @@ jQuery(document).ready(function ($) {
                             `);
                     }
                 }
+
+                $("#overlay").fadeOut();
+                $("body").removeClass("no-scroll");
+
             },
             error: function (xhr, status, error) {
                 console.error("خطا در درخواست AJAX:", error);
+
+
+
+                let loginToast = document.getElementById("loginToast");
+                let loginAlertBody = loginToast.querySelector(".toast-body");
+                loginAlertBody.textContent ='حظایی رخ داده دوباره تلاش کنید';
+                let toast = new bootstrap.Toast(loginToast);
+                toast.show();
+
+                $('button[type=submit]#verifyCode').removeAttr('disabled');
+
+
+
+
+
+
+                $("#overlay").fadeOut();
+                $("body").removeClass("no-scroll");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             }
         });
     });
@@ -531,36 +574,17 @@ jQuery(document).ready(function ($) {
 
     });
 
-
-
-
     $(document).on("click", '#pagenet #next', function (e) {
         e.preventDefault();
-
         let next = $(this).data('paged');
-
         ajaxAllMatch(next);
-
     });
 
     $(document).on("click", '#pagenet #prev', function (e) {
         e.preventDefault();
-
         let prev = $(this).data('paged');
-
         ajaxAllMatch(prev);
 
     });
-
-
-
-
-
-
-
-
-
-
-
 });
 
