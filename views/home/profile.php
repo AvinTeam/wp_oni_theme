@@ -115,6 +115,10 @@
         </div>
         <div class="h-32px"></div>
         <div id="all_result_match"></div>
+        <div id="pagenet" class="d-flex flex-row justify-content-around align-items-center gap-3 d-none">
+             <button id="prev" type="button" data-paged="0" class="btn btn-outline-primary w-100" disabled>قبلی</button>
+             <button id="next" type="button" data-paged="1" class="btn btn-outline-primary w-100" disabled>بعدی</button>
+        </div>
     </div>
 
 

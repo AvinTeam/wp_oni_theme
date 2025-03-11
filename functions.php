@@ -7,7 +7,7 @@ use oniclass\ONIDB;
 
 date_default_timezone_set('Asia/Tehran');
 
-//enable_maintenance_mode();
+//enable_maintenance_mode_oni();
 
 define('ONI_VERSION', '2.3.5');
 
@@ -25,6 +25,7 @@ define('ONI_JS', ONI_ASSETS . 'js/');
 define('ONI_IMAGE', ONI_ASSETS . 'image/');
 define('ONI_VENDOR', ONI_ASSETS . 'vendor/');
 define('ONI_QUESTION_SCORE', 1);
+define('ONI_PER_PAGE', 10);
 define('ONI_TOKEN', '1|L6niilLOBERWI0P6ftbfDLT7hfmry7iut7geWdD85e2f5836');
 
 require_once ONI_PATH . 'vendor/autoload.php';
@@ -68,13 +69,11 @@ if (is_admin()) {
 
 if (isset($_GET[ 'mydbreal' ])) {
 
-
-
     // exit;
 
 }
 
-function enable_maintenance_mode()
+function enable_maintenance_mode_oni()
 {
     if (! current_user_can('administrator')) {
         // لاگ‌اوت کردن کاربران غیر ادمین

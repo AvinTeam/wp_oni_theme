@@ -410,6 +410,8 @@ jQuery(document).ready(function ($) {
         $("body").addClass("no-scroll");
         $('#all_result_match').html('');
 
+        $('#pagenet').addClass('d-none');
+
         const formData = {
             action: 'oniAjaxAllMatch',
             type: type,
@@ -424,11 +426,36 @@ jQuery(document).ready(function ($) {
             data: formData,
             dataType: 'json',
             success: function (response) {
+
+                //console.log(response.data);
+
                 if (response.success) {
-                    $('#all_result_match').html(response.data);
+
+                    $('#all_result_match').html(response.data.massage);
+
+                    if (response.data.prev || response.data.next) {
+
+                        $('#pagenet').removeClass('d-none');
+                        $('#pagenet #next ,#pagenet #prev').attr('disabled', 'disabled');
+
+                        if (response.data.next) {
+                            $('#pagenet #next').removeAttr('disabled');
+
+                            $('#pagenet #next').attr('data-paged', (paged + 1));
+
+                        }
+
+                        if (response.data.prev) {
+                            $('#pagenet #prev').removeAttr('disabled');
+
+                            $('#pagenet #prev').attr('data-paged', (paged - 1));
+
+                        }
+                    }
+
                 }
                 else {
-                    $('#all_result_match').html(`<div class="alert alert-danger" role="alert">خطایی پیش آمده دوباره تلاش کتید</div>`);
+                    $('#all_result_match').html(response.data);
                 }
 
                 $("#overlay").fadeOut();
@@ -503,6 +530,37 @@ jQuery(document).ready(function ($) {
         ajaxAllMatch();
 
     });
+
+
+
+
+    $(document).on("click", '#pagenet #next', function (e) {
+        e.preventDefault();
+
+        let next = $(this).data('paged');
+
+        ajaxAllMatch(next);
+
+    });
+
+    $(document).on("click", '#pagenet #prev', function (e) {
+        e.preventDefault();
+
+        let prev = $(this).data('paged');
+
+        ajaxAllMatch(prev);
+
+    });
+
+
+
+
+
+
+
+
+
+
 
 });
 

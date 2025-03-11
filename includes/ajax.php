@@ -234,8 +234,12 @@ add_action('wp_ajax_oniAjaxAllMatch', 'oniAjaxAllMatch');
 
 function oniAjaxAllMatch()
 {
-
     // wp_send_json_success($_POST);
+
+    $_POST[ 'paged' ] = absint($_POST[ 'paged' ]) - 1;
+    $offset           = (isset($_POST[ 'paged' ]) && absint($_POST[ 'paged' ])) ? (ONI_PER_PAGE * absint($_POST[ 'paged' ])) : 0;
+
+    $next_offset = $offset + ONI_PER_PAGE;
 
     if ($_POST[ 'type' ] == 'all-match') {
         $matchdl = new oni_export('match');
@@ -244,14 +248,14 @@ function oniAjaxAllMatch()
         $array            = $matchdl->get_by_user(
             $_POST[ 'date' ] ? sanitize_text_field($_POST[ 'date' ]) : '',
             $_POST[ 'sort' ] ? "total_count_true {$_POST[ 'sort' ]}" : '',
+            $offset
         );
 
         if (sizeof($array) == 0) {
             if (! empty($_POST[ 'date' ])) {
-                wp_send_json_success('<div class="alert alert-secondary" role="alert">شما در تاریخ ' . $_POST[ 'date' ] . ' در مسابقه ای شرکت نکردید.</div>');
-
+                wp_send_json_error('<div class="alert alert-secondary" role="alert">شما در تاریخ ' . $_POST[ 'date' ] . ' در مسابقه ای شرکت نکردید.</div>');
             }
-            wp_send_json_success('<div class="alert alert-secondary" role="alert">شما در مسابقه ای شرکت نکردید</div>');
+            wp_send_json_error('<div class="alert alert-secondary" role="alert">شما در مسابقه ای شرکت نکردید</div>');
         }
 
         foreach ($array as $row) {
@@ -286,7 +290,19 @@ function oniAjaxAllMatch()
             <div class="h-16px"></div>';
         }
 
-        wp_send_json_success($string_all_match);
+        $arraynext = $matchdl->get_by_user(
+            $_POST[ 'date' ] ? sanitize_text_field($_POST[ 'date' ]) : '',
+            '',
+            $next_offset
+        );
+
+        $response = [
+            'massage' => $string_all_match,
+            'prev'    => ($offset) ? 1 : 0,
+            'next'    => (sizeof($arraynext)) ? 1 : 0,
+         ];
+
+        wp_send_json_success($response);
 
     } elseif ($_POST[ 'type' ] == 'today-match') {
 
@@ -297,8 +313,10 @@ function oniAjaxAllMatch()
         $string_all_match = '';
 
         $args = [
-            'data'  => [ 'iduser' => get_current_user_id() ],
-            'where' => "DATE(`created_at`) = '$this_date'",
+            'data'     => [ 'iduser' => get_current_user_id() ],
+            'where'    => "DATE(`created_at`) = '$this_date'",
+            'per_page' => ONI_PER_PAGE,
+            'offset'   => $offset,
 
          ];
 
@@ -312,7 +330,7 @@ function oniAjaxAllMatch()
 
         $m = sizeof($array);
         if (sizeof($array) == 0) {
-            wp_send_json_success('<div class="alert alert-secondary" role="alert">شما امروز در مسابقه ای شرکت نکردید</div>');
+            wp_send_json_error('<div class="alert alert-secondary" role="alert">شما امروز در مسابقه ای شرکت نکردید</div>');
         }
 
         foreach ($array as $row) {
@@ -366,9 +384,21 @@ function oniAjaxAllMatch()
 
         }
 
+        $args[ 'offset' ] = $next_offset;
+
+        $arraynext = $onidb->select($args);
+
+        $response = [
+            'massage' => $string_all_match,
+            'prev'    => ($offset) ? 1 : 0,
+            'next'    => (sizeof($arraynext)) ? 1 : 0,
+         ];
+
+        wp_send_json_success($response);
+
         wp_send_json_success($string_all_match);
 
     }
-    wp_send_json_error('');
+    wp_send_json_error('<div class="alert alert-danger" role="alert">خطایی پیش آمده دوباره تلاش کتید</div>');
 
 }

@@ -186,11 +186,9 @@ class ONIDB
 
         $star = (isset($args[ 'star' ])) ? $args[ 'star' ] : "*";
 
-        $mpn_row = $this->wpdb->get_results(
-            "SELECT $star FROM `$this->tablename` WHERE  $where "
-        );
-
         $this->this_q = "SELECT $star FROM `$this->tablename` WHERE  $where ";
+
+        $mpn_row = $this->wpdb->get_results($this->this_q);
 
         return $mpn_row;
 

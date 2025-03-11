@@ -87,11 +87,11 @@ class oni_export extends ONIDB
 
     }
 
-    public function get_by_user(string $date = '', string $order = '')
+    public function get_by_user(string $date = '', string $order = '', int $paged = 0)
     {
-
-        $userid = get_current_user_id();
-        $where  = "";
+        $per_page = ONI_PER_PAGE;
+        $userid   = get_current_user_id();
+        $where    = "";
 
         if (! empty($date)) {
             $dateend = tarikh($date);
@@ -101,8 +101,7 @@ class oni_export extends ONIDB
             $order = 'unique_date DESC';
         }
 
-        $result = $this->wpdb->get_results(
-            "SELECT
+        $this->this_q = "SELECT
                 DATE(created_at) AS unique_date,
                 SUM(count_questions) AS total_count_questions,
                 SUM(count_true) AS total_count_true,
@@ -112,10 +111,15 @@ class oni_export extends ONIDB
             FROM `$this->tablename`
             WHERE
                 iduser = $userid
-
                 $where
             GROUP BY DATE(created_at)
-            ORDER BY $order;");
+            ORDER BY $order
+
+            LIMIT $per_page
+            OFFSET  $paged
+            ;";
+
+        $result = $this->wpdb->get_results($this->this_q);
 
         return $result;
 
