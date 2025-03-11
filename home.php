@@ -27,6 +27,10 @@ function notificator(text) {
 
     $is_has_page = (is_user_logged_in()) ? $is_profile : 'login';
 
-    require_once ONI_VIEWS . "home/$is_has_page.php";
+
+    $file_path = ONI_VIEWS . "home/$is_has_page.php";
+if (file_exists($file_path)) {
+    require_once $file_path;
+}
 
 get_footer();

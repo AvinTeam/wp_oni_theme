@@ -1,6 +1,7 @@
 <?php
 
 use oniclass\ONIDB;
+use oniclass\RabbitMQHandler;
 
 (defined('ABSPATH')) || exit;
 
@@ -22,12 +23,14 @@ $cron_error_db = new ONIDB('cron_error');
 
 function avin_it_cron_function()
 {
-    $api_url = ' http://94.232.173.178:31963/api/';
+
+    $array_is_ok   = [  ];
+    $array_is_nook = [  ];
 
     $crondb        = new ONIDB('cron');
     $cron_error_db = new ONIDB('cron_error');
 
-    $my_res = $crondb->select([
+     $my_res = $crondb->select([
         'per_page' => 50,
         'order_by' => [
             'id',
@@ -38,80 +41,89 @@ function avin_it_cron_function()
          ],
      ]);
 
-    foreach ($my_res as $row) {
+    try {
+        $rabbitMQHandler = new RabbitMQHandler();
+        $rabbitMQHandler->connect();
 
-        $ap_u = ($row->cron_type == 'ip') ? 'ipLog' : 'rabbitMq';
+        foreach ($my_res as $i => $row) {
 
-        $error_message = '';
+            $error_message = '';
 
-        $tracking = (absint($row->tracking) + 1);
+            $tracking = (absint($row->tracking) + 1);
 
-        $data  = [ 'tracking' => $tracking ];
-        $where = [ 'id' => $row->id ];
-        $crondb->update($data, $where);
+            $data  = [ 'tracking' => $tracking ];
+            $where = [ 'id' => $row->id ];
+            $crondb->update($data, $where);
 
-        $response = wp_remote_post(
-            $api_url . $ap_u,
-            [
-                'timeout' => 1000,
-                'headers' => [
-                    'Authorization' => 'Bearer ' . ONI_TOKEN, // ارسال توکن در هدر
-                    'Content-Type'  => 'application/json',    // نوع محتوای بدنه
-                 ],
-                'body'    => json_encode(unserialize($row->send_array)),
-             ]);
+            $inputs = unserialize($row->send_array);
 
+            try {
 
+                foreach ($inputs[ 'game' ] as $index => $input) {
+                    $message = [
+                        'game_id'        => null,
+                        'question_id'    => null,
+                        'description'    => $inputs[ 'description' ] ?? null,
+                        'direction'      => 'in',
+                        'game_type'      => $inputs[ 'game_type' ] ?? null,
+                        'chapter'        => $input[ 'chapter' ] ?? null,
+                        'chapter_number' => $input[ 'chapter_number' ] ?? null,
+                        'verse'          => $input[ 'verse' ] ?? null,
+                        'part'           => $input[ 'part' ] ?? null,
+                        'type'           => $input[ 'type' ] ?? null,
+                        'score'          => $input[ 'score' ] ?? null,
+                        'winners'        => [ $inputs[ 'mobile' ] ],
+                        'created_at'     => current_time('mysql'),
+                     ];
 
+                    try {
+                        $rabbitMQHandler->sendMessage($message);
 
-             $response = wp_remote_post(
-                $api_url . 'rabbitMq',
-                [
-                    'timeout' => 1000,
-                    'headers' => [
-                        'Authorization' => 'Bearer ' . ONI_TOKEN, // ارسال توکن در هدر
-                        'Content-Type'  => 'application/json',    // نوع محتوای بدنه
-                     ],
-                    'body'    => json_encode(unserialize($row->send_array)),
-                 ]);
-    
+                        $array_is_ok[ 'p'.$i ][ 'ok-' . $index ] = $index;
+                        $crondb->delete([ 'id' => $row->id ]);
 
+                    } catch (Exception $e) {
 
+                        $error_message          = $e->getMessage();
+                        $array_is_nook[ 'p'.$i ][ 'no1' ] = $array_is_nook;
 
+                    }
 
-        if (is_wp_error($response)) {
+                }
 
-            $error_message = $response->get_error_message();
+            } catch (Exception $e) {
 
-        } else {
+                $array_is_nook = $e->getMessage();
 
-            $body = wp_remote_retrieve_body($response);
-            $data = json_decode($body);
+                $array_is_nook[ 'p'.$i ][ 'no2' ] = $array_is_nook;
+            }
 
-            if (isset($data->success) && $data->success) {
+            if (! empty($error_message) && $tracking >= 5) {
 
                 $crondb->delete([ 'id' => $row->id ]);
 
-            } else {
-
-                $error_message = $data->message;
-
+                $cron_error_db->insert([
+                    'cron_type'  => $row->cron_type,
+                    'send_array' => $row->send_array,
+                    'cron_error' => $error_message,
+                 ]);
             }
 
         }
 
-        if (! empty($error_message) && $tracking >= 5) {
+        $rabbitMQHandler->close();
 
-            $crondb->delete([ 'id' => $row->id ]);
+    } catch (Exception $e) {
 
-            $cron_error_db->insert([
-                'cron_type'  => $row->cron_type,
-                'send_array' => $row->send_array,
-                'cron_error' => $error_message,
-             ]);
-        }
+        $error_message          = $e->getMessage();
+        $array_is_nook[ 'no3' ] = $array_is_nook;
 
     }
+
+    return [
+        'array_is_ok'   => $array_is_ok,
+        'array_is_nook' => $array_is_nook,
+     ];
 
 }
 
@@ -146,4 +158,13 @@ if (! $oni_crone_time || intval($oni_crone_time) + 10 < time()) {
 
     // update_option('oni_crone_time', time());
 
+}
+
+if (isset($_GET[ 'rab_test' ])) {
+
+    $res = avin_it_cron_function();
+
+    print_r($res);
+
+    exit;
 }

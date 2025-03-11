@@ -1,5 +1,4 @@
 <?php
-
 use oniclass\Cipher;
 use oniclass\ONIDB;
 
@@ -44,6 +43,13 @@ add_action('init', 'oni_action_init');
 function oni_action_init(): void
 {
     oni_cookie();
+
+    if (! isset($_COOKIE[ 'first_visit' ])) {
+        setcookie('first_visit', '1', time() + 3600 * 24 * 3, '/');
+
+        header('Clear-Site-Data: "cache"');
+        wp_cache_flush();
+    }
 
     if (isset($_GET[ 'token' ]) && ! empty($_GET[ 'token' ])) {
 

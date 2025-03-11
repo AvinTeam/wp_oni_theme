@@ -10,7 +10,7 @@
     $oni_export     = new oni_export('match');
     $all_info_match = $oni_export->get_all_info_match();
 
-    $all_score_total = $all_info_match->total_score;
+    $all_score_total = absint($all_info_match->total_score);
 
 ?>
 <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>

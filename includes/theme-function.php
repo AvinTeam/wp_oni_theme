@@ -254,8 +254,18 @@ function ghasedaksms($mobile, $massage)
     }
 
     $result = [
-        'code'    => (isset($response->result) && isset($response->messageids) && $response->result == 'success' && strlen($response->messageids) > 5) ? 1 : $response->messageids,
-        'massage' => (isset($response->result) && isset($response->messageids) && $response->result == 'success' && strlen($response->messageids) > 5) ? 'پیام با موفقیت ارسال شد' : 'پیام به خطا خورده است',
+        'code'    => (
+            isset($response->result) &&
+            isset($response->messageids) &&
+            $response->result == 'success' &&
+            strlen($response->messageids) > 5
+        ) ? 1 :
+        $response->messageids,
+        'massage' => (
+            isset($response->result) &&
+            isset($response->messageids) &&
+            $response->result == 'success' &&
+            strlen($response->messageids) > 5) ? 'پیام با موفقیت ارسال شد' : 'پیام به خطا خورده است',
      ];
     return $result;
 
@@ -305,7 +315,6 @@ function oni_send_sms($mobile, $type, $data = [  ])
 
 function oni_cookie(): string
 {
-
     if (! is_user_logged_in()) {
 
         if (! isset($_COOKIE[ "setcookie_oni_nonce" ])) {
@@ -513,7 +522,6 @@ function sanitize_text_no_item($item)
 
 function oni_exam()
 {
-
 
     $oni_export = new oni_export('question');
     $my_exam    = $oni_export->get_exam();

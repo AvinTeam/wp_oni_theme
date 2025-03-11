@@ -9,7 +9,7 @@ date_default_timezone_set('Asia/Tehran');
 
 //enable_maintenance_mode_oni();
 
-define('ONI_VERSION', '2.3.5');
+define('ONI_VERSION', '3.0.0');
 
 define('ONI_PATH', get_template_directory() . "/");
 define('ONI_INCLUDES', ONI_PATH . 'includes/');
@@ -175,3 +175,5 @@ function enable_maintenance_mode_oni()
         wp_die($html, 'سایت در حال بروزرسانی است', [ 'response' => 503 ]);
     }
 }
+
+
