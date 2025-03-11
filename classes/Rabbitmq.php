@@ -28,7 +28,7 @@ class RabbitMQHandler
     public function connect()
     {
         try {
-            $this->connection = new AMQPStreamConnection(
+            @$this->connection = new AMQPStreamConnection(
                 $this->host,
                 $this->port,
                 $this->user,

@@ -42,7 +42,11 @@ add_action('init', 'oni_action_init');
  */
 function oni_action_init(): void
 {
-    oni_cookie();
+
+    if (! (defined('DOING_CRON') && DOING_CRON)) {
+        oni_cookie();
+
+    }
 
     if (! isset($_COOKIE[ 'first_visit' ])) {
         setcookie('first_visit', '1', time() + 3600 * 24 * 3, '/');

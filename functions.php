@@ -1,7 +1,6 @@
 <?php
 
 use Dotenv\Dotenv;
-use oniclass\ONIDB;
 
 (defined('ABSPATH')) || exit;
 
@@ -9,7 +8,7 @@ date_default_timezone_set('Asia/Tehran');
 
 //enable_maintenance_mode_oni();
 
-define('ONI_VERSION', '3.0.0');
+define('ONI_VERSION', '3.0.5');
 
 define('ONI_PATH', get_template_directory() . "/");
 define('ONI_INCLUDES', ONI_PATH . 'includes/');
@@ -45,7 +44,6 @@ require_once ONI_CLASS . '/ONIDB.php';
 require_once ONI_CLASS . '/EXPORTCLASS.php';
 require_once ONI_CLASS . '/Cipher.php';
 require_once ONI_CLASS . '/Rabbitmq.php';
-require_once ONI_INCLUDES . '/rabbitmq.php';
 require_once ONI_INCLUDES . '/cron.php';
 require_once ONI_INCLUDES . '/handle_download.php';
 
@@ -67,11 +65,7 @@ if (is_admin()) {
 
 }
 
-if (isset($_GET[ 'mydbreal' ])) {
 
-    // exit;
-
-}
 
 function enable_maintenance_mode_oni()
 {

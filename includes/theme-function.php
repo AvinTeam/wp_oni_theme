@@ -188,8 +188,8 @@ function notificator($mobile, $massage)
     $result = json_decode(wp_remote_retrieve_body($response));
 
     $result = [
-        'code'    => $result->success,
-        'massage' => ($result->success) ? 'پیام با موفقیت ارسال شد' : 'پیام به خطا خورده است ',
+        'code'    => $result->success ?? 0,
+        'massage' => ($result->success ?? 0) ? 'پیام با موفقیت ارسال شد' : 'پیام به خطا خورده است ',
      ];
 
     return $result;
@@ -221,8 +221,8 @@ function tsms($mobile, $massage)
     $response = json_decode(wp_remote_retrieve_body($response));
 
     $result = [
-        'code'    => (! is_null($response->code) && absint($response->code) == 200) ? 1 : intval($response->code),
-        'massage' => (! is_null($response->code) && absint($response->code) == 200) ? 'پیام با موفقیت ارسال شد' : 'پیام به خطا خورده است',
+        'code'    => (! is_null($response) && ! is_null($response->code) && absint($response->code) == 200) ? 1 : intval($response->code ?? 0),
+        'massage' => (! is_null($response) && ! is_null($response->code) && absint($response->code) == 200) ? 'پیام با موفقیت ارسال شد' : 'پیام به خطا خورده است',
      ];
     return $result;
 
@@ -315,6 +315,7 @@ function oni_send_sms($mobile, $type, $data = [  ])
 
 function oni_cookie(): string
 {
+
     if (! is_user_logged_in()) {
 
         if (! isset($_COOKIE[ "setcookie_oni_nonce" ])) {
@@ -576,3 +577,4 @@ function q_name_row(int $index, int $type = 0): string
     return $name_row;
 
 }
+
