@@ -147,43 +147,51 @@ function oni_sent_question()
 
     $this_user = wp_get_current_user();
 
-    $matchdl = new ONIDB('match');
-    $onidb   = new ONIDB('question');
-    $crondb  = new ONIDB('cron');
+    $matchdl    = new ONIDB('match');
+    $onidb      = new ONIDB('question');
+    $crondb     = new ONIDB('cron');
+    $oni_extera = new oni_export('match');
 
     $count_true = 0;
 
     $this_date = date('Y-m-d');
 
-    $q = $matchdl->num([ 'iduser' => get_current_user_id() ], "DATE(`created_at`) = '$this_date'");
+    $eid = $matchdl->num([ 'iduser' => get_current_user_id() ], "DATE(`created_at`) = '$this_date'");
 
     $question_list = sanitize_text_no_item(explode(',', $_POST[ 'question_list' ]));
 
     $array_game = $true_questions = [  ];
-    foreach ($question_list as $question) {
 
-        $this_question = $onidb->get([ 'id' => $question ]);
+    $date = [
+        'data' => [
+            'id' => $question_list,
 
-        if ($this_question->answer == absint($_POST[ 'Q' . $question ])) {
+         ],
+     ];
 
-            $true_questions[  ] = $question;
-            $array_game[  ]     = [
+    $my_this_question = $onidb->select($date);
+
+    foreach ($my_this_question as $question) {
+
+        if ($question->answer == absint($_POST[ 'Q' . $question->id ])) {
+
+            $true_questions[  ] = $question->id;
+
+            $array_game[  ] = [
                 'score'          => ONI_QUESTION_SCORE,
-                'chapter'        => $this_question->chapter,
-                'chapter_number' => $this_question->chapter_number,
-                'verse'          => $this_question->verse,
-                'type'           => $this_question->q_type,
+                'chapter'        => $question->chapter,
+                'chapter_number' => $question->chapter_number,
+                'verse'          => $question->verse,
+                'type'           => $question->q_type,
 
              ];
-
             $count_true++;
-
         }
 
     }
 
     $insert_match = $matchdl->insert([
-        'eid'             => absint($q) + 1,
+        'eid'             => absint($eid) + 1,
         'iduser'          => get_current_user_id(),
         'count_questions' => count($question_list),
         'true_questions'  => serialize($true_questions),
@@ -210,20 +218,7 @@ function oni_sent_question()
 
         }
 
-        $all_user_questions   = absint(get_user_meta(get_current_user_id(), 'questions', true));
-        $all_user_count_true  = absint(get_user_meta(get_current_user_id(), 'count_true', true));
-        $all_user_count_match = absint(get_user_meta(get_current_user_id(), 'count_match', true));
-        $all_user_score_total = absint(get_user_meta(get_current_user_id(), 'score_total', true));
-
-        $count_all = ($all_user_count_true + $count_true);
-
         $score = $count_true * ONI_QUESTION_SCORE;
-
-        update_user_meta(get_current_user_id(), 'questions', ($all_user_questions + count($question_list)));
-        update_user_meta(get_current_user_id(), 'count_true', $count_all);
-        update_user_meta(get_current_user_id(), 'count_match', ($all_user_count_match + 1));
-
-        update_user_meta(get_current_user_id(), 'score_total', ($all_user_score_total + $score));
 
         wp_send_json_success([
             'score'      => $score,
@@ -247,7 +242,6 @@ function oniAjaxAllMatch()
 
         $string_all_match = '';
         $array            = $matchdl->get_by_user(
-            get_current_user_id(),
             $_POST[ 'date' ] ? sanitize_text_field($_POST[ 'date' ]) : '',
             $_POST[ 'sort' ] ? "total_count_true {$_POST[ 'sort' ]}" : '',
         );

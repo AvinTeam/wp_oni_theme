@@ -1,10 +1,16 @@
 <?php
 
+    use oniclass\oni_export;
+
     global $exam;
-    $question_list        = '';
-    $all_user_score_total = absint(get_user_meta(get_current_user_id(), 'score_total', true));
+    $question_list = '';
 
     $user_mobile = get_user_meta(get_current_user_id(), 'mobile', true);
+
+    $oni_export     = new oni_export('match');
+    $all_info_match = $oni_export->get_all_info_match();
+
+    $all_score_total = $all_info_match->total_score;
 
 ?>
 <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
@@ -24,7 +30,7 @@
             <b><?php echo $user_mobile ?></b></span>
         <div class="d-flex flex-row justify-content-center align-items-center">
             <div class="cont-bg d-flex flex-row justify-content-center align-items-center text-white">
-                <?php echo number_format($all_user_score_total) ?> امتیاز
+                <?php echo number_format($all_score_total) ?> امتیاز
             </div>
             <img class="img-fluid" src="<?php echo oni_panel_image('next-cont.svg') ?>">
 
@@ -105,41 +111,41 @@
                 }
 
             ?>
-        <section id="question-<?php echo $index + 1 ?>"
-            class="w-100 rounded-8px  mx-auto d-flex flex-column bg-white p-24px ">
+			        <section id="question-<?php echo $index + 1 ?>"
+			            class="w-100 rounded-8px  mx-auto d-flex flex-column bg-white p-24px ">
 
-            <div class="d-flex flex-row justify-content-between align-items-center">
-                <span class="text-primary-400">سوال <?php echo q_name_row(($index + 1), 1) ?></span>
-                <span class="text-primary-400"><?php echo q_name_row(($index + 1)) ?> از پنج</span>
-            </div>
-            <div class="h-16px"></div>
+			            <div class="d-flex flex-row justify-content-between align-items-center">
+			                <span class="text-primary-400">سوال			                                                       		                                                       	                                                        <?php echo q_name_row(($index + 1), 1) ?></span>
+			                <span class="text-primary-400"><?php echo q_name_row(($index + 1)) ?> از پنج</span>
+			            </div>
+			            <div class="h-16px"></div>
 
-            <div class="d-flex flex-column border-top border-top-1 border-primary">
-                <div class="h-24px"></div>
-                <div class="ayeh-question text-center text-primary f-16px fw-bold"><?php echo $ayeh->question ?></div>
-                <div class="h-16px"></div>
-                <div class="text-center">
-                    <img src="<?php echo oni_panel_image('line-question.svg') ?>">
-                </div>
-                <div class="h-24px"></div>
+			            <div class="d-flex flex-column border-top border-top-1 border-primary">
+			                <div class="h-24px"></div>
+			                <div class="ayeh-question text-center text-primary f-16px fw-bold"><?php echo $ayeh->question ?></div>
+			                <div class="h-16px"></div>
+			                <div class="text-center">
+			                    <img src="<?php echo oni_panel_image('line-question.svg') ?>">
+			                </div>
+			                <div class="h-24px"></div>
 
-                <div class="">
+			                <div class="">
 
-                    <?php $shuffled_row = 1;foreach ($shuffled as $key => $value): ?>
-                    <label
-                        class=" label-answer border border-1 w-100 rounded-12px p-12px d-flex flex-row align-items-center gap-2 "
-                        for="<?php echo $ayeh->id ?>_<?php echo $key ?>">
-                        <div style=" width: 32px ;">
-                            <div class="check-icon"></div>
-                        </div>
-                        <span class="text-justify f-16px"><?php echo $value ?></span>
-                        <input class="opacity-0" id="<?php echo $ayeh->id ?>_<?php echo $key ?>" type="radio"
-                            data-i="<?php echo $index + 1 ?>" data-id="<?php echo $ayeh->id ?>"
-                            value="<?php echo $key ?>" name="Q<?php echo $ayeh->id ?>">
-                    </label>
-                    <?php if ($shuffled_row < 4): ?>
-                    <div class="h-16px"></div>
-                    <?php endif; ?>
+			                    <?php $shuffled_row = 1;foreach ($shuffled as $key => $value): ?>
+			                    <label
+			                        class=" label-answer border border-1 w-100 rounded-12px p-12px d-flex flex-row align-items-center gap-2 "
+			                        for="<?php echo $ayeh->id ?>_<?php echo $key ?>">
+			                        <div style=" width: 32px ;">
+			                            <div class="check-icon"></div>
+			                        </div>
+			                        <span class="text-justify f-16px"><?php echo $value ?></span>
+			                        <input class="opacity-0" id="<?php echo $ayeh->id ?>_<?php echo $key ?>" type="radio"
+			                            data-i="<?php echo $index + 1 ?>" data-id="<?php echo $ayeh->id ?>"
+			                            value="<?php echo $key ?>" name="Q<?php echo $ayeh->id ?>">
+			                    </label>
+			                    <?php if ($shuffled_row < 4): ?>
+			                    <div class="h-16px"></div>
+			                    <?php endif; ?>
 
                     <?php $shuffled_row++;endforeach; ?>
                 </div>
@@ -192,7 +198,7 @@
                         <span>آزمون مجدد</span>
                     </button>
                     <div class="h-12px"></div>
-                    <a href="https://zendegibaayeha.ir" target="_blank"
+                    <a href="https://zendegibaayeha.ir/app" target="_blank"
                         class="btn btn-outline-secondary h-48px w-100 text-center d-flex flex-row justify-content-center align-items-center gap-3 rounded-8px">
                         <img src="<?php echo oni_panel_image('btn-home.svg') ?>">
                         <span>نصب برنامه کاربردی زندگی با آیه ها</span>

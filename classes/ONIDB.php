@@ -153,12 +153,10 @@ class ONIDB
             foreach ($args[ 'data' ] as $key => $value) {
 
                 if (is_array($value)) {
-                    $where .= ' AND (';
-                    foreach ($value as $i => $row) {
-                        if ($i == 1) {$where .= ' OR ';}
-                        $where .= $this->wpdb->prepare(' %i = ' . $this->set_type($row), $key, $row);
-                    }
-                    $where .= ')';
+
+                    $value = implode(',', $value);
+                    $where .= $this->wpdb->prepare(" AND  %i IN ( $value )", $key);
+
                 } else {
                     $where .= $this->wpdb->prepare(' AND %i = ' . $this->set_type($value), $key, $value);
 
@@ -166,7 +164,6 @@ class ONIDB
 
             }
         }
-
 
         if (isset($args[ 's' ])) {
             $where .= $this->wpdb->prepare(" AND %i LIKE %s", $args[ 's' ][ 0 ], '%' . $args[ 's' ][ 1 ] . '%');
@@ -193,13 +190,7 @@ class ONIDB
             "SELECT $star FROM `$this->tablename` WHERE  $where "
         );
 
-
-
-
         $this->this_q = "SELECT $star FROM `$this->tablename` WHERE  $where ";
-
-
-
 
         return $mpn_row;
 

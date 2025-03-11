@@ -87,9 +87,11 @@ class oni_export extends ONIDB
 
     }
 
-    public function get_by_user(int $userid, string $date, string $order)
+    public function get_by_user(string $date = '', string $order = '')
     {
-        $where = "";
+
+        $userid = get_current_user_id();
+        $where  = "";
 
         if (! empty($date)) {
             $dateend = tarikh($date);
@@ -152,6 +154,36 @@ class oni_export extends ONIDB
 
     }
 
+    public function get_all_info_match(int $user_id = 0)
+    {
+        $this_user_id = ($user_id) ? $user_id : get_current_user_id();
+
+        $result = $this->wpdb->get_row(
+            "SELECT
+                SUM(count_questions) AS total_count_questions,
+                SUM(count_true) AS total_count_true,
+                SUM(score) AS total_score,
+                COUNT(*) AS total_match
+            FROM
+                `$this->tablename`
+
+              WHERE `iduser` = $this_user_id");
+
+        if (! $result) {
+
+            $result = (object) [
+                'total_count_questions' => 0,
+                'total_count_true'      => 0,
+                'total_score'           => 0,
+                'total_match'           => 0,
+             ];
+
+        }
+
+        return $result;
+
+    }
+
     public function get_exam()
     {
 
@@ -176,18 +208,14 @@ class oni_export extends ONIDB
         }
         if (isset($_COOKIE[ 'setcookie_oni_shown_ids' ])) {
 
-   
             $cookie_to_array = explode(',', $_COOKIE[ 'setcookie_oni_shown_ids' ]);
-    
-   
-            $shown_ids =  array_unique (array_merge($cookie_to_array, $shown_ids));
-    
-            echo count( $shown_ids);
 
-            if(count( $shown_ids)>20){
-                $shown_ids=[];
+            $shown_ids = array_unique(array_merge($cookie_to_array, $shown_ids));
+
+            if (count($shown_ids) > 20) {
+                $shown_ids = [  ];
             }
-    
+
         }
 
         setcookie("setcookie_oni_shown_ids", implode(',', $shown_ids), time() + 3600, "/");

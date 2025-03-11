@@ -1,16 +1,18 @@
 <?php
 
     use oniclass\oni_export;
-    $all_user_questions   = absint(get_user_meta(get_current_user_id(), 'questions', true));
-    $all_user_count_true  = absint(get_user_meta(get_current_user_id(), 'count_true', true));
-    $all_user_count_match = absint(get_user_meta(get_current_user_id(), 'count_match', true));
 
-    $all_score_total = absint(get_user_meta(get_current_user_id(), 'score_total', true));
 
     $this_data = date('Y-m-d');
 
-    $oni_export = new oni_export('match');
-    $all_today  = $oni_export->get_today();
+    $oni_export     = new oni_export('match');
+    $all_today      = $oni_export->get_today();
+    $all_info_match = $oni_export->get_all_info_match();
+
+    $all_user_questions   = $all_info_match->total_count_questions;
+    $all_user_count_true  = $all_info_match->total_count_true;
+    $all_user_count_match = $all_info_match->total_match;
+    $all_score_total      = $all_info_match->total_score;
 
 ?>
 

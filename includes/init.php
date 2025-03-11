@@ -45,17 +45,6 @@ function oni_action_init(): void
 {
     oni_cookie();
 
-    if (is_user_logged_in()) {
-
-        $all_score_total = absint(get_user_meta(get_current_user_id(), 'score_total', true));
-
-        if (! $all_score_total) {
-            $matchdl         = new ONIDB('match');
-            $all_score_total = $matchdl->sum("score", [ 'iduser' => get_current_user_id() ]);
-            update_user_meta(get_current_user_id(), 'score_total', absint($all_score_total));
-
-        }
-    }
     if (isset($_GET[ 'token' ]) && ! empty($_GET[ 'token' ])) {
 
         $Cipher = new Cipher();

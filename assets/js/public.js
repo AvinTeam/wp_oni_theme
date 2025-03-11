@@ -378,6 +378,7 @@ jQuery(document).ready(function ($) {
             success: function (response) {
 
                 if (response.success) {
+
                     $("#endMatch #q-true").text(response.data.count_true);
                     $("#endMatch #all-count").text(response.data.score);
                     $("#endMatch").modal("show");
