@@ -1,5 +1,8 @@
 <?php
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 (defined('ABSPATH')) || exit;
 
 add_action('admin_init', 'handle_download');
@@ -10,55 +13,42 @@ function handle_download()
     if (isset($_GET[ 'action' ])) {
 
         if ($_GET[ 'action' ] === 'user_excel') {
+
             $args = [
-                'role' => 'subscriber',
-             ];
+                'meta_key'     => 'mobile',
+                'meta_value'   => '09',
+                'meta_compare' => 'LIKE',
+            ];
 
             $user_query = new WP_User_Query($args);
-            $users      = $user_query->get_results();
 
-            $data = [  ];
+            if (! empty($user_query->results)) {
+                // ایجاد یک شیء Spreadsheet جدید
+                $spreadsheet = new Spreadsheet();
+                $sheet       = $spreadsheet->getActiveSheet();
 
-            foreach ($users as $user) {
-                $user_id = $user->ID;
-                $mobile  = get_user_meta($user_id, 'mobile', true);
-                if (is_mobile($mobile)) {continue;}
-                $row[ 'شماره موبایل' ] = $mobile;
+                // تنظیم هدر ستون
+                $sheet->setCellValue('A1', 'Mobile');
 
-                $data[  ] = $row;
-            }
-
-            function filterData(&$str)
-            {
-                $str = preg_replace("/\t/", "\\t", $str);
-                $str = preg_replace("/\r?\n/", "\\n", $str);
-                if (strstr($str, '"')) {
-                    $str = '"' . str_replace('"', '""', $str) . '"';
+                // پر کردن داده‌ها
+                $row = 2;
+                foreach ($user_query->results as $user) {
+                    $mobile = get_user_meta($user->ID, 'mobile', true);
+                    $sheet->setCellValue('A' . $row, $mobile);
+                    $row++;
                 }
 
+                // ارسال فایل اکسل به کاربر برای دانلود
+                header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+                header('Content-Disposition: attachment;filename="users_ayeh_online.xlsx"');
+                header('Cache-Control: max-age=0');
+
+                $writer = new Xlsx($spreadsheet);
+                $writer->save('php://output');
+                exit;
+            } else {
+                echo 'هیچ کاربری یافت نشد.';
             }
-
-            $fileName = "users.xls";
-            header("Content-Disposition: attachment; filename=\"$fileName\"");
-            header("Content-type: application/octet-stream");
-            header('Content-Transfer-Encoding: binary');
-            header("Pragma: no-cache");
-            header("Expires: 0");
-
-            $flag = false;
-            foreach ($data as $row) {
-                if (! $flag) {
-                    $key1 = implode("\t", array_keys($row)) . "\n";
-
-                    echo chr(255) . chr(254) . iconv("UTF-8", "UTF-16LE//IGNORE", $key1);
-                    $flag = true;
-                }
-                array_walk($row, 'filterData');
-                $key2 = implode("\t", array_values($row)) . "\n";
-                echo chr(255) . chr(254) . iconv("UTF-8", "UTF-16LE//IGNORE", $key2);
-            }
-
-            exit;
 
         }
 

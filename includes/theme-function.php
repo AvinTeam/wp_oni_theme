@@ -514,29 +514,6 @@ function sanitize_text_no_item($item)
 function oni_exam()
 {
 
-    // $onidb    = new ONIDB('question');
-    // $all_ayeh = $onidb->select();
-
-    // $random_numbers = [  ];
-    // $exam           = [  ];
-    // $answers        = [  ];
-    // $stop_condition = false;
-
-    // while (! $stop_condition) {
-    //     $random_number = rand(1, $onidb->num() - 1);
-
-    //     if (! in_array($random_number, $random_numbers)) {
-    //         $random_numbers[  ] = $random_number;
-
-    //         $ayeh                       = $all_ayeh[ $random_number ];
-    //         $exam[  ]                   = $ayeh;
-    //         $answers[ 'Q' . $ayeh->id ] = $ayeh->answer;
-
-    //         if (count($random_numbers) == 5) {
-    //             $stop_condition = true;
-    //         }
-    //     }
-    // }
 
     $oni_export = new oni_export('question');
     $my_exam    = $oni_export->get_exam();

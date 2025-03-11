@@ -1,6 +1,7 @@
 <?php
 
 use Dotenv\Dotenv;
+use oniclass\ONIDB;
 
 (defined('ABSPATH')) || exit;
 
@@ -8,7 +9,7 @@ date_default_timezone_set('Asia/Tehran');
 
 //enable_maintenance_mode();
 
-define('ONI_VERSION', '2.3.1');
+define('ONI_VERSION', '2.3.4');
 
 define('ONI_PATH', get_template_directory() . "/");
 define('ONI_INCLUDES', ONI_PATH . 'includes/');
@@ -65,13 +66,13 @@ if (is_admin()) {
 
 }
 
-// if (isset($_GET[ 'test' ])) {
+if (isset($_GET[ 'mydbreal' ])) {
 
-// print_r($_GET);
-// exit;
 
-// }
 
+    // exit;
+
+}
 
 function enable_maintenance_mode()
 {
@@ -172,6 +173,6 @@ function enable_maintenance_mode()
         ';
 
         // نمایش پیام و خاتمه اجرای اسکریپت
-        wp_die($html, 'سایت در حال بروزرسانی است', ['response' => 503]);
+        wp_die($html, 'سایت در حال بروزرسانی است', [ 'response' => 503 ]);
     }
 }

@@ -174,6 +174,21 @@ class oni_export extends ONIDB
             $shown_ids[  ]              = $ayeh->id;
 
         }
+        if (isset($_COOKIE[ 'setcookie_oni_shown_ids' ])) {
+
+   
+            $cookie_to_array = explode(',', $_COOKIE[ 'setcookie_oni_shown_ids' ]);
+    
+   
+            $shown_ids =  array_unique (array_merge($cookie_to_array, $shown_ids));
+    
+            echo count( $shown_ids);
+
+            if(count( $shown_ids)>20){
+                $shown_ids=[];
+            }
+    
+        }
 
         setcookie("setcookie_oni_shown_ids", implode(',', $shown_ids), time() + 3600, "/");
 
