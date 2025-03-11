@@ -2,7 +2,6 @@
 
     use oniclass\oni_export;
 
-
     $this_data = date('Y-m-d');
 
     $oni_export     = new oni_export('match');
@@ -80,7 +79,11 @@
 
     <div class="bg-white rounded-8px border-1 border-primary-200 p-16px">
         <div class="h-16px"></div>
-        <img class="mx-auto w-100" src="<?php echo oni_panel_image('match-history.svg') ?>">
+        <div class="d-flex flex-column justify-content-center align-items-center">
+            <h2 class="f-20px fw-heavy text-primary">تاریخچه مسابقات</h2>
+            <div class="h-8px"></div>
+            <img style="height: 24px;" src="<?php echo oni_panel_image('line-question.svg') ?>">
+        </div>
         <div class="h-24px"></div>
         <div class="d-flex flex-row justify-content-between align-items-center">
 
@@ -117,6 +120,7 @@
 
 
     <div class="text-center py-4 bg-primary-100 w-100">
-        <a href="https://avinmedia.ir/" class="text-primary" target="_blank">طراحی و پشتیبانی: گروه هنری رسانه ای آوین</a>
+        <a href="https://avinmedia.ir/" class="text-primary" target="_blank">طراحی و پشتیبانی: گروه هنری رسانه ای
+            آوین</a>
     </div>
 </div>
