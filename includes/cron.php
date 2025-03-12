@@ -128,10 +128,9 @@ if (isset($_GET[ 'cron_rabbit_mq' ])) {
     $current_time   = current_time('timestamp');
     $current_minute = date('i', $current_time);
 
-    if ($current_minute >= 20 && $current_minute < 50) {
+    if ($current_minute >= 50 || $current_minute <= 25) {
 
         mrr_cron_function();
-
     }
 
 }

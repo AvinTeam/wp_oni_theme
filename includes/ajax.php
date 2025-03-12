@@ -63,13 +63,12 @@ function oni_sent_verify()
                     $user_id = wp_create_user($mobile, wp_generate_password(), $mobile . '@example.com');
 
                     if (! is_wp_error($user_id)) {
+
                         update_user_meta($user_id, 'mobile', $mobile);
-                        update_user_meta($user_id, 'questions', 0);
-                        update_user_meta($user_id, 'count_true', 0);
-                        update_user_meta($user_id, 'count_match', 0);
-                        update_user_meta($user_id, 'score_total', 0);
                         wp_set_current_user($user_id);
                         wp_set_auth_cookie($user_id, true);
+
+                        oni_cookie('ok');
 
                         $massage = 'ثبت‌ نام با موفقیت انجام شد و شما وارد شدید!';
                     } else {
