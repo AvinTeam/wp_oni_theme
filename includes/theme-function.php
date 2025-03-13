@@ -316,28 +316,18 @@ function oni_send_sms($mobile, $type, $data = [  ])
 function oni_cookie(): string
 {
 
-    if (! is_user_logged_in()) {
+    if (! isset($_COOKIE[ "setcookie_oni_nonce" ])) {
 
-        if (! isset($_COOKIE[ "setcookie_oni_nonce" ])) {
+        $is_key_cookie = wp_generate_password(20, true, true);
 
-            $is_key_cookie = oni_rand_string(15);
-            ob_start();
+        setcookie("setcookie_oni_nonce", $is_key_cookie, time() + 1800, "/");
 
-            setcookie("setcookie_oni_nonce", $is_key_cookie, time() + 1800, "/");
-
-            ob_end_flush();
-
-            header("Refresh:0");
-            exit;
-
-        } else {
-            $is_key_cookie = $_COOKIE[ "setcookie_oni_nonce" ];
-        }
     } else {
 
-        $is_key_cookie = get_current_user_id();
+        $is_key_cookie = $_COOKIE[ "setcookie_oni_nonce" ];
 
     }
+
     return $is_key_cookie;
 }
 
@@ -577,4 +567,3 @@ function q_name_row(int $index, int $type = 0): string
     return $name_row;
 
 }
-

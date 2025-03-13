@@ -56,6 +56,8 @@ function oni_sent_verify()
                     wp_set_current_user($user->ID);
                     wp_set_auth_cookie($user->ID, true);
 
+                    setcookie("setcookie_oni_nonce", wp_generate_password(20, true, true), time() + 1800, "/");
+
                     $massage = 'خوش آمدید، شما وارد شدید!';
 
                 } else {
@@ -68,9 +70,10 @@ function oni_sent_verify()
                         wp_set_current_user($user_id);
                         wp_set_auth_cookie($user_id, true);
 
-                        oni_cookie('ok');
-
                         $massage = 'ثبت‌ نام با موفقیت انجام شد و شما وارد شدید!';
+
+                        setcookie("setcookie_oni_nonce", wp_generate_password(20, true, true), time() + 1800, "/");
+
                     } else {
                         wp_send_json_error('لطفا دوباره تلاش کنید', 403);
 
@@ -119,7 +122,6 @@ function oni_update_row()
 }
 
 add_action('wp_ajax_oni_logout', 'oni_logout');
-
 function oni_logout()
 {
     wp_logout();
@@ -127,7 +129,6 @@ function oni_logout()
 }
 
 add_action('wp_ajax_oni_del_all_question', 'oni_del_all_question');
-
 function oni_del_all_question()
 {
     $onidb = new ONIDB('question');
@@ -139,94 +140,121 @@ function oni_del_all_question()
 }
 
 add_action('wp_ajax_oni_sent_question', 'oni_sent_question');
-
 function oni_sent_question()
 {
-    $oni_option = oni_start_working();
 
     $this_user = wp_get_current_user();
 
-    $matchdl    = new ONIDB('match');
-    $onidb      = new ONIDB('question');
-    $crondb     = new ONIDB('cron');
-    $oni_extera = new oni_export('match');
+    if (! isset($_POST[ 'start_match' ])) {
+        error_log(print_r([
+            'isuser' => get_current_user_id(),
+            'mobile' => $this_user->mobile,
 
-    $count_true = 0;
-
-    $this_date = date('Y-m-d');
-
-    $eid = $matchdl->num([ 'iduser' => get_current_user_id() ], "DATE(`created_at`) = '$this_date'");
-
-    $question_list = sanitize_text_no_item(explode(',', $_POST[ 'question_list' ]));
-
-    $array_game = $true_questions = [  ];
-
-    $date = [
-        'data' => [
-            'id' => $question_list,
-
-         ],
-     ];
-
-    $my_this_question = $onidb->select($date);
-
-    foreach ($my_this_question as $question) {
-
-        if ($question->answer == absint($_POST[ 'Q' . $question->id ])) {
-
-            $true_questions[  ] = $question->id;
-
-            $array_game[  ] = [
-                'score'          => ONI_QUESTION_SCORE,
-                'chapter'        => $question->chapter,
-                'chapter_number' => $question->chapter_number,
-                'verse'          => $question->verse,
-                'type'           => $question->q_type,
-
-             ];
-            $count_true++;
-        }
-
+         ]
+            , true));
     }
 
-    $insert_match = $matchdl->insert([
-        'eid'             => absint($eid) + 1,
-        'iduser'          => get_current_user_id(),
-        'count_questions' => count($question_list),
-        'true_questions'  => serialize($true_questions),
-        'count_true'      => $count_true,
-        'score'           => $count_true * ONI_QUESTION_SCORE,
-        'created_at'      => date('Y-m-d H:i:s'),
-     ]);
+    if (
+        isset($_POST[ '_wpnonce' ]) &&
+        isset($_POST[ 'start_match' ]) &&
+        wp_verify_nonce($_POST[ '_wpnonce' ], 'oni_send_question_list' . oni_cookie()) &&
+        (time() - intval($_POST[ 'start_match' ])) > 5
+    ) {
 
-    $array_send = [
-        'mobile'      => $this_user->mobile,
-        'description' => "id game " . $insert_match,
-        'game_type'   => 'online',
-        'game'        => $array_game,
-     ];
+        setcookie("setcookie_oni_nonce", wp_generate_password(20, true, true), time() + 1800, "/");
 
-    if ($insert_match) {
+        $oni_option = oni_start_working();
 
-        if ($oni_option[ 'send_cron' ] == 'yes' && $count_true) {
+        $matchdl = new ONIDB('match');
+        $onidb   = new ONIDB('question');
+        $crondb  = new ONIDB('cron');
 
-            $crondb->insert([
-                'cron_type'  => 'game',
-                'send_array' => serialize($array_send),
+        $count_true = 0;
+
+        $this_date = date('Y-m-d');
+
+        $eid = $matchdl->num([ 'iduser' => get_current_user_id() ], "DATE(`created_at`) = '$this_date'");
+
+        if ($eid > ONI_END_MATCH) {
+            setcookie("setcookie_oni_nonce", wp_generate_password(20, true, true), time() + 1800, "/");
+
+            wp_send_json_error('صفحه را یکیار به روزرسانی کنید');
+        }
+
+        $question_list = sanitize_text_no_item(explode(',', $_POST[ 'question_list' ]));
+
+        $array_game = $true_questions = [  ];
+
+        $date = [
+            'data' => [
+                'id' => $question_list,
+
+             ],
+         ];
+
+        $my_this_question = $onidb->select($date);
+
+        foreach ($my_this_question as $question) {
+
+            if ($question->answer == absint($_POST[ 'Q' . $question->id ])) {
+
+                $true_questions[  ] = $question->id;
+
+                $array_game[  ] = [
+                    'score'          => ONI_QUESTION_SCORE,
+                    'chapter'        => $question->chapter,
+                    'chapter_number' => $question->chapter_number,
+                    'verse'          => $question->verse,
+                    'type'           => $question->q_type,
+
+                 ];
+                $count_true++;
+            }
+
+        }
+
+        $insert_match = $matchdl->insert([
+            'eid'             => absint($eid) + 1,
+            'iduser'          => get_current_user_id(),
+            'count_questions' => count($question_list),
+            'true_questions'  => serialize($true_questions),
+            'count_true'      => $count_true,
+            'score'           => $count_true * ONI_QUESTION_SCORE,
+            'created_at'      => date('Y-m-d H:i:s'),
+         ]);
+
+        $array_send = [
+            'mobile'      => $this_user->mobile,
+            'description' => "id game " . $insert_match,
+            'game_type'   => 'online',
+            'game'        => $array_game,
+         ];
+
+        if ($insert_match) {
+
+            if ($oni_option[ 'send_cron' ] == 'yes' && $count_true) {
+
+                $crondb->insert([
+                    'cron_type'  => 'game',
+                    'send_array' => serialize($array_send),
+                 ]);
+
+            }
+
+            $score = $count_true * ONI_QUESTION_SCORE;
+
+            wp_send_json_success([
+                'score'      => $score,
+                'count_true' => $count_true,
              ]);
 
         }
-
-        $score = $count_true * ONI_QUESTION_SCORE;
-
-        wp_send_json_success([
-            'score'      => $score,
-            'count_true' => $count_true,
-         ]);
-
+        wp_send_json_error('مشکلی پیش آمده اطفا دوباره تلاش کنید');
     }
-    wp_send_json_error('');
 
+    setcookie("setcookie_oni_nonce", wp_generate_password(20, true, true), time() + 1800, "/");
+
+    wp_send_json_error('صفحه را یکیار به روزرسانی کنید');
 }
 
 add_action('wp_ajax_oniAjaxAllMatch', 'oniAjaxAllMatch');

@@ -3,39 +3,40 @@ jalaliDatepicker.startWatch({
     maxDate: "attr"
 });
 
-function startLoading() {
-    var overlay = document.getElementById("overlay");
 
-    if (overlay) {
-        overlay.style.display = "flex"; // نمایش به صورت flex
-        overlay.style.opacity = "0"; // آماده‌سازی برای افکت fadeIn
-        overlay.style.transition = "opacity 0.5s ease-in-out"; // اضافه کردن انیمیشن
+    function startLoading() {
+        var overlay = document.getElementById("overlay");
 
-        // تأخیر برای اعمال transition
-        setTimeout(() => {
-            overlay.style.opacity = "1";
-        }, 10);
+        if (overlay) {
+            overlay.style.display = "flex"; // نمایش به صورت flex
+            overlay.style.opacity = "0"; // آماده‌سازی برای افکت fadeIn
+            overlay.style.transition = "opacity 0.5s ease-in-out"; // اضافه کردن انیمیشن
+
+            // تأخیر برای اعمال transition
+            setTimeout(() => {
+                overlay.style.opacity = "1";
+            }, 10);
+        }
+
+        document.body.classList.add("no-scroll"); // اضافه کردن کلاس به body
     }
 
-    document.body.classList.add("no-scroll"); // اضافه کردن کلاس به body
-}
+    function endLoading() {
 
-function endLoading() {
+        var overlay = document.getElementById("overlay");
 
-    var overlay = document.getElementById("overlay");
+        if (overlay) {
+            overlay.style.transition = "opacity 0.5s ease-in-out"; // اضافه کردن انیمیشن
+            overlay.style.opacity = "0"; // شروع افکت fadeOut
 
-    if (overlay) {
-        overlay.style.transition = "opacity 0.5s ease-in-out"; // اضافه کردن انیمیشن
-        overlay.style.opacity = "0"; // شروع افکت fadeOut
+            setTimeout(() => {
+                overlay.style.display = "none"; // بعد از محو شدن، مخفی کردن کامل
+            }, 500); // مقدار 500 باید با زمان transition هماهنگ باشه
+        }
 
-        setTimeout(() => {
-            overlay.style.display = "none"; // بعد از محو شدن، مخفی کردن کامل
-        }, 500); // مقدار 500 باید با زمان transition هماهنگ باشه
+        document.body.classList.remove("no-scroll"); // حذف کلاس از body
+
     }
-
-    document.body.classList.remove("no-scroll"); // حذف کلاس از body
-
-}
 
 const pageLogin = document.getElementById('loginForm');
 if (pageLogin) {
@@ -219,32 +220,86 @@ document.querySelectorAll('#start-match').forEach(item => {
 });
 
 
-const sections = document.querySelectorAll("section"); // تمام سکشن‌ها رو بگیر
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
+if (document.getElementById('form-question')) {
 
-            let id = entry.target.id;
-            id = id.replace("question-", "");
-            const items = document.querySelectorAll(".number-question");
-            if (items) {
-                items.forEach(item => {
-                    item.classList.remove("q-info");
-                });
 
-                let this_has_id = document.getElementById('qn-' + id);
 
-                if (this_has_id.classList.contains("q-info") || this_has_id.classList.contains("q-success") || this_has_id.classList.contains("q-error")) {
-                } else {
-                    document.getElementById('qn-' + id).classList.add('q-info')
+    const sections = document.querySelectorAll("section"); // تمام سکشن‌ها رو بگیر
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+
+                let id = entry.target.id;
+                id = id.replace("question-", "");
+                const items = document.querySelectorAll(".number-question");
+                if (items) {
+                    items.forEach(item => {
+                        item.classList.remove("q-info");
+                    });
+
+                    let this_has_id = document.getElementById('qn-' + id);
+
+                    if (this_has_id.classList.contains("q-info") || this_has_id.classList.contains("q-success") || this_has_id.classList.contains("q-error")) {
+                    } else {
+                        document.getElementById('qn-' + id).classList.add('q-info')
+                    }
                 }
             }
-        }
-    });
-}, { threshold: 1.0 });
+        });
+    }, { threshold: 1.0 });
 
-sections.forEach(section => observer.observe(section));
+    sections.forEach(section => observer.observe(section));
+}
 
+function displayCountdown() {
+
+    const now = new Date();
+
+
+    const tomorrow = new Date(now);
+    tomorrow.setDate(now.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
+
+    const timeDifference = tomorrow - now;
+
+    let hours = Math.floor(timeDifference / (1000 * 60 * 60));
+    let minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+    let seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+    if (hours < 10) {
+        hours = "0" + hours;
+    }
+    if (minutes < 10) {
+        minutes = "0" + minutes;
+    }
+    if (seconds < 10) {
+        seconds = "0" + seconds;
+    }
+
+
+    let toStartMatch = document.getElementById('to_start_match');
+
+    toStartMatch.textContent = `${hours}:${minutes}:${seconds}`;
+
+
+    // const serverOffset = 30 * 60 * 1000; 
+    // const serverTime = new Date(new Date() - serverOffset);
+    const serverTime = new Date();
+
+    console.log(`زمان سرور: ${serverTime.getHours()}:${serverTime.getMinutes()}:${serverTime.getSeconds()}`);
+}
+
+
+let toStartMatch = document.getElementById('to_start_match');
+
+if (toStartMatch) {
+    // اجرای تابع هر ثانیه
+    setInterval(displayCountdown, 1000);
+
+    // اجرای اولیه
+    displayCountdown();
+
+}
 jQuery(document).ready(function ($) {
 
     let countAnswer = 0;
@@ -293,6 +348,36 @@ jQuery(document).ready(function ($) {
         }
     });
 
+
+
+
+
+
+    let timeLeftBtn = 5;
+
+    const $countdownButton = $('#verifyCode');
+    const $countdownSpan = $countdownButton.find('span');
+
+    function updateCountdown() {
+        if (timeLeftBtn > 0) {
+            $countdownSpan.text(`پایان آزمون (${timeLeftBtn})`);
+            timeLeftBtn--;
+        } else {
+            $countdownSpan.text('پایان آزمون');
+            clearInterval(interval);
+        }
+    }
+
+    const interval = setInterval(updateCountdown, 1000);
+
+
+
+
+
+
+
+
+
     $('input[type=radio]').change(function (e) {
         const obj = oni_js.answers;
         const _this = this;
@@ -325,7 +410,7 @@ jQuery(document).ready(function ($) {
 
         const numberOfElements = Object.keys(obj).length;
 
-        if (countAnswer == numberOfElements) {
+        if (countAnswer == numberOfElements && timeLeftBtn == 0) {
 
             $('button[type=submit]#verifyCode').removeAttr('disabled');
         }
@@ -361,6 +446,13 @@ jQuery(document).ready(function ($) {
 
     $("#form-question").on("submit", function (e) {
         e.preventDefault();
+
+
+        let loginToast = document.getElementById("loginToast");
+        let loginAlertBody = loginToast.querySelector(".toast-body");
+        let toast = new bootstrap.Toast(loginToast);
+
+
         $("#overlay").css("display", "flex").hide().fadeIn();
         $("body").addClass("no-scroll");
 
@@ -382,7 +474,11 @@ jQuery(document).ready(function ($) {
             contentType: false,
             success: function (response) {
 
+                $("#overlay").fadeOut();
+                $("body").removeClass("no-scroll");
+
                 if (response.success) {
+
 
                     $("#endMatch #q-true").text(response.data.count_true);
                     $("#endMatch #all-count").text(response.data.score);
@@ -396,10 +492,21 @@ jQuery(document).ready(function ($) {
                             
                             `);
                     }
+                } else {
+
+
+
+                    console.error(response.data);
+
+                    loginAlertBody.textContent = response.data;
+                    toast.show();
+
+                    $('button[type=submit]#verifyCode').removeAttr('disabled');
+
+
                 }
 
-                $("#overlay").fadeOut();
-                $("body").removeClass("no-scroll");
+
 
             },
             error: function (xhr, status, error) {
@@ -407,9 +514,8 @@ jQuery(document).ready(function ($) {
 
 
 
-                let loginToast = document.getElementById("loginToast");
-                let loginAlertBody = loginToast.querySelector(".toast-body");
-                loginAlertBody.textContent ='حظایی رخ داده دوباره تلاش کنید';
+
+                loginAlertBody.textContent = 'حظایی رخ داده دوباره تلاش کنید';
                 let toast = new bootstrap.Toast(loginToast);
                 toast.show();
 
@@ -422,11 +528,6 @@ jQuery(document).ready(function ($) {
 
                 $("#overlay").fadeOut();
                 $("body").removeClass("no-scroll");
-
-
-
-
-
 
 
 

@@ -8,7 +8,7 @@ date_default_timezone_set('Asia/Tehran');
 
 //enable_maintenance_mode_oni();
 
-define('ONI_VERSION', '3.1.0');
+define('ONI_VERSION', '3.2.1');
 
 define('ONI_PATH', get_template_directory() . "/");
 define('ONI_INCLUDES', ONI_PATH . 'includes/');
@@ -25,7 +25,8 @@ define('ONI_IMAGE', ONI_ASSETS . 'image/');
 define('ONI_VENDOR', ONI_ASSETS . 'vendor/');
 define('ONI_QUESTION_SCORE', 1);
 define('ONI_PER_PAGE', 10);
-define('ONI_TOKEN', '1|L6niilLOBERWI0P6ftbfDLT7hfmry7iut7geWdD85e2f5836');
+define('ONI_END_MATCH', 60);
+
 
 require_once ONI_PATH . 'vendor/autoload.php';
 
@@ -64,8 +65,6 @@ if (is_admin()) {
 //     require_once ONI_INCLUDES . '/handle_download.php';
 
 }
-
-
 
 function enable_maintenance_mode_oni()
 {
@@ -169,5 +168,3 @@ function enable_maintenance_mode_oni()
         wp_die($html, 'سایت در حال بروزرسانی است', [ 'response' => 503 ]);
     }
 }
-
-
