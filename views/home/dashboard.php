@@ -41,7 +41,7 @@
     <div class="h-32px"></div>
     <div class="w-100 rounded-8px  mx-auto d-flex flex-row justify-content-around align-items-center">
 
-        <?php if ($all_today->total_rows <= ONI_END_MATCH): ?>
+        <?php if ($all_today->total_rows < ONI_END_MATCH): ?>
         <a id="start-match" href="#"> <img class="img-fluid" src="<?php echo oni_panel_image('start-match.svg') ?>"></a>
 
         <?php endif; ?>
@@ -53,7 +53,7 @@
 
 
 
-    <?php if ($all_today->total_rows <= ONI_END_MATCH && ! isset($_GET[ 'test_end_match' ])): ?>
+    <?php if ($all_today->total_rows < ONI_END_MATCH): ?>
 
 
 

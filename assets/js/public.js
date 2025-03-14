@@ -4,39 +4,39 @@ jalaliDatepicker.startWatch({
 });
 
 
-    function startLoading() {
-        var overlay = document.getElementById("overlay");
+function startLoading() {
+    var overlay = document.getElementById("overlay");
 
-        if (overlay) {
-            overlay.style.display = "flex"; // نمایش به صورت flex
-            overlay.style.opacity = "0"; // آماده‌سازی برای افکت fadeIn
-            overlay.style.transition = "opacity 0.5s ease-in-out"; // اضافه کردن انیمیشن
+    if (overlay) {
+        overlay.style.display = "flex"; // نمایش به صورت flex
+        overlay.style.opacity = "0"; // آماده‌سازی برای افکت fadeIn
+        overlay.style.transition = "opacity 0.5s ease-in-out"; // اضافه کردن انیمیشن
 
-            // تأخیر برای اعمال transition
-            setTimeout(() => {
-                overlay.style.opacity = "1";
-            }, 10);
-        }
-
-        document.body.classList.add("no-scroll"); // اضافه کردن کلاس به body
+        // تأخیر برای اعمال transition
+        setTimeout(() => {
+            overlay.style.opacity = "1";
+        }, 10);
     }
 
-    function endLoading() {
+    document.body.classList.add("no-scroll"); // اضافه کردن کلاس به body
+}
 
-        var overlay = document.getElementById("overlay");
+function endLoading() {
 
-        if (overlay) {
-            overlay.style.transition = "opacity 0.5s ease-in-out"; // اضافه کردن انیمیشن
-            overlay.style.opacity = "0"; // شروع افکت fadeOut
+    var overlay = document.getElementById("overlay");
 
-            setTimeout(() => {
-                overlay.style.display = "none"; // بعد از محو شدن، مخفی کردن کامل
-            }, 500); // مقدار 500 باید با زمان transition هماهنگ باشه
-        }
+    if (overlay) {
+        overlay.style.transition = "opacity 0.5s ease-in-out"; // اضافه کردن انیمیشن
+        overlay.style.opacity = "0"; // شروع افکت fadeOut
 
-        document.body.classList.remove("no-scroll"); // حذف کلاس از body
-
+        setTimeout(() => {
+            overlay.style.display = "none"; // بعد از محو شدن، مخفی کردن کامل
+        }, 500); // مقدار 500 باید با زمان transition هماهنگ باشه
     }
+
+    document.body.classList.remove("no-scroll"); // حذف کلاس از body
+
+}
 
 const pageLogin = document.getElementById('loginForm');
 if (pageLogin) {
@@ -444,9 +444,13 @@ jQuery(document).ready(function ($) {
         this.value = this.value.replace(/[^0-9]/g, '');
     });
 
+
+    let sendMatchUser = 0;
+
+
     $("#form-question").on("submit", function (e) {
         e.preventDefault();
-
+        sendMatchUser++;
 
         let loginToast = document.getElementById("loginToast");
         let loginAlertBody = loginToast.querySelector(".toast-body");
@@ -456,15 +460,12 @@ jQuery(document).ready(function ($) {
         $("#overlay").css("display", "flex").hide().fadeIn();
         $("body").addClass("no-scroll");
 
-
-
-
-
         $('button[type=submit]#verifyCode').attr('disabled', 'disabled');
 
 
         let formData = new FormData(this);
         formData.append("action", "oni_sent_question");
+        formData.append("send_match_user", sendMatchUser);
 
         $.ajax({
             url: oni_js.ajaxurl,
@@ -479,7 +480,6 @@ jQuery(document).ready(function ($) {
 
                 if (response.success) {
 
-
                     $("#endMatch #q-true").text(response.data.count_true);
                     $("#endMatch #all-count").text(response.data.score);
                     $("#endMatch").modal("show");
@@ -488,32 +488,23 @@ jQuery(document).ready(function ($) {
                         $('#dotlottie_svg').html(`
                             
                             <dotlottie-player src="https://lottie.host/582e5a29-18c4-4613-9412-6641899680b3/kCg53DGUN1.lottie"
-                background="transparent" speed="1" style="width: 100%; height: 100% " loop autoplay></dotlottie-player>s
-                            
-                            `);
+                background="transparent" speed="1" style="width: 100%; height: 100% " loop autoplay></dotlottie-player>`);
                     }
                 } else {
-
-
+                    sendMatchUser = 0;
 
                     console.error(response.data);
-
                     loginAlertBody.textContent = response.data;
                     toast.show();
 
                     $('button[type=submit]#verifyCode').removeAttr('disabled');
-
-
                 }
-
-
 
             },
             error: function (xhr, status, error) {
                 console.error("خطا در درخواست AJAX:", error);
 
-
-
+                sendMatchUser = 0;
 
                 loginAlertBody.textContent = 'حظایی رخ داده دوباره تلاش کنید';
                 let toast = new bootstrap.Toast(loginToast);
@@ -521,23 +512,8 @@ jQuery(document).ready(function ($) {
 
                 $('button[type=submit]#verifyCode').removeAttr('disabled');
 
-
-
-
-
-
                 $("#overlay").fadeOut();
                 $("body").removeClass("no-scroll");
-
-
-
-
-
-
-
-
-
-
 
             }
         });

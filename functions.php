@@ -8,7 +8,7 @@ date_default_timezone_set('Asia/Tehran');
 
 //enable_maintenance_mode_oni();
 
-define('ONI_VERSION', '3.2.1');
+define('ONI_VERSION', '3.2.6');
 
 define('ONI_PATH', get_template_directory() . "/");
 define('ONI_INCLUDES', ONI_PATH . 'includes/');
@@ -26,7 +26,6 @@ define('ONI_VENDOR', ONI_ASSETS . 'vendor/');
 define('ONI_QUESTION_SCORE', 1);
 define('ONI_PER_PAGE', 10);
 define('ONI_END_MATCH', 60);
-
 
 require_once ONI_PATH . 'vendor/autoload.php';
 
@@ -50,19 +49,13 @@ require_once ONI_INCLUDES . '/handle_download.php';
 
 $oni_option = oni_start_working();
 
-// require_once ONI_INCLUDES . '/postype.php';
-// require_once ONI_INCLUDES . '/meta_boxs.php';
-// require_once ONI_CLASS . '/Iran_Area.php';
-// require_once ONI_INCLUDES . '/init_user_submit.php';
 
 if (is_admin()) {
     require_once ONI_CLASS . '/List_Table.php';
     require_once ONI_INCLUDES . '/menu.php';
     require_once ONI_INCLUDES . '/install.php';
     require_once ONI_INCLUDES . '/edit_user_table.php';
-//     require_once ONI_INCLUDES . '/edit_column_institute.php';
-//
-//     require_once ONI_INCLUDES . '/handle_download.php';
+
 
 }
 
@@ -168,3 +161,4 @@ function enable_maintenance_mode_oni()
         wp_die($html, 'سایت در حال بروزرسانی است', [ 'response' => 503 ]);
     }
 }
+

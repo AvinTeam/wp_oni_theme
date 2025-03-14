@@ -4,7 +4,6 @@ use oniclass\ONIDB;
 use oniclass\oni_export;
 
 add_action('wp_ajax_nopriv_oni_sent_sms', 'oni_sent_sms');
-
 function oni_sent_sms()
 {
     if (wp_verify_nonce($_POST[ 'nonce' ], 'ajax-nonce' . oni_cookie())) {
@@ -28,7 +27,6 @@ function oni_sent_sms()
 }
 
 add_action('wp_ajax_nopriv_oni_sent_verify', 'oni_sent_verify');
-
 function oni_sent_verify()
 {
     if (wp_verify_nonce($_POST[ 'nonce' ], 'ajax-nonce' . oni_cookie())) {
@@ -96,7 +94,6 @@ function oni_sent_verify()
 }
 
 add_action('wp_ajax_oni_update_row', 'oni_update_row');
-
 function oni_update_row()
 {
     $onidb = new ONIDB('question');
@@ -145,7 +142,8 @@ function oni_sent_question()
 
     $this_user = wp_get_current_user();
 
-    if (! isset($_POST[ 'start_match' ])) {
+    if (! isset($_POST[ 'start_match' ]) &&
+        ! isset($_POST[ 'send_match_user' ])) {
         error_log(print_r([
             'isuser' => get_current_user_id(),
             'mobile' => $this_user->mobile,
@@ -157,25 +155,28 @@ function oni_sent_question()
     if (
         isset($_POST[ '_wpnonce' ]) &&
         isset($_POST[ 'start_match' ]) &&
+        isset($_POST[ 'send_match_user' ]) &&
         wp_verify_nonce($_POST[ '_wpnonce' ], 'oni_send_question_list' . oni_cookie()) &&
-        (time() - intval($_POST[ 'start_match' ])) > 5
+        (time() - intval($_POST[ 'start_match' ])) > 5 &&
+        intval($_POST[ 'send_match_user' ]) == 1
     ) {
 
         setcookie("setcookie_oni_nonce", wp_generate_password(20, true, true), time() + 1800, "/");
 
         $oni_option = oni_start_working();
 
-        $matchdl = new ONIDB('match');
-        $onidb   = new ONIDB('question');
-        $crondb  = new ONIDB('cron');
+        $matchdl    = new ONIDB('match');
+        $onidb      = new ONIDB('question');
+        $crondb     = new ONIDB('cron');
+        $oni_export = new oni_export('match');
 
         $count_true = 0;
 
-        $this_date = date('Y-m-d');
+        $all_today = $oni_export->get_today();
 
-        $eid = $matchdl->num([ 'iduser' => get_current_user_id() ], "DATE(`created_at`) = '$this_date'");
+        $eid = absint($all_today->total_rows);
 
-        if ($eid > ONI_END_MATCH) {
+        if ($eid >= ONI_END_MATCH) {
             setcookie("setcookie_oni_nonce", wp_generate_password(20, true, true), time() + 1800, "/");
 
             wp_send_json_error('صفحه را یکیار به روزرسانی کنید');
@@ -258,7 +259,6 @@ function oni_sent_question()
 }
 
 add_action('wp_ajax_oniAjaxAllMatch', 'oniAjaxAllMatch');
-
 function oniAjaxAllMatch()
 {
     // wp_send_json_success($_POST);

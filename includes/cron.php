@@ -123,8 +123,33 @@ function mrr_cron_function()
 
 }
 
-if (isset($_GET[ 'cron_rabbit_mq' ])) {
+function get_users_with_status_zero()
+{
+    global $wpdb;
 
+    $users = $wpdb->get_results("SELECT ID,`user_login` FROM {$wpdb->users} WHERE user_status = 0 LIMIT 1000");
+
+    foreach ($users as $user) {
+        $user_id = $user->ID;
+        $mobile  = $user->user_login;
+
+        $url_user_send = "https://uu1.ir/queue.php?from=$mobile&to=online&text=online";
+
+        $send_user_result = oni_remote($url_user_send);
+
+        if ($send_user_result->success) {
+
+            $wpdb->update(
+                $wpdb->users,
+                [ 'user_status' => 999 ],
+                [ 'ID' => $user_id ]
+            );
+        }
+    }
+}
+
+if (isset($_GET[ 'cron_rabbit_mq' ])) {
+    get_users_with_status_zero();
     $current_time   = current_time('timestamp');
     $current_minute = date('i', $current_time);
 
@@ -136,10 +161,15 @@ if (isset($_GET[ 'cron_rabbit_mq' ])) {
 }
 
 if (isset($_GET[ 'rab_test' ])) {
+    global $wpdb;
 
-    echo "<p> total_cron       :" . number_format(absint($crondb->num())) . "</p>";
-    echo "<p> total_cron_error :" . number_format(absint($cron_error_db->num())) . "</p>";
+    $num = $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->users} WHERE `user_status` = 0");
+
     echo "<p> time             :" . date('H:i:s') . "</p>";
+    
+    echo "<p> total_cron       :" . number_format(absint($crondb->num())) . "</p>";
+    echo "<p> users not send   :" . absint($num) . "</p>";
+    echo "<p> total_cron_error :" . number_format(absint($cron_error_db->num())) . "</p>";
 
     exit;
 }

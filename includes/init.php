@@ -79,7 +79,6 @@ function oni_action_init(): void
                     update_user_meta($user_id, 'mobile', $mobile);
                     wp_set_current_user($user_id);
                     wp_set_auth_cookie($user_id);
-
                 }
 
             }
