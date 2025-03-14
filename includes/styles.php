@@ -121,15 +121,17 @@ function oni_style()
         ONI_VERSION,
         true
     );
+    $user_next_match = get_user_meta(get_current_user_id(), 'user_next_match', true);
 
     wp_localize_script(
         'oni_js',
         'oni_js',
         [
-            'ajaxurl' => admin_url('admin-ajax.php'),
-            'nonce'   => wp_create_nonce('ajax-nonce' . oni_cookie()),
-            'option'  => oni_start_working(),
-            'answers' => (is_user_logged_in()) ? oni_exam() : [  ],
+            'ajaxurl'         => admin_url('admin-ajax.php'),
+            'nonce'           => wp_create_nonce('ajax-nonce' . oni_cookie()),
+            'option'          => oni_start_working(),
+            'answers'         => (is_user_logged_in()) ? oni_exam() : [  ],
+            'user_next_match' => (is_user_logged_in()) ? intval(get_user_meta(get_current_user_id(), 'user_next_match', true)) + 2 : '',
 
          ]
     );

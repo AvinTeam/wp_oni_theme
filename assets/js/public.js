@@ -251,21 +251,47 @@ if (document.getElementById('form-question')) {
     sections.forEach(section => observer.observe(section));
 }
 
+
+let is_reload = false;
+
 function displayCountdown() {
+
+
+
+    let customTimestamp = oni_js.user_next_match; // تایم‌استمپ اختیاری
+
+    customTimestamp = Number(customTimestamp * 1000);
 
     const now = new Date();
 
 
-    const tomorrow = new Date(now);
-    tomorrow.setDate(now.getDate() + 1);
-    tomorrow.setHours(0, 0, 0, 0);
+    // بررسی کنید آیا تایم‌استمپ معتبر است (بزرگ‌تر از زمان فعلی باشد)
+    if (customTimestamp && customTimestamp >= now.getTime()) {
+        // اگر تایم‌استمپ معتبر است، از آن استفاده کنید
+        targetTime = new Date(customTimestamp);
 
-    const timeDifference = tomorrow - now;
+    } else {
+        // اگر تایم‌استمپ معتبر نیست یا وجود ندارد، تا نیمه‌شب بعدی شمارش کنید
+        targetTime = new Date(now);
+        targetTime.setDate(now.getDate() + 1);
+        targetTime.setHours(0, 0, 0, 0);
+    }
+
+    const timeDifference = targetTime - now;
+
+
+    // اگر زمان به صفر رسید، صفحه را ریلود کنید و به بالای صفحه بروید
+    if (timeDifference < 1000) {
+        window.scrollTo(0, 0);
+        location.reload();
+        return;
+    }
 
     let hours = Math.floor(timeDifference / (1000 * 60 * 60));
     let minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
     let seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
 
+    // اضافه کردن صفر به اعداد تک‌رقمی
     if (hours < 10) {
         hours = "0" + hours;
     }
@@ -276,17 +302,9 @@ function displayCountdown() {
         seconds = "0" + seconds;
     }
 
-
+    // نمایش تایمر در صفحه
     let toStartMatch = document.getElementById('to_start_match');
-
     toStartMatch.textContent = `${hours}:${minutes}:${seconds}`;
-
-
-    // const serverOffset = 30 * 60 * 1000; 
-    // const serverTime = new Date(new Date() - serverOffset);
-    const serverTime = new Date();
-
-    console.log(`زمان سرور: ${serverTime.getHours()}:${serverTime.getMinutes()}:${serverTime.getSeconds()}`);
 }
 
 
@@ -546,8 +564,6 @@ jQuery(document).ready(function ($) {
             data: formData,
             dataType: 'json',
             success: function (response) {
-
-                //console.log(response.data);
 
                 if (response.success) {
 
