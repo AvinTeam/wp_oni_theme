@@ -8,7 +8,7 @@ date_default_timezone_set('Asia/Tehran');
 
 //enable_maintenance_mode_oni();
 
-define('ONI_VERSION', '3.2.8');
+define('ONI_VERSION', '3.2.10');
 
 define('ONI_PATH', get_template_directory() . "/");
 define('ONI_INCLUDES', ONI_PATH . 'includes/');

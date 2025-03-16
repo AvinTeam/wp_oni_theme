@@ -1,6 +1,7 @@
 <?php
 
     use oniclass\oni_export;
+    usleep(rand(0, 50000));
 
     $this_data = date('Y-m-d');
 

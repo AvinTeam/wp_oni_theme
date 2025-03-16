@@ -139,16 +139,16 @@ function oni_del_all_question()
 add_action('wp_ajax_oni_sent_question', 'oni_sent_question');
 function oni_sent_question()
 {
+    $this_user = wp_get_current_user();
 
     $user_next_match = get_user_meta(get_current_user_id(), 'user_next_match', true);
 
-    if ($user_next_match > time()) {
+    if ($user_next_match > time() ) {
         setcookie("setcookie_oni_nonce", wp_generate_password(20, true, true), time() + 1800, "/");
 
         wp_send_json_error('صفحه را یکیار به روزرسانی کنید');
     }
 
-    $this_user = wp_get_current_user();
 
     if (! isset($_POST[ 'start_match' ]) &&
         ! isset($_POST[ 'send_match_user' ])) {
@@ -168,6 +168,8 @@ function oni_sent_question()
         (time() - intval($_POST[ 'start_match' ])) > 5 &&
         intval($_POST[ 'send_match_user' ]) == 1
     ) {
+
+        usleep(rand(0, 50000));
 
         setcookie("setcookie_oni_nonce", wp_generate_password(20, true, true), time() + 1800, "/");
 
@@ -252,7 +254,7 @@ function oni_sent_question()
 
             $score = $count_true * ONI_QUESTION_SCORE;
 
-            if ((absint($eid) + 1) < 60) {
+            if ((absint($eid) + 1) < 60 ) {
                 update_user_meta(get_current_user_id(), 'user_next_match', (time() - 2 + (60 * ONI_NEXT_MATCH)));
 
             }
