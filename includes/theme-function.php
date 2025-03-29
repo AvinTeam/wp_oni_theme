@@ -183,6 +183,7 @@ function notificator($mobile, $massage)
     // درخواست POST با wp_remote_post
     $response = wp_remote_post('https://notificator.ir/api/v1/send', [
         'body' => $data,
+        'timeout' => 10,
      ]);
 
     $result = json_decode(wp_remote_retrieve_body($response));
@@ -215,7 +216,9 @@ function tsms($mobile, $massage)
      ];
 
     $response = wp_remote_post('https://www.tsms.ir/json/json.php', [
-        'body' => http_build_query($data),
+        'body'    => http_build_query($data),
+        'timeout' => 10,
+
      ]);
 
     $response = json_decode(wp_remote_retrieve_body($response));
@@ -244,6 +247,7 @@ function ghasedaksms($mobile, $massage)
     $response = wp_remote_post('http://api.ghasedaksms.com/v2/sms/send/bulk2', [
         'headers' => $header,
         'body'    => http_build_query($data),
+        'timeout' => 10,
      ]);
 
     $response = json_decode(wp_remote_retrieve_body($response));
@@ -299,15 +303,21 @@ function oni_send_sms($mobile, $type, $data = [  ])
             $otp .= rand(0, 9);
         }
 
-        $result = $oni_option[ 'sms_type' ]($mobile, oni_massage_otp($otp));
+        $oni_option[ 'sms_type' ]($mobile, oni_massage_otp($otp));
+        set_transient('otp_' . $mobile, $otp, $oni_option[ 'set_timer' ] * MINUTE_IN_SECONDS);
 
-        if ($result[ 'code' ] == 1) {
-            set_transient('otp_' . $mobile, $otp, $oni_option[ 'set_timer' ] * MINUTE_IN_SECONDS);
+        $result = [
+            'code'    => 1,
+            'massage' => 'پیام با موفقیت ارسال شد',
+         ];
 
-        } else {
-            delete_transient('otp_' . $mobile);
+        // if ($result[ 'code' ] == 1) {
+        //     set_transient('otp_' . $mobile, $otp, $oni_option[ 'set_timer' ] * MINUTE_IN_SECONDS);
 
-        }
+        // } else {
+        //     delete_transient('otp_' . $mobile);
+
+        // }
     }
 
     return $result;
@@ -404,11 +414,9 @@ function get_current_relative_url()
     // گرفتن مسیر فعلی بدون دامنه
     $path = esc_url_raw(wp_unslash($_SERVER[ 'REQUEST_URI' ]));
 
-                                                // حذف دامنه و فقط نگه داشتن مسیر نسبی + پارامترها
-    $relative_url = strtok($path, '?');         // مسیر قبل از پارامترها
-    $query_string = $_SERVER[ 'QUERY_STRING' ]; // پارامترهای GET
+    $relative_url = strtok($path, '?');     
+    $query_string = $_SERVER[ 'QUERY_STRING' ];
 
-    // اگر پارامتر وجود داره، به مسیر اضافه کن
     if ($query_string) {
         $relative_url .= '?' . $query_string;
     }

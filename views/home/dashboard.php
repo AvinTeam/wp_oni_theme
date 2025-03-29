@@ -19,7 +19,6 @@
 
     if (empty($user_next_match) || (isset($_GET[ 'mrr_new_test' ]) && isset($_GET[ 'mrr_ok' ]))) {
         update_user_meta(get_current_user_id(), 'user_next_match', 0);
-        $user_next_match = 0;
     }
 
 ?>
